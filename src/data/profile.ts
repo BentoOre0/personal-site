@@ -27,6 +27,7 @@ export const IDENTITY = {
 		'rockets. ',
 		'automation solutions. ',
 		'fast algorithms. ',
+		'AI Slop ಠಿ_ಠ? ',
 	],
 	links: [
 		{ label: 'GitHub', href: 'https://github.com/BentoOre0', icon: 'github' },

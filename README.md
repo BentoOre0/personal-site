@@ -1,63 +1,101 @@
-# Astro Starter Kit: Blog
+# personal-site
+
+Portfolio and blog for Jeremy Aidan Hernandez Yu.
+
+**Live:** https://jeremyaidanhernandezyu.vercel.app
+
+Astro, static output, deployed on Vercel from `master`. No database, no
+backend, no auth.
+
+## Quick start
 
 ```sh
-npm create astro@latest -- --template blog
+npm install
+npx astro dev --background     # http://localhost:4321
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Manage the background server with `astro dev stop`, `astro dev status`,
+and `astro dev logs`.
 
-Features:
+| Command | What it does |
+| :-- | :-- |
+| `npx astro dev --background` | Dev server with hot reload |
+| `npm run build` | Production build to `./dist/` — must pass before any commit |
+| `npm run preview` | Serve `./dist/` exactly as Vercel will |
+| `npx astro dev logs` | Dev server log; the first place to look when something is wrong |
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+## Editing content
 
-## 🚀 Project Structure
+**Almost everything on the homepage lives in one file: `src/data/profile.ts`.**
+Name, tagline, rotating terms, contact links, credentials, the details
+table, and every project. Change it there, not in the markup.
 
-Inside of your Astro project, you'll see the following folders and files:
+Nothing on this site may be invented. Unfilled values read `TBD` and the
+document carries a `PRELIMINARY` revision stamp until they are real.
+
+## Writing a post
+
+Drop a `.md` file into `src/content/blog/`. The filename becomes the URL:
+`bringing-up-the-stm32.md` → `/blog/bringing-up-the-stm32/`.
+
+```markdown
+---
+title: 'Bringing up the STM32'
+description: 'One sentence. Shows on the blog index and in search results.'
+pubDate: 'Sep 01 2026'
+tags: ['embedded', 'pcb']
+# heroImage: '../../assets/your-photo.jpg'   (optional)
+---
+
+Body in plain Markdown.
+```
+
+Copy `src/content/_post-template.md` to start. That template sits outside
+`blog/`, so it is never published.
+
+`tags` are optional and free-form. Each one generates a static archive at
+`/blog/tags/<tag>/` and feeds the filter on `/blog`. No registry to keep
+up to date.
+
+To publish from a phone or another machine, use GitHub's web editor:
+`github.com/BentoOre0/personal-site/new/master/src/content/blog`.
+
+## Structure
 
 ```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+src/
+├── data/profile.ts        all homepage content
+├── pages/
+│   ├── index.astro        the homepage
+│   └── blog/              index, [...slug], tags/[tag]
+├── layouts/BlogPost.astro post shell
+├── components/            BaseHead, Header, Footer, Icon, TagList
+├── content/blog/          posts
+├── styles/global.css      tokens and shared primitives
+└── assets/                images and self-hosted fonts
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Design
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+`DESIGN.md` holds the visual system — palette, type scale, spacing, and
+the rules behind them. `.claude/skills/design/SKILL.md` is the pinned
+brief those rules answer to. Read both before restyling anything.
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+`PRODUCT.md` holds product truth: who the site is for and what is
+confirmed versus unfilled.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Deploying
 
-## 🧞 Commands
+`git push` to `master` deploys. There is no confirmation step — Vercel
+watches the branch, builds, and publishes. Nothing you do locally is
+visible to anyone until you push.
 
-All commands are run from the root of the project, from a terminal:
+## Gotchas
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+- **Editing `astro.config.mjs` needs a dev-server restart.** Hot reload
+  does not cover it, and a stale server fails in confusing ways
+  (undefined `Astro.site`, client scripts silently missing).
+- **Page renders but nothing animates or responds?** Stale dev server.
+  `npx astro dev stop && npx astro dev --background`.
+- **If `npm run build` passes but the dev server misbehaves, it is the
+  dev server.** The build compiles from scratch with no cached state.

@@ -1,5 +1,9 @@
 # personal-site
 
+**Start here: read `HANDOFF.md` before doing anything.** It carries the
+current state, the decisions behind it, and what is still unfilled.
+`PRODUCT.md` holds product truth; `DESIGN.md` holds the visual system.
+
 Personal portfolio and blog. Astro, deployed on Vercel.
 
 ## Content structure
@@ -10,7 +14,9 @@ impressive first.
 2. Credentials as a short list. Competitive programming results belong
    here, as a credential, not as a project.
 3. Projects, flat list, ordered by impact.
-4. Blog.
+
+The blog is its own route at /blog, reached from the nav. It is
+deliberately not a section on the homepage.
 
 ## Rules
 - No database, no backend, no auth. Static only.
@@ -39,22 +45,3 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
-
-# personal-site
-
-Personal portfolio and blog. Astro, deployed on Vercel.
-
-## Content structure
-Flat. No Software/Hardware split. Order sections by what is most
-impressive first.
-
-1. Name, one-line description, links (GitHub, LinkedIn, email)
-2. Credentials as a short list. Competitive programming results belong
-   here, as a credential, not as a project.
-3. Projects, flat list, ordered by impact.
-4. Blog.
-
-## Rules
-- No database, no backend, no auth. Static only.
-- `npm run build` must pass before any commit.
-- Do not add dependencies without asking.
