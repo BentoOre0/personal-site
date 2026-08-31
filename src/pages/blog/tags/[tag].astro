@@ -1,0 +1,157 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import Header from '../../../components/Header.astro';
+import TagList from '../../../components/TagList.astro';
+import { SITE_TITLE } from '../../../consts';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+
+	return tags.map((tag) => ({
+		params: { tag },
+		props: {
+			posts: posts
+				.filter((post) => post.data.tags.includes(tag))
+				.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+		},
+	}));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+const count = posts.length;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`${tag} — ${SITE_TITLE}`}
+			description={`Posts tagged ${tag}.`}
+		/>
+	</head>
+	<body>
+		<Header />
+		<main class="sheet">
+			<div class="head">
+				<p class="legend"><a href="/blog">← All posts</a></p>
+				<h1>{tag}</h1>
+				<p class="lede">{count} {count === 1 ? 'post' : 'posts'}</p>
+			</div>
+
+			<ol class="index">
+				{
+					posts.map((post) => (
+						<li>
+							<div>
+								<h2>
+									<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+								</h2>
+								<p class="summary">{post.data.description}</p>
+								<TagList tags={post.data.tags} />
+							</div>
+							<span class="date legend">
+								<FormattedDate date={post.data.pubDate} />
+							</span>
+						</li>
+					))
+				}
+			</ol>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.head {
+		padding-block: var(--s-6) var(--s-5);
+		max-width: var(--measure);
+	}
+
+	.head .legend {
+		margin: 0 0 var(--s-3) 0;
+	}
+
+	.head .legend a {
+		color: var(--muted);
+		text-decoration: none;
+	}
+
+	.head .legend a:hover {
+		color: var(--ink);
+	}
+
+	h1 {
+		font-family: var(--font-geist-mono);
+		letter-spacing: -0.02em;
+	}
+
+	.lede {
+		font-size: var(--t-xs);
+		color: var(--muted);
+		margin: var(--s-3) 0 0 0;
+		font-family: var(--font-geist-mono);
+	}
+
+	.index {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.index li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: var(--s-4);
+		align-items: baseline;
+		padding: var(--s-4) var(--s-2);
+		margin-inline: calc(-1 * var(--s-2));
+		border-radius: 2px;
+		transition: background-color 120ms ease-out;
+	}
+
+	.index li:hover {
+		background: var(--wash);
+	}
+
+	.index h2 {
+		font-size: var(--t-md);
+		margin: 0;
+	}
+
+	.index h2 a {
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.index h2 a:hover {
+		color: var(--accent);
+	}
+
+	.summary {
+		margin: var(--s-2) 0 var(--s-3) 0;
+		font-size: var(--t-xs);
+		color: var(--muted);
+		max-width: 60ch;
+	}
+
+	.date {
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 40rem) {
+		.index li {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-2);
+		}
+
+		.date {
+			text-align: left;
+		}
+	}
+</style>

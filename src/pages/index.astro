@@ -1,8 +1,13 @@
 ---
+import { Image } from 'astro:assets';
+import discipline from '../assets/discipline-crop2.png';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import Icon from '../components/Icon.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profile';
+
 ---
 
 <!doctype html>
@@ -12,38 +17,561 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	</head>
 	<body>
 		<Header />
+
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<!-- Title block -->
+			<section class="sheet title" aria-labelledby="name">
+				<div class="title-grid">
+					<div class="column">
+						<h1 id="name">{IDENTITY.name}</h1>
+						<p class="tagline line">
+							{IDENTITY.taglinePrefix}{' '}<span
+								class="rotator"
+								data-rotator
+								data-terms={JSON.stringify(IDENTITY.rotating)}>{IDENTITY.rotating[0]}</span
+							><span class="caret" aria-hidden="true"></span>
+						</p>
+					</div>
+					<Image
+						class="emblem"
+						src={discipline}
+						width={1102}
+						densities={[1, 2]}
+						loading="eager"
+						alt="Hand-drawn sketch of a figure turning away from a plate of food, captioned DISCIPLINE."
+					/>
+				</div>
+
+				<div class="foot">
+					<div class="reach">
+						<ul class="contacts">
+							{
+								IDENTITY.links.map((link) => (
+									<li>
+										<a href={link.href} aria-label={link.label}>
+											<Icon name={link.icon} />
+										</a>
+									</li>
+								))
+							}
+						</ul>
+						<a class="resume" href={IDENTITY.resume.href}>{IDENTITY.resume.label}</a>
+					</div>
+					<p class="stamp">
+						Rev {REVISION.rev} · {REVISION.status} ·{' '}
+						<time datetime={REVISION.updated}>{REVISION.updated}</time>
+					</p>
+				</div>
+
+			</section>
+
+			<!-- Features: the credential list -->
+			<section class="sheet section" aria-labelledby="features">
+				<div class="section-head">
+					<a class="designator anchor" href="#features">§1</a>
+					<h2 id="features">Credentials</h2>
+				</div>
+				<ul class="features">
+					{
+						CREDENTIALS.map((c) => (
+							<li class:list={[{ unconfirmed: !c.confirmed }]}>
+								<span class="feature-text">{c.text}</span>
+								<span class="feature-note">{c.note}</span>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<!-- Specifications -->
+			<section class="sheet section" aria-labelledby="specs">
+				<div class="section-head">
+					<a class="designator anchor" href="#specs">§2</a>
+					<h2 id="specs">Details</h2>
+				</div>
+				<table class="spec">
+					<tbody>
+						{
+							SPECS.map((s) => (
+								<tr>
+									<th scope="row">{s.key}</th>
+									<td class:list={[{ tbd: s.value === 'TBD' }]}>{s.value}</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</section>
+
+			<!-- Selected work -->
+			<section class="sheet section" aria-labelledby="work">
+				<div class="section-head">
+					<a class="designator anchor" href="#work">§3</a>
+					<h2 id="work">Projects</h2>
+				</div>
+
+				<ol class="projects">
+					{
+						PROJECTS.map((p, i) => (
+							<li class="project" class:list={[`rank-${i + 1}`]}>
+								<div class="project-body">
+									<div class="project-head">
+										<span class="designator">{p.id}</span>
+										<h3>
+											{p.links[0] ? (
+												<a href={p.links[0].href}>{p.title}</a>
+											) : (
+												p.title
+											)}
+										</h3>
+									</div>
+									<p class="summary">{p.summary}</p>
+									<table class="spec params">
+										<tbody>
+											{p.params.map((param) => (
+												<tr>
+													<th scope="row">{param.key}</th>
+													<td class:list={[{ tbd: param.value === 'TBD' }]}>{param.value}</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+									<ul class="project-links">
+										{p.links.map((l) => (
+											<li>
+												<a href={l.href}>{l.label}</a>
+											</li>
+										))}
+									</ul>
+								</div>
+
+								{p.figure && (
+									<figure class="figure">
+										<div
+											class="plate"
+											role="img"
+											aria-label={`Figure ${i + 1} placeholder`}
+											style={`aspect-ratio: ${p.figure.ratio};`}
+										>
+											<span class="legend">Fig. {i + 1}</span>
+											<span class="plate-spec">{p.figure.spec}</span>
+										</div>
+										<figcaption>
+											<span class="designator">Fig. {i + 1}</span>
+											{' '}{p.figure.caption}
+										</figcaption>
+									</figure>
+								)}
+							</li>
+						))
+					}
+				</ol>
+			</section>
+
 		</main>
+
 		<Footer />
+
+		<script>
+			// Module scripts run once, but the client router swaps pages without
+			// a reload — so init on every page load, and clear the pending timer
+			// or two loops end up racing on the same element.
+			let timer;
+
+			const start = () => {
+				const rotator = document.querySelector('[data-rotator]');
+				const line = rotator && rotator.closest('.tagline');
+				const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+				clearTimeout(timer);
+				if (!rotator || !line || still.matches) return;
+
+				const terms = JSON.parse(rotator.dataset.terms || '[]');
+				if (terms.length < 2) return;
+
+				const TYPE = 62;
+				const DELETE = 34;
+				const REST = 1900;
+				const BEAT = 420;
+
+				let term = 0;
+				let chars = terms[0].length;
+				let erasing = false;
+
+				const wait = (ms) => new Promise((r) => (timer = setTimeout(r, ms)));
+
+				const tick = async () => {
+					if (!rotator.isConnected) return;
+
+					if (!erasing && chars === terms[term].length) {
+						// Hold with the caret blinking before erasing.
+						line.classList.remove('is-typing');
+						await wait(REST);
+						erasing = true;
+					} else if (erasing && chars === 0) {
+						await wait(BEAT);
+						erasing = false;
+						term = (term + 1) % terms.length;
+					}
+
+					line.classList.add('is-typing');
+					chars += erasing ? -1 : 1;
+					rotator.textContent = terms[term].slice(0, chars);
+
+					await wait(erasing ? DELETE : TYPE);
+					tick();
+				};
+
+				tick();
+			};
+
+			document.addEventListener('astro:page-load', start);
+		</script>
 	</body>
 </html>
+
+<style>
+	/* --- Title block --- */
+	.title {
+		padding-block: var(--s-7) var(--s-6);
+	}
+
+	.title-grid {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: var(--s-6);
+	}
+
+	h1 {
+		font-size: var(--t-display);
+		line-height: 1.02;
+		letter-spacing: -0.035em;
+	}
+
+	.tagline {
+		font-size: var(--t-lg);
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+		color: var(--muted);
+		margin: var(--s-4) 0 0 0;
+		max-width: 22ch;
+	}
+
+	/* The typed term is the tail of the sentence, so characters are only
+	   ever added or removed after every other word. Nothing reflows. */
+	.rotator {
+		color: var(--accent);
+	}
+
+	.caret {
+		display: inline-block;
+		width: 2px;
+		height: 0.78em;
+		background: var(--accent);
+		/* Bottom of the bar rests on the baseline, like a real text caret;
+		   text-bottom dropped it onto the descender line. */
+		vertical-align: baseline;
+		margin-left: 3px;
+		animation: blink 1.06s step-end infinite;
+	}
+
+	/* Solid while characters are moving; it only blinks while resting. */
+	.tagline.is-typing .caret {
+		animation: none;
+		opacity: 1;
+	}
+
+	@keyframes blink {
+		0%,
+		49% {
+			opacity: 1;
+		}
+		50%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	.emblem {
+		width: clamp(200px, 34vw, 380px);
+		height: auto;
+		flex: none;
+		align-self: flex-start;
+		/* The sketch is drawn on white, so it sits on the paper without a frame. */
+		mix-blend-mode: multiply;
+	}
+
+	.foot {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: var(--s-4);
+		flex-wrap: wrap;
+		margin-top: var(--s-6);
+	}
+
+	.reach {
+		display: flex;
+		align-items: center;
+		gap: var(--s-4);
+		flex-wrap: wrap;
+	}
+
+	.resume {
+		font-family: var(--font-geist-mono);
+		font-size: var(--t-xs);
+		letter-spacing: 0.02em;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+	}
+
+	.resume:hover {
+		text-decoration-color: var(--accent);
+	}
+
+	.contacts {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-2) var(--s-6);
+	}
+
+	.contacts {
+		gap: var(--s-4);
+	}
+
+	.contacts a {
+		display: block;
+		color: var(--accent);
+		line-height: 0;
+		padding: var(--s-1);
+		margin: calc(-1 * var(--s-1));
+		transition: color 120ms ease-out;
+	}
+
+	.contacts a:hover {
+		color: color-mix(in srgb, var(--accent) 72%, #000);
+	}
+
+	.stamp {
+		margin: 0;
+		font-family: var(--font-geist-mono);
+		font-size: var(--t-xs);
+		font-variant-numeric: tabular-nums;
+		color: var(--accent);
+		white-space: nowrap;
+	}
+
+
+	@media (prefers-reduced-motion: reduce) {
+		.caret {
+			animation: none;
+		}
+	}
+
+	/* --- Features --- */
+	.features {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.features li {
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-1);
+		padding: var(--s-3) var(--s-2);
+		margin-inline: calc(-1 * var(--s-2));
+		border-radius: 2px;
+		transition: background-color 120ms ease-out;
+	}
+
+	.features li:hover {
+		background: var(--wash);
+	}
+
+	.feature-text {
+		font-size: var(--t-md);
+		line-height: 1.35;
+		letter-spacing: -0.01em;
+	}
+
+	.features li.unconfirmed .feature-text {
+		font-size: var(--t-base);
+		color: var(--muted);
+	}
+
+	.feature-note {
+		font-size: var(--t-xs);
+		color: var(--muted);
+	}
+
+	/* --- Projects. Graded legibility: the list compresses downward. --- */
+	.projects {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.project {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+		gap: var(--s-6);
+		align-items: start;
+		padding: var(--s-6) var(--s-2);
+		margin-inline: calc(-1 * var(--s-2));
+		border-radius: 2px;
+		transition: background-color 120ms ease-out;
+	}
+
+	.project:hover {
+		background: var(--wash);
+	}
+
+	.project:first-child {
+		padding-top: var(--s-4);
+	}
+
+	.project-head {
+		display: flex;
+		align-items: baseline;
+		gap: var(--s-3);
+	}
+
+	.project h3 {
+		font-size: var(--t-md);
+		font-family: var(--font-geist-mono);
+		font-weight: 500;
+	}
+
+	.project h3 a {
+		color: var(--ink);
+		text-decoration: none;
+		background-image: linear-gradient(var(--accent), var(--accent));
+		background-repeat: no-repeat;
+		background-position: 0 100%;
+		background-size: 0% var(--hairline);
+		transition:
+			background-size 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+			color 160ms ease-out;
+	}
+
+	.project h3 a:hover,
+	.project h3 a:focus-visible {
+		color: var(--accent);
+		background-size: 100% var(--hairline);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.project h3 a {
+			transition: none;
+		}
+	}
+
+
+	.rank-1 h3 {
+		font-size: var(--t-lg);
+		letter-spacing: -0.025em;
+	}
+
+	.summary {
+		margin: var(--s-2) 0 var(--s-4) 0;
+		color: var(--muted);
+		max-width: 60ch;
+	}
+
+	.rank-1 .summary {
+		color: var(--ink);
+		font-size: var(--t-md);
+		line-height: 1.5;
+	}
+
+	.rank-4 .summary,
+	.rank-4 h3 {
+		font-size: var(--t-base);
+	}
+
+	.params {
+		max-width: 24rem;
+		margin-bottom: var(--s-3);
+	}
+
+	.project-links {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-4);
+		margin: 0;
+		padding: 0;
+		font-size: var(--t-xs);
+	}
+
+	/* --- Figures. The photo slot states the shot it needs. --- */
+	.figure {
+		margin: 0;
+	}
+
+	.plate {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		border: var(--hairline) dashed var(--rule-strong);
+		background: var(--wash);
+		padding: var(--s-3);
+	}
+
+	.plate-spec {
+		font-size: var(--t-xs);
+		color: var(--muted);
+		line-height: 1.4;
+	}
+
+	figcaption {
+		margin-top: var(--s-2);
+		font-size: var(--t-xs);
+		color: var(--muted);
+	}
+
+
+	/* --- Adaptation. Mobile is the default case. --- */
+	@media (max-width: 52rem) {
+		.project {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-4);
+		}
+
+		.figure {
+			max-width: 20rem;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.title {
+			padding-block: var(--s-6) var(--s-5);
+		}
+
+		.title-grid {
+			flex-direction: column-reverse;
+			align-items: flex-start;
+			gap: var(--s-4);
+		}
+
+
+		.emblem {
+			width: 132px;
+		}
+
+
+		.foot {
+			align-items: flex-start;
+			gap: var(--s-3);
+		}
+
+		.contacts {
+			gap: var(--s-3) var(--s-5);
+		}
+
+	}
+</style>

@@ -22,3 +22,17 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local agent settings
+.claude/settings.local.json
+# vendored agent skills (reinstallable; 3.5MB). The project's own
+# design rules under .claude/skills/design/ ARE tracked.
+.claude/skills/impeccable/
+.claude/skills/grill-me/
+
+# impeccable working state (live/ config is kept as project config)
+.impeccable/config.local.json
+.impeccable/questions/
+.impeccable/live/sessions/
+.impeccable/live/annotations/
+.impeccable/live/roots.json

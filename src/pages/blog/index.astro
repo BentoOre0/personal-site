@@ -1,114 +1,260 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import TagList from '../../components/TagList.astro';
+import { SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+// Tag counts drive the filter bar. Each chip is a real link to the static
+// tag page, so the filter works with JavaScript off.
+const counts = new Map<string, number>();
+for (const post of posts) {
+	for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+}
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+		<BaseHead
+			title={`Blog — ${SITE_TITLE}`}
+			description="Notes on things built, measured, and got working."
+		/>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+		<main class="sheet">
+			<div class="head">
+				<div class="head-line">
+					<h1>Blog</h1>
+				</div>
+				<p class="lede">Notes on things built, measured, and got working.</p>
+			</div>
+
+			{
+				tags.length > 0 && (
+					<nav class="filter" aria-label="Filter posts by tag">
+						<a class="chip is-on" href="/blog" data-filter="" aria-current="page">
+							All <span class="count">{posts.length}</span>
+						</a>
+						{tags.map(([tag, n]) => (
+							<a class="chip" href={`/blog/tags/${tag}/`} data-filter={tag}>
+								{tag} <span class="count">{n}</span>
+							</a>
+						))}
+					</nav>
+				)
+			}
+
+			<p class="empty" hidden>No posts with that tag yet.</p>
+
+			<ol class="index">
+				{
+					posts.map((post) => (
+						<li data-tags={post.data.tags.join(' ')}>
+							<div class="entry">
+								<h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+								<p class="summary">{post.data.description}</p>
+								<TagList tags={post.data.tags} />
+							</div>
+							<span class="date legend">
+								<FormattedDate date={post.data.pubDate} />
+							</span>
+						</li>
+					))
+				}
+			</ol>
 		</main>
 		<Footer />
+
+		<script>
+			const setup = () => {
+				const bar = document.querySelector('.filter');
+				const list = document.querySelector('.index');
+				const empty = document.querySelector('.empty');
+				if (!bar || !list || !empty) return;
+
+				const chips = Array.from(bar.querySelectorAll('[data-filter]'));
+				const items = Array.from(list.querySelectorAll('li'));
+
+				const apply = (tag) => {
+					let shown = 0;
+					for (const item of items) {
+						const tags = (item.dataset.tags || '').split(' ').filter(Boolean);
+						const match = !tag || tags.includes(tag);
+						item.hidden = !match;
+						if (match) shown++;
+					}
+					empty.hidden = shown > 0;
+					for (const chip of chips) {
+						const on = chip.dataset.filter === tag;
+						chip.classList.toggle('is-on', on);
+						if (on) chip.setAttribute('aria-current', 'page');
+						else chip.removeAttribute('aria-current');
+					}
+				};
+
+				const fromPath = (path) => {
+					const m = path.match(/\/blog\/tags\/([^/]+)\/?$/);
+					return m ? decodeURIComponent(m[1]) : '';
+				};
+
+				for (const chip of chips) {
+					chip.addEventListener('click', (event) => {
+						if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+						event.preventDefault();
+						const tag = chip.dataset.filter;
+						apply(tag);
+						history.pushState({ tag }, '', chip.getAttribute('href'));
+					});
+				}
+
+				window.addEventListener('popstate', () => apply(fromPath(location.pathname)));
+				apply(fromPath(location.pathname));
+			};
+
+			document.addEventListener('astro:page-load', setup);
+		</script>
 	</body>
 </html>
+
+<style>
+	.head {
+		padding-block: var(--s-7) var(--s-5);
+	}
+
+	.head-line {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+	}
+
+	.head-line::after {
+		content: '';
+		flex: 1 1 auto;
+		border-top: var(--hairline) solid var(--rule);
+	}
+
+	.lede {
+		font-size: var(--t-md);
+		color: var(--muted);
+		margin: var(--s-3) 0 0 0;
+		max-width: var(--measure);
+	}
+
+	.filter {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-2);
+		margin-bottom: var(--s-5);
+	}
+
+	.chip {
+		font-family: var(--font-geist-mono);
+		font-size: var(--t-xs);
+		line-height: 1.3;
+		color: var(--accent);
+		text-decoration: none;
+		padding: 4px var(--s-2);
+		border: var(--hairline) solid color-mix(in srgb, var(--accent) 35%, transparent);
+		border-radius: 2px;
+		transition:
+			color 120ms ease-out,
+			background-color 120ms ease-out,
+			border-color 120ms ease-out;
+	}
+
+	.chip:hover {
+		border-color: var(--accent);
+		background: color-mix(in srgb, var(--accent) 7%, transparent);
+	}
+
+	.chip.is-on {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--paper);
+	}
+
+	.count {
+		font-variant-numeric: tabular-nums;
+		opacity: 0.65;
+	}
+
+	.empty {
+		font-family: var(--font-geist-mono);
+		font-size: var(--t-xs);
+		color: var(--muted);
+		padding-block: var(--s-5);
+		margin: 0;
+	}
+
+	.index {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.index li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: var(--s-4);
+		align-items: baseline;
+		padding: var(--s-4) var(--s-2);
+		margin-inline: calc(-1 * var(--s-2));
+		border-radius: 2px;
+		transition: background-color 120ms ease-out;
+	}
+
+	.index li:hover {
+		background: var(--wash);
+	}
+
+	.index h2 {
+		font-size: var(--t-md);
+		margin: 0;
+	}
+
+	.index h2 a {
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.index h2 a:hover {
+		color: var(--accent);
+	}
+
+	.summary {
+		margin: var(--s-2) 0 var(--s-3) 0;
+		font-size: var(--t-xs);
+		color: var(--muted);
+		max-width: 60ch;
+	}
+
+	.date {
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 40rem) {
+		.head {
+			padding-block: var(--s-6) var(--s-4);
+		}
+
+		.index li {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-2);
+		}
+
+		.date {
+			grid-column: 1;
+			text-align: left;
+		}
+	}
+</style>

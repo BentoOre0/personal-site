@@ -4,6 +4,25 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 
+const sansFallbacks = [
+	'ui-sans-serif',
+	'system-ui',
+	'-apple-system',
+	'Segoe UI',
+	'Roboto',
+	'Helvetica Neue',
+	'sans-serif',
+];
+
+const monoFallbacks = [
+	'ui-monospace',
+	'SFMono-Regular',
+	'Menlo',
+	'Consolas',
+	'Liberation Mono',
+	'monospace',
+];
+
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://example.com',
@@ -11,20 +30,30 @@ export default defineConfig({
 	fonts: [
 		{
 			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
-			fallbacks: ['sans-serif'],
+			name: 'Geist',
+			cssVariable: '--font-geist',
+			fallbacks: sansFallbacks,
 			options: {
 				variants: [
 					{
-						src: ['./src/assets/fonts/atkinson-regular.woff'],
-						weight: 400,
+						src: ['./src/assets/fonts/geist-variable.woff2'],
+						weight: '400 700',
 						style: 'normal',
 						display: 'swap',
 					},
+				],
+			},
+		},
+		{
+			provider: fontProviders.local(),
+			name: 'Geist Mono',
+			cssVariable: '--font-geist-mono',
+			fallbacks: monoFallbacks,
+			options: {
+				variants: [
 					{
-						src: ['./src/assets/fonts/atkinson-bold.woff'],
-						weight: 700,
+						src: ['./src/assets/fonts/geist-mono-variable.woff2'],
+						weight: '400 700',
 						style: 'normal',
 						display: 'swap',
 					},
