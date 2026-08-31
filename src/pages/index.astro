@@ -48,7 +48,12 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 							{
 								IDENTITY.links.map((link) => (
 									<li>
-										<a href={link.href} aria-label={link.label}>
+										<a
+											href={link.href}
+											aria-label={link.label}
+											target={link.href.startsWith('http') ? '_blank' : undefined}
+											rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+										>
 											<Icon name={link.icon} />
 										</a>
 									</li>
@@ -75,7 +80,15 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 					{
 						CREDENTIALS.map((c) => (
 							<li class:list={[{ unconfirmed: !c.confirmed }]}>
-								<span class="feature-text">{c.text}</span>
+								<span class="feature-text">
+									{c.href ? (
+										<a href={c.href} target="_blank" rel="noopener noreferrer">
+											{c.text}
+										</a>
+									) : (
+										c.text
+									)}
+								</span>
 								<span class="feature-note">{c.note}</span>
 							</li>
 						))
@@ -396,6 +409,24 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		font-size: var(--t-md);
 		line-height: 1.35;
 		letter-spacing: -0.01em;
+	}
+
+	.feature-text a {
+		color: var(--ink);
+		text-decoration: none;
+		background-image: linear-gradient(var(--accent), var(--accent));
+		background-repeat: no-repeat;
+		background-position: 0 100%;
+		background-size: 0% var(--hairline);
+		transition:
+			background-size 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+			color 160ms ease-out;
+	}
+
+	.feature-text a:hover,
+	.feature-text a:focus-visible {
+		color: var(--accent);
+		background-size: 100% var(--hairline);
 	}
 
 	.features li.unconfirmed .feature-text {

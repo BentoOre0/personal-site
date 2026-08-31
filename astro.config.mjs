@@ -25,7 +25,7 @@ const monoFallbacks = [
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	site: 'https://jeremyaidanhernandezyu.vercel.app',
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{

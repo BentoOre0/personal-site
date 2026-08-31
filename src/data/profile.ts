@@ -1,15 +1,15 @@
 /*
   All page content lives here so placeholders are filled in one place.
 
-  Anything marked PLACEHOLDER is illustrative structure, not fact.
-  Replace it before the site is published. The only confirmed
-  credential on this page is the IOI Camp entry.
+  Every entry below is taken from the résumé of 25 Aug 2026.
+  Nothing here may be invented. The one field still unfilled is the
+  résumé link; it is marked PLACEHOLDER.
 */
 
 export const REVISION = {
-	rev: '0.1',
+	rev: '0.2',
 	status: 'PRELIMINARY',
-	updated: '2026-08-31',
+	updated: '2026-09-01',
 };
 
 export const IDENTITY = {
@@ -29,9 +29,13 @@ export const IDENTITY = {
 		'fast algorithms. ',
 	],
 	links: [
-		/* PLACEHOLDER */ { label: 'GitHub', href: '#', icon: 'github' },
-		/* PLACEHOLDER */ { label: 'LinkedIn', href: '#', icon: 'linkedin' },
-		/* PLACEHOLDER */ { label: 'Email', href: '#', icon: 'email' },
+		{ label: 'GitHub', href: 'https://github.com/BentoOre0', icon: 'github' },
+		{
+			label: 'LinkedIn',
+			href: 'https://www.linkedin.com/in/jeremy-aidan-hernandez-yu-a583542b1/',
+			icon: 'linkedin',
+		},
+		{ label: 'Email', href: 'mailto:jahysocials@gmail.com', icon: 'email' },
 	],
 	/* The highest-intent click on the page, so it gets a word rather than
 	   a glyph. PLACEHOLDER — paste the Google Drive share link here. */
@@ -41,33 +45,42 @@ export const IDENTITY = {
 /* Credentials. Ordered most impressive first. */
 export const CREDENTIALS = [
 	{
-		/* CONFIRMED */
-		text: 'IOI Camp Philippines — ranked top 4 nationally',
-		note: 'International Olympiad in Informatics national training camp',
+		text: 'National Olympiad in Informatics — 4th in the Philippines (2024)',
+		note: 'Top 20 nationally for three consecutive years, 2023–2025',
+		href: 'https://noi.ph/2024-national-eliminations/' as string | null,
+		confirmed: true,
+	},
+	{
+		text: 'IOI selection candidate, Philippine National Team (2023–2025)',
+		note: 'Advanced to final team selection — one rank from representing the Philippines',
+		href: 'https://ioinformatics.org/' as string | null,
+		confirmed: true,
+	},
+	{
+		text: 'Asia-Pacific Informatics Olympiad (2023–2024)',
+		note: 'Invited; regional IOI-level contest against 30+ Asia-Pacific countries',
 		href: null as string | null,
 		confirmed: true,
 	},
 	{
-		/* PLACEHOLDER */
-		text: 'Competitive programming rating — TBD',
-		note: 'Codeforces / USACO division, with a profile link',
+		text: 'BASc Engineering Physics, University of British Columbia',
+		note: '2025–present · 92.3%',
 		href: null as string | null,
-		confirmed: false,
+		confirmed: true,
 	},
 	{
-		/* PLACEHOLDER */
-		text: 'Education — TBD',
-		note: 'Institution and programme',
+		text: 'IB Diploma 42/45 — British School Manila',
+		note: 'HL Mathematics AA 7/7, Physics 7/7, Chemistry 7/7',
 		href: null as string | null,
-		confirmed: false,
+		confirmed: true,
 	},
 ];
 
 export const SPECS = [
-	{ key: 'Focus', value: 'Software engineering · embedded · robotics' },
-	{ /* PLACEHOLDER */ key: 'Location', value: 'TBD' },
-	{ /* PLACEHOLDER */ key: 'Languages', value: 'TBD' },
-	{ /* PLACEHOLDER */ key: 'Availability', value: 'TBD' },
+	{ key: 'Focus', value: 'Software engineering · machine learning · avionics hardware' },
+	{ key: 'Based in', value: 'Vancouver, BC' },
+	{ key: 'Languages', value: 'C++ · C · Python · JavaScript / TypeScript' },
+	{ key: 'Availability', value: 'Open to 2026 and 2027 opportunities' },
 ];
 
 export type Project = {
@@ -80,82 +93,107 @@ export type Project = {
 	placeholder: boolean;
 };
 
-/*
-  PLACEHOLDER ENTRIES.
-  Structure and figure specs are real; every string is illustrative.
-  Ordered by impact, per CLAUDE.md — not grouped by discipline.
-*/
+/* Flat list, ordered by impact — not grouped by discipline, per CLAUDE.md. */
 export const PROJECTS: Project[] = [
 	{
 		id: 'P1',
-		title: 'Project title',
+		title: 'Dispatch and fulfilment control system',
 		summary:
-			'One sentence on what it does and why it was hard. The strongest project goes here and is set at full size; the list compresses as it descends.',
+			"A dispatching and fulfilment control system for SEAOIL and SEAGAS delivery operations, built and shipped as sole developer 60 days ahead of schedule. Automated rider messaging and order confirmation through the Viber API, deployed on AWS serverless infrastructure, with a Google Apps Script MVP so ground staff could use it before the full system landed.",
 		params: [
-			{ key: 'Role', value: 'TBD' },
-			{ key: 'Stack', value: 'TBD' },
-			{ key: 'Year', value: 'TBD' },
+			{ key: 'Role', value: 'Sole developer · AI & Automation Engineering intern' },
+			{ key: 'Stack', value: 'Node.js · NestJS · AWS serverless · Viber API' },
+			{ key: 'Year', value: '2025' },
 		],
 		figure: {
-			caption: 'The built system, whole, in frame.',
-			spec: '4:3 · plan view · even diffuse light · plain ground',
-			ratio: '4 / 3',
+			caption: 'System architecture.',
+			spec: '16:9 · vector · same four colours as this page',
+			ratio: '16 / 9',
 		},
-		links: [
-			{ label: 'Repository', href: '#' },
-			{ label: 'Write-up', href: '#' },
-		],
-		placeholder: true,
+		links: [],
+		placeholder: false,
 	},
 	{
 		id: 'P2',
-		title: 'Project title',
+		title: 'Baybayin script recognition — CNN vs. SVC',
 		summary:
-			'A hardware build. The photograph carries the proof, so the figure spec below states the shot it needs.',
+			"Research comparing convolutional neural networks against support vector classifiers at recognising Baybayin script under rotation and noise. CNNs proved more resilient to distortion; SVCs were more accurate on clean data, where the script's diacritics carry the distinction.",
 		params: [
-			{ key: 'Role', value: 'TBD' },
-			{ key: 'Stack', value: 'TBD' },
-			{ key: 'Year', value: 'TBD' },
+			{ key: 'Role', value: 'Sole author · IB Extended Essay' },
+			{ key: 'Stack', value: 'Python · CNN · SVC' },
+			{ key: 'Year', value: '2024–2025' },
 		],
 		figure: {
-			caption: 'Board detail, populated.',
-			spec: '4:3 · overhead · raking light to raise the silkscreen',
-			ratio: '4 / 3',
-		},
-		links: [{ label: 'Repository', href: '#' }],
-		placeholder: true,
-	},
-	{
-		id: 'P3',
-		title: 'Project title',
-		summary:
-			'A software project. Where a hardware entry shows a photograph, this one shows its chart or architecture diagram in the same figure slot.',
-		params: [
-			{ key: 'Role', value: 'TBD' },
-			{ key: 'Stack', value: 'TBD' },
-			{ key: 'Year', value: 'TBD' },
-		],
-		figure: {
-			caption: 'System diagram.',
+			caption: 'Accuracy across rotation and noise levels.',
 			spec: '16:9 · vector · same four colours as this page',
 			ratio: '16 / 9',
 		},
 		links: [
-			{ label: 'Repository', href: '#' },
-			{ label: 'Live', href: '#' },
+			{ label: 'Code', href: 'https://github.com/BentoOre0/Portfolio/tree/main/imageplayground' },
+			{
+				label: 'Paper',
+				href: 'https://drive.google.com/file/d/1Tz5_n4KKLvXJk2pD9c-VNwKGnvGy7cFN/view',
+			},
 		],
-		placeholder: true,
+		placeholder: false,
+	},
+	{
+		id: 'P3',
+		title: 'UBC Rocket — avionics hardware',
+		summary:
+			"Avionics hardware on UBC Rocket's test rocket subteam, working across recovery, internals and composites. Integrated avionics for separation tests firing black powder charges through web-app-triggered e-matches, with microscope-assisted soldering and continuity testing. Also built a personal certification rocket for a Class H motor.",
+		params: [
+			{ key: 'Role', value: 'Avionics hardware · test rocket subteam' },
+			{ key: 'Stack', value: 'CAD · 3D printing · wet layup composites · lathe and mill' },
+			{ key: 'Year', value: '2025–present' },
+		],
+		figure: {
+			caption: 'Avionics bay, assembled.',
+			spec: '4:3 · overhead · raking light on a plain ground',
+			ratio: '4 / 3',
+		},
+		links: [
+			{
+				label: 'Hardware',
+				href: 'https://drive.google.com/drive/folders/1QTmTV7L_z7bfXIQ4lazjrTeh2V993nZ6',
+			},
+		],
+		placeholder: false,
 	},
 	{
 		id: 'P4',
-		title: 'Project title',
-		summary: 'A fourth entry, set quieter. Cutting a weak project strengthens the page more than adding one.',
+		title: 'Automated colour analysis for percentage coverage',
+		summary:
+			'An image-segmentation algorithm measuring percentage colour coverage, cited by the judging panel as the key contribution in a first-place school science competition entry.',
 		params: [
-			{ key: 'Role', value: 'TBD' },
-			{ key: 'Year', value: 'TBD' },
+			{ key: 'Role', value: 'Sole developer' },
+			{ key: 'Stack', value: 'Python · image segmentation' },
+			{ key: 'Year', value: '2024' },
+		],
+		figure: {
+			caption: 'Segmentation output against the source image.',
+			spec: '16:9 · screenshot or vector',
+			ratio: '16 / 9',
+		},
+		links: [
+			{
+				label: 'Repository',
+				href: 'https://github.com/BentoOre0/Portfolio/tree/main/ColorSegmentationAlgoPercentageCoverage',
+			},
+		],
+		placeholder: false,
+	},
+	{
+		id: 'P5',
+		title: 'BSM Programming Varsity',
+		summary:
+			'Co-founded and ran a competitive programming club of 20+ members — biweekly in-house contests, curricula and lectures on Python, algorithms and data structures. Two members qualified for nationals; one joined the national team.',
+		params: [
+			{ key: 'Role', value: 'Co-founder · coach' },
+			{ key: 'Year', value: '2023–2025' },
 		],
 		figure: null,
-		links: [{ label: 'Repository', href: '#' }],
-		placeholder: true,
+		links: [],
+		placeholder: false,
 	},
 ];
