@@ -93,11 +93,36 @@ details table, all five projects, GitHub, LinkedIn, email.
   renaming the project did not attach the short `.vercel.app` domain
   until it was added manually under Settings → Domains.
 
-## Suggested next session
+## To do — owner's list, 1 Sep
 
-1. Fill the résumé link.
+Owner's own three, in his words, with what each needs before it can start:
+
+1. **Update the look of the blog.** Direction needed. The blog currently
+   inherits the homepage language — labelled-rule heading, hover-wash
+   rows, red tags and filter chips, and the face drawing in the header.
+   Ask what specifically feels wrong before restyling; "update the look"
+   has been ambiguous every time this session and the useful answers came
+   from asking which element bothered him.
+2. **Write one post.** *His to write, not the assistant's.* Drafting a
+   post in his voice would be inventing content, which is the one rule
+   this project holds hardest. Offer to edit, structure, or set up the
+   file — never to author it. `src/content/_post-template.md` is the
+   starting point.
+3. **Put more information onto the site.** Scope needed. Candidates the
+   résumé supports but the site does not yet carry: the SEAOIL
+   internship as employment rather than only as a project, the
+   self-taught languages line, the Extended Essay abstract, more detail
+   on the UBC Rocket work. Ask which, and remember the content-structure
+   rule in AGENTS.md — the homepage is Credentials, Details, Projects,
+   and adding a section is a real change to that spec.
+
+## Also outstanding
+
+1. Fill the résumé link (`IDENTITY.resume.href`).
 2. Produce the four figures to the specs the page prints.
-3. Drop the `PRELIMINARY` stamp and bump the revision.
-4. Delete the four leftover Astro demo posts (`first-post`,
+3. `og:image` is still the Astro placeholder `blog-placeholder-1.jpg`,
+   so sharing the link on LinkedIn or Slack shows a stock photo.
+4. Drop the `PRELIMINARY` stamp and bump the revision once the above land.
+5. Delete the four leftover Astro demo posts (`first-post`,
    `second-post`, `third-post`, `using-mdx`). `markdown-style-guide.md`
    is worth keeping as a syntax reference until the owner is comfortable.

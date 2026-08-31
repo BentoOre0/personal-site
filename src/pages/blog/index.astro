@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import avatar from '../../assets/avatar.png';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -35,7 +37,17 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 				<div class="head-line">
 					<h1>Blog</h1>
 				</div>
-				<p class="lede">Notes on things built, measured, and got working.</p>
+				<div class="head-body">
+					<p class="lede">Notes on things built, measured, and got working.</p>
+					<Image
+						class="avatar"
+						src={avatar}
+						width={320}
+						densities={[1, 2]}
+						loading="eager"
+						alt=""
+					/>
+				</div>
 			</div>
 
 			{
@@ -142,11 +154,38 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 		border-top: var(--hairline) solid var(--rule);
 	}
 
+	.head-body {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: var(--s-6);
+	}
+
 	.lede {
 		font-size: var(--t-md);
 		color: var(--muted);
 		margin: var(--s-3) 0 0 0;
-		max-width: var(--measure);
+		max-width: 34ch;
+	}
+
+	.avatar {
+		width: 132px;
+		height: auto;
+		flex: none;
+		/* Drawn on white, so it sits on the paper without a frame. */
+		mix-blend-mode: multiply;
+	}
+
+	@media (max-width: 40rem) {
+		.head-body {
+			flex-direction: column-reverse;
+			align-items: flex-start;
+			gap: var(--s-3);
+		}
+
+		.avatar {
+			width: 104px;
+		}
 	}
 
 	.filter {
