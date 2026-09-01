@@ -145,6 +145,20 @@ request. It is the only autonomous motion on the site. An earlier
 hover-to-type effect on project titles was built and removed as too
 noisy; project titles are now plain.
 
+### Project rows hang from their designator
+
+`.project-body` is a two-column grid: the `P1`–`P5` designator sits in a
+gutter and the title, summary, parameter table and links all share the
+content column's left edge. The title used to be a flex sibling of the
+designator, which indented it ~50px while everything beneath it stayed
+flush left — invisible at desktop width where the title fits one line,
+and obvious on a phone where it wraps to three. The `.spec` inset is
+zeroed inside a project for the same reason.
+
+Below 40rem the gutter is dropped and the designator takes its own line:
+full measure matters more than the hanging indent at 342px, and
+everything still shares one edge.
+
 ### Section marks
 
 `§1`–`§4` sit *after* their headings as permalink anchors, not as eyebrow

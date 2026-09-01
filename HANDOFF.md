@@ -331,3 +331,12 @@ indistinguishable from plain text on a phone.
   to 25 characters per line.
 - `/404` is the best-composed mobile page on the site — one viewport
   tall. Worth looking at as a target for the others.
+
+**Alignment fix (owner-reported, from a phone screenshot).** Project rows
+had three different left edges: the title indented ~50px as a flex
+sibling of its designator, the summary flush left, and the params table
+inset 8px by `.spec th:first-child`. `.project-body` is now a grid with
+the designator in a gutter and everything else in one content column;
+below 40rem the gutter collapses and the designator takes its own line.
+Verified by measuring left edges in a capture — desktop now shows
+exactly two (gutter, content), mobile exactly one.

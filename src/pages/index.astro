@@ -130,16 +130,14 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 						PROJECTS.map((p, i) => (
 							<li class="project" class:list={[`rank-${i + 1}`]}>
 								<div class="project-body">
-									<div class="project-head">
-										<span class="designator">{p.id}</span>
-										<h3>
-											{p.links[0] ? (
-												<a href={p.links[0].href}>{p.title}</a>
-											) : (
-												p.title
-											)}
-										</h3>
-									</div>
+									<span class="designator">{p.id}</span>
+									<h3>
+										{p.links[0] ? (
+											<a href={p.links[0].href}>{p.title}</a>
+										) : (
+											p.title
+										)}
+									</h3>
 									<p class="summary">{p.summary}</p>
 									<table class="spec params">
 										<tbody>
@@ -527,10 +525,34 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		padding-top: var(--s-4);
 	}
 
-	.project-head {
-		display: flex;
-		align-items: baseline;
-		gap: var(--s-3);
+	/* A hanging indent: the designator sits in its own gutter and the title,
+	   summary, parameters and links all share one left edge. Previously the
+	   title was a flex sibling of the designator, so it started ~50px in
+	   while everything below it was flush left — invisible on desktop where
+	   the title fits one line, glaring on a phone where it wraps to three. */
+	.project-body {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		column-gap: var(--s-3);
+	}
+
+	.project-body > .designator {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	.project-body > :not(.designator) {
+		grid-column: 2;
+	}
+
+	.project-body > h3 {
+		grid-row: 1;
+	}
+
+	/* The params table is inset 8px by the shared .spec rule, which would
+	   put it one step off the summary above it. */
+	.params th:first-child {
+		padding-left: 0;
 	}
 
 	.project h3 {
@@ -625,6 +647,24 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 
 	/* --- Adaptation. Mobile is the default case. --- */
 	@media (max-width: 52rem) {
+		/* Full width matters more than the gutter at this size: the
+		   designator takes its own line and everything stays flush left. */
+		.project-body {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-2);
+		}
+
+		.project-body > .designator,
+		.project-body > h3,
+		.project-body > :not(.designator) {
+			grid-column: 1;
+		}
+
+		.project-body > .designator,
+		.project-body > h3 {
+			grid-row: auto;
+		}
+
 		.project {
 			grid-template-columns: minmax(0, 1fr);
 			gap: var(--s-4);
