@@ -1,0 +1,51 @@
+---
+/*
+  The tag bar, shared by /blog and every /blog/tags/<tag> page.
+
+  Every chip is a plain link to a static tag page. There is no client-side
+  filtering, so the URL and the list can never disagree, and the bar works
+  with JavaScript off. ClientRouter already makes these navigations
+  client-side, so nothing is lost by letting the link do the work.
+*/
+interface Props {
+	/* [tag, count], already ordered. */
+	tags: [string, number][];
+	total: number;
+	/* null on /blog — the "All" chip is the current one. */
+	current?: string | null;
+}
+
+const { tags, total, current = null } = Astro.props;
+---
+
+{
+	tags.length > 0 && (
+		<nav class="filter" aria-label="Filter posts by tag">
+			<a
+				class:list={['chip', { 'is-on': current === null }]}
+				href="/blog"
+				aria-current={current === null ? 'page' : undefined}
+			>
+				All <span class="count">{total}</span>
+			</a>
+			{tags.map(([tag, n]) => (
+				<a
+					class:list={['chip', { 'is-on': current === tag }]}
+					href={`/blog/tags/${encodeURIComponent(tag)}/`}
+					aria-current={current === tag ? 'page' : undefined}
+				>
+					{tag} <span class="count">{n}</span>
+				</a>
+			))}
+		</nav>
+	)
+}
+
+<style>
+	.filter {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-2);
+		margin-bottom: var(--s-6);
+	}
+</style>

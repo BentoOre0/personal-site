@@ -52,7 +52,21 @@ washes are derived from `--muted` with `color-mix` so the count holds.
 | `--paper` | `#ffffff` | ground — the page is printed paper |
 | `--ink` | `#101418` | foreground, near-black, never pure black |
 | `--muted` | `#6f757d` | secondary text, labels, rules (4.65:1 on paper) |
-| `--accent` | `#1b4f9c` | links only (7.9:1 on paper) |
+| `--accent` | `#e51b23` | links, marks, and tags (4.65:1 on paper) |
+
+The accent is sampled from the red X in the owner's own sketch
+(`#ec1c24`), darkened the minimum needed to clear 4.5:1 on white. It
+clears AA for text and nothing more: it must never carry a hairline or
+a control boundary on its own, which needs 3:1 and the 35%-tinted chip
+border does not reach.
+
+It is **not** links-only, despite what earlier drafts of this file said.
+It also paints the rotating term, the caret, the contact glyphs, the
+revision stamp, and every tag chip. What keeps that from becoming
+confetti is rank, not restraint: the homepage's accent spans 28px and
+14px, so the small marks sit under a large one. Any surface that uses
+the accent only at 14px reads as speckle — the blog index currently
+does, with eleven resting accent marks against the homepage's eight.
 
 Light only, committed. The use scene is a recruiter skimming on a laptop
 in daylight, and the world is a printed document. No dark theme; if that
@@ -139,6 +153,14 @@ resolve; if they ever stop linking, delete them.
 ## Motion
 
 Nothing moves without user input — a pinned rule and a hard constraint.
+Two documented exceptions carry autonomous motion: the typed tagline,
+and the loading screen (`Loader.astro`), where an indicator that does
+not move is not an indicator. The loader runs three layers on separate
+clocks — the figure trots at 660ms, the notes bob at 900ms, the Z's
+jitter at 420ms on `steps()` so they snap rather than glide — and exits
+by sliding the whole sheet up, never by fading. Both are off entirely
+under `prefers-reduced-motion`, and the overlay carries a 6s CSS
+failsafe so a dead script cannot seal the page shut.
 The only transitions are 120ms ease-out color and underline changes on
 hover and focus. `prefers-reduced-motion` is honoured globally.
 
@@ -157,6 +179,24 @@ as a single quiet mono line at 14px. The stamp was originally a
 three-row block beside the sketch and was reduced — it is reference
 metadata, not a headline, and the footer carries it in full.
 
+### One title, two roles
+
+`/blog` sets its `h1` in the sans; a tag archive sets its `h1` in the
+mono. That is not drift. The word "Blog" is a section name, and a tag
+is a literal value — and mono carries measured and specified values.
+
+### The blog masthead
+
+The avatar sits left at a fixed 96px (72px under 40rem), vertically
+centred against `Blog` and its one-line subtext to the right. There is
+no rule beneath it: a hairline there cut the title off from the list it
+introduces, and the drawing had nothing to attach to.
+
+It does not resize on scroll. A scroll-linked shrink was built and
+removed — scroll is user input, so it did not break the motion rule,
+but at masthead scale the drawing overpowered a 40px title and the
+movement bought nothing the fixed size does not already give.
+
 ## Naming
 
 Headings use plain language matching the content structure in CLAUDE.md:
@@ -171,13 +211,46 @@ seconds.
 
 Posts carry optional `tags` in frontmatter. Each tag gets a static
 archive at `/blog/tags/<tag>/`. Tags render as hairline-outlined mono
-chips at 14px, muted until hover.
+chips at 14px in the accent, filling solid when current.
+
+**Filtering is navigation, not state.** `TagFilter.astro` renders the
+bar on both `/blog` and every tag archive, and every chip is a plain
+link to a page that already exists. There is no client-side filter: an
+earlier one set `hidden` on the rows, which an author-origin
+`display: grid` silently overrode, so the chips lit up and the list
+never changed. Worse, it `pushState`d a tag URL onto the index's own
+DOM, so the same address rendered two different pages depending on how
+you reached it. `ClientRouter` already makes these navigations
+client-side, so the links cost nothing and cannot disagree with the URL.
+
+`.chip` is one primitive in `global.css`, shared by the filter bar and
+by a post's own tag list. It replaced two near-identical components
+with different padding, radius, and hover. Measured on paper:
+
+| State | Value | Ratio |
+|---|---|---|
+| label, rest | `--accent` | 4.65:1 |
+| label, hover | `accent 72% + black` on `--accent-wash` | 6.60:1 |
+| border | `accent 65%` | 3.01:1 |
+| current (`.is-on`) | `--paper` on `--accent` | 4.65:1 |
+
+The border sits at 65% because a control boundary needs 3:1; the
+earlier 35% measured 1.80:1 and drew nothing. Hover darkens the label
+rather than holding the accent, which measured 4.16:1 against its own
+wash and failed AA.
 
 ## Placeholder discipline
 
 The document is stamped `PRELIMINARY` with a revision number while
 content is incomplete, and unfilled values read `TBD` — both native to
 the format, so honesty costs the design nothing. All page content lives
-in `src/data/profile.ts`, with every placeholder marked. The only
-confirmed credential currently on the page is IOI Camp Philippines,
-top 4 nationally. Nothing on this site may be invented to fill a gap.
+in `src/data/profile.ts`, with every placeholder marked. All five
+credentials on the page are now confirmed and sourced from the résumé
+of 25 Aug 2026; `IDENTITY.resume.href` is the one field still unfilled.
+Nothing on this site may be invented to fill a gap.
+
+The blog is the one surface where that rule is currently broken, and
+not by the design: `src/content/blog/` still holds four Astro demo
+posts whose bodies are Lorem ipsum and whose tags — `embedded`,
+`robotics`, `algorithms` — are invented. They are live and syndicated
+through `rss.xml`.

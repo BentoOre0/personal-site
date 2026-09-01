@@ -1,6 +1,7 @@
 # Handoff — 1 Sep 2026
 
-State of the site after the redesign session of 31 Aug / 1 Sep 2026.
+State of the site after the redesign session of 31 Aug / 1 Sep 2026,
+updated after the blog session later on 1 Sep (see "Blog session" below).
 Read this with `PRODUCT.md` (product truth) and `DESIGN.md` (visual
 system). This file records what happened and what is left; those two
 record what is true.
@@ -97,12 +98,12 @@ details table, all five projects, GitHub, LinkedIn, email.
 
 Owner's own three, in his words, with what each needs before it can start:
 
-1. **Update the look of the blog.** Direction needed. The blog currently
-   inherits the homepage language — labelled-rule heading, hover-wash
-   rows, red tags and filter chips, and the face drawing in the header.
-   Ask what specifically feels wrong before restyling; "update the look"
-   has been ambiguous every time this session and the useful answers came
-   from asking which element bothered him.
+1. **Update the look of the blog.** Partly done — see "Blog session".
+   The header was reworked and the dead filter removed. Still open is the
+   amplitude work the critique identified: the blog carries zero
+   designators and zero spec tables against the homepage's 16 and 6.
+   Note the pattern that worked: he answers precisely when asked about a
+   named element, and not at all when asked "how should it look".
 2. **Write one post.** *His to write, not the assistant's.* Drafting a
    post in his voice would be inventing content, which is the one rule
    this project holds hardest. Offer to edit, structure, or set up the
@@ -126,3 +127,150 @@ Owner's own three, in his words, with what each needs before it can start:
 5. Delete the four leftover Astro demo posts (`first-post`,
    `second-post`, `third-post`, `using-mdx`). `markdown-style-guide.md`
    is worth keeping as a syntax reference until the owner is comfortable.
+
+
+## Blog session — 1 Sep, later
+
+`npm run build` passes, 11 pages. Nothing below is committed yet.
+
+**Homepage.** The email contact is now the address as text
+(`jahysocials@gmail.com`) rather than an envelope glyph; a contact is
+either an `icon` or a `text` string in `IDENTITY.links`, and the unused
+`email` path is gone from `Icon.astro`. Nav hover moved from `--ink` to
+`--accent`, so Home/Blog go red on hover like the wordmark. One
+consequence: hover and current-page now share a colour, and only the red
+underline distinguishes "you are here".
+
+**The tag filter was inert and is now deleted.** `item.hidden = true` did
+nothing, because `.index li { display: grid }` at author origin overrides
+the UA's `[hidden] { display: none }`. Chips lit up, the URL changed, the
+list never moved. `TagFilter.astro` now renders the bar on both `/blog`
+and every tag archive, as plain links to pages that already existed.
+Deleting the script also removed a `popstate` handler that leaked on
+every ClientRouter navigation. **Do not reintroduce client-side
+filtering**; the reasoning is recorded in DESIGN.md under Tags.
+
+**The blog masthead** is the avatar left at a fixed 96px, vertically
+centred against `Blog` and its subtext to the right, no rule beneath.
+Three layouts were tried and rejected on the way: avatar below the rule
+(it belonged to the lede, not the heading), avatar centred above the
+title, and a scroll-driven shrink from 300px. The shrink was legal —
+scroll is user input, not autonomous motion — but the drawing overpowered
+a 40px title. Note `avatar.png` is only 320x309, so anything above about
+300px CSS is upscaled.
+
+**An `/impeccable critique` ran on the blog** (dual-agent; detector clean,
+zero findings on all five files; no browser automation available in the
+session). Snapshot in `.impeccable/critique/`. Findings still open:
+
+1. **The four demo posts stay — the owner wants a template blog.** He
+   said so directly ("i want a template blog why did you kill it") after
+   a test run made them briefly 404. Do not propose deleting them again.
+   The critique rated them the site's biggest problem (Lorem ipsum, live
+   at the public URL, RSS-syndicated, invented tags) and that assessment
+   stands on the merits — but it is decided, and re-raising it wastes his
+   time. If he ever does clear them, `/blog` now has a real empty state.
+2. **The amplitude gap is furniture, not type size.** At 390px the
+   homepage and blog `h1` are both 40px. The homepage carries 16
+   designator marks and 6 spec tables; the blog carries none.
+3. **The blog has more red than the homepage** — 11 resting accent marks
+   against 8 — and all of it is 14px. It needs one accent mark *above*
+   14px, not fewer marks.
+4. `.chip` hover is 4.16:1 and fails AA; `TagList`'s equivalent is correct
+   at 6.94:1. The two chip components should be one primitive.
+5. `.head` and `.index` on `/blog` are uncapped, so text runs to ~880px
+   against the 720px rule. `[tag].astro` already caps correctly.
+
+**Docs corrected this session:** DESIGN.md's accent row said `#1b4f9c` at
+7.9:1, "links only" — the shipped value is `#e51b23` at 4.65:1 and it
+paints far more than links. PRODUCT.md described the repo as the
+unmodified Astro starter and cited a superseded credential.
+
+**Gotcha to add to the list:** a subagent stopped the dev server when it
+finished measuring, which took localhost down mid-session. If localhost
+dies for no apparent reason, check `npx astro dev status` before
+debugging any code.
+
+
+## Polish / harden / optimize — 1 Sep, later still
+
+Three impeccable passes after the critique. `npm run build` passes,
+12 pages.
+
+**Polish.** `.chip` is now one primitive in `global.css` instead of two
+near-identical components; hover went from 4.16:1 (failed AA) to
+6.60:1, and the border from 1.80:1 to 3.01:1, the floor for a control
+boundary. Post rows wash on hover and now genuinely are the click
+target — the title's link is stretched over the row, with the tags
+lifted above it. The loader lost its animated ellipsis: it animated the
+`content` property, which Firefox does not animate, so those dots never
+existed for a third of visitors.
+
+**Harden.** Real bug fixed: tag hrefs were not URL-encoded, so any tag
+containing a space or `+` would link to a page that does not exist.
+Added a 404 page, an empty state for a postless `/blog` (uses `.plate`,
+now promoted to `global.css`), table overflow scrolling inside the
+measure, and a guard so an unknown icon name renders nothing rather
+than a broken `<path>`.
+
+**Optimize.** The loader PNGs were the largest asset on every route —
+larger than either font or the JS bundle — and `public/` means Astro
+never touches them. Requantised to 32-colour palette PNGs, verified
+pixel-identical at 2x zoom:
+
+| | before | after |
+|---|---|---|
+| loader art (3 files) | 46.2 KB | **11.7 KB** |
+| `/` total | 181.0 KB | **146.6 KB** |
+| `/blog` total | 143.3 KB | **108.8 KB** |
+| a post | 162.7 KB | **128.2 KB** |
+
+They stay PNG on purpose — the owner asked for PNG, and palette PNG beat
+lossless WebP here anyway (9.0 KB vs 18.1 KB on the body layer). Fonts
+were already optimal: preloaded, `font-display: swap`, with a
+metric-matched Arial fallback carrying `size-adjust` and
+`ascent-override`, so a font swap cannot shift layout. Every image
+carries intrinsic dimensions.
+
+**Gotcha, third time this session.** Astro's content index lives at
+`node_modules/.astro/data-store.json`, not in `.astro/`. Clearing it
+while a dev server is running makes every post 404 while the files sit
+untouched on disk — it looks exactly like deleted content and is not.
+Restart the dev server. Also: `astro dev stop` can report "No dev server
+is running" while an orphan still holds port 4321; find it with
+`ss -lptn 'sport = :4321'` and kill it.
+
+
+## Adapt — responsive pass, 1 Sep
+
+**Every hover rule is now guarded by `@media (hover: hover)`** — there
+were 20 and none were. On a touch device a hover style latches after a
+tap, so the post-row wash, chip hover, nav hover and project-title
+hover all stuck until the next tap. The primary visitor skims on a
+phone, so this was the worst of the responsive defects.
+
+**Touch targets.** Chips were ~28px tall against a 44px floor. Bumped
+under `@media (pointer: coarse)` rather than at a width breakpoint, so
+the printed density survives on desktop and a touch laptop still gets
+real targets. Screen width does not tell you the input method.
+
+**Safe areas.** `viewport-fit=cover` is on, and the sheet gutters, the
+loader, and the footer's bottom pad now take `max(token,
+env(safe-area-inset-*))` so a notch in landscape and a home indicator
+do not sit on top of content.
+
+**The loader was clipped in landscape.** `.stage` was width-bounded
+only, and the art is taller than it is wide, so on a 320px-tall
+landscape phone it needed ~368px. Now `min(clamp(180px, 30vw, 260px),
+47vh)`: worst case is 240px of 320px.
+
+**320px overflow.** `.stamp` is 34 mono characters — about 286px against
+a 272px content box — with `white-space: nowrap`, which forced the whole
+page sideways. It wraps below 30rem now, as do the `.spec` row headers.
+
+**Not done, deliberately.** The breakpoints are still desktop-first
+(`max-width`), against the pinned brief's "mobile is the default case".
+Inverting five files to `min-width` is redesign-scale churn for no
+visual change and real regression risk; the cost is that mobile parses
+a few rules it discards. Worth doing only alongside other work in those
+files.

@@ -23,12 +23,13 @@ export const IDENTITY = {
 	   the timing adapts. Keep them all true. */
 	rotating: [
 		'websites. ',
-		'robots |0_x|. ',
+		'robots [^3^]. ',
 		'rockets. ',
 		'automation solutions. ',
 		'fast algorithms. ',
-		'AI Slop ಠಿ_ಠ? ',
+		'AI Slop ಠಿ_ಠ...? ',
 	],
+	/* A contact is either a glyph (`icon`) or the literal string (`text`). */
 	links: [
 		{ label: 'GitHub', href: 'https://github.com/BentoOre0', icon: 'github' },
 		{
@@ -36,8 +37,14 @@ export const IDENTITY = {
 			href: 'https://www.linkedin.com/in/jeremy-aidan-hernandez-yu-a583542b1/',
 			icon: 'linkedin',
 		},
-		{ label: 'Email', href: 'mailto:jahysocials@gmail.com', icon: 'email' },
-	],
+		/* Spelled out rather than iconised: an address a recruiter can read,
+		   copy, or paste into a client that isn't their default one. */
+		{
+			label: 'Email',
+			href: 'mailto:jahysocials@gmail.com',
+			text: 'jahysocials@gmail.com',
+		},
+	] as { label: string; href: string; icon?: string; text?: string }[],
 	/* The highest-intent click on the page, so it gets a word rather than
 	   a glyph. PLACEHOLDER — paste the Google Drive share link here. */
 	resume: { label: 'Résumé', href: '#' },

@@ -123,8 +123,10 @@ a {
 	transition: text-decoration-color 120ms ease-out;
 }
 
-a:hover {
-	text-decoration-color: var(--accent);
+@media (hover: hover) {
+	a:hover {
+		text-decoration-color: var(--accent);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -163,7 +165,9 @@ a:hover {
 	width: 100%;
 	max-width: var(--wide);
 	margin-inline: auto;
-	padding-inline: var(--s-4);
+	/* In landscape on a notched phone the notch sits over the gutter, so
+	   the inline padding takes whichever is larger. */
+	padding-inline: max(var(--s-4), env(safe-area-inset-left)) max(var(--s-4), env(safe-area-inset-right));
 }
 
 .column {
@@ -221,9 +225,11 @@ a:hover {
 	border-end-start-radius: 2px;
 }
 
-.spec tbody tr:hover th,
-.spec tbody tr:hover td {
-	background: var(--wash);
+@media (hover: hover) {
+	.spec tbody tr:hover th,
+	.spec tbody tr:hover td {
+		background: var(--wash);
+	}
 }
 
 .spec th {
@@ -263,8 +269,10 @@ a.designator {
 	transition: color 120ms ease-out;
 }
 
-a.designator:hover {
-	color: var(--ink);
+@media (hover: hover) {
+	a.designator:hover {
+		color: var(--ink);
+	}
 }
 
 /* Geist Mono, the sans's sibling. Used for measured and specified
@@ -308,5 +316,92 @@ a.designator:hover {
 	::view-transition-old(root),
 	::view-transition-new(root) {
 		animation: none;
+	}
+}
+
+/* --- Tag chip ---------------------------------------------------------
+   One primitive for the filter bar and for a post's own tag list, which
+   were two near-identical components with different padding, radius and
+   hover. The border sits at 65% accent, which measures 3.01:1 on paper —
+   the floor for a control boundary; 35% measured 1.80:1 and drew nothing.
+   Hover darkens the label instead of holding the accent, which measured
+   4.16:1 against its own wash and failed AA. */
+.chip {
+	display: inline-block;
+	font-family: var(--font-geist-mono);
+	font-size: var(--t-xs);
+	line-height: 1.3;
+	color: var(--accent);
+	text-decoration: none;
+	padding: 4px var(--s-2);
+	border: var(--hairline) solid color-mix(in srgb, var(--accent) 65%, transparent);
+	border-radius: 2px;
+	transition:
+		color 120ms ease-out,
+		background-color 120ms ease-out,
+		border-color 120ms ease-out;
+}
+
+@media (hover: hover) {
+	.chip:hover {
+		color: color-mix(in srgb, var(--accent) 72%, #000);
+		border-color: var(--accent);
+		background: var(--accent-wash);
+	}
+}
+
+.chip.is-on {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: var(--paper);
+}
+
+.chip .count {
+	font-variant-numeric: tabular-nums;
+	opacity: 0.65;
+}
+
+/* --- Plate -------------------------------------------------------------
+   An honest placeholder: a slot that states what belongs in it. Used by
+   the unshot project figures and by the blog index when it holds no
+   posts. Dashed, because the format already reads "not filled in yet". */
+.plate {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: var(--s-3);
+	border: var(--hairline) dashed var(--rule-strong);
+	background: var(--wash);
+	padding: var(--s-3);
+}
+
+.plate-spec {
+	font-size: var(--t-xs);
+	color: var(--muted);
+	line-height: 1.4;
+	max-width: 60ch;
+}
+
+
+/* --- Touch --------------------------------------------------------------
+   The primary visitor skims on a phone. Chips are 14px type and would sit
+   at ~28px tall, under the 44px comfortable-target floor, so coarse
+   pointers get the padding and fine pointers keep the printed density. */
+@media (pointer: coarse) {
+	.chip {
+		min-height: 44px;
+		display: inline-flex;
+		align-items: center;
+		padding-inline: var(--s-3);
+	}
+}
+
+/* Below 320px-ish the uppercase row headers cannot hold their own line
+   without squeezing the value column past readability. */
+@media (max-width: 30rem) {
+	.spec th {
+		white-space: normal;
+		width: auto;
+		padding-right: var(--s-3);
 	}
 }

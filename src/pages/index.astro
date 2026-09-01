@@ -36,6 +36,7 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 						class="emblem"
 						src={discipline}
 						width={1102}
+						sizes="(max-width: 40rem) 132px, (max-width: 68rem) 34vw, 380px"
 						densities={[1, 2]}
 						loading="eager"
 						alt="Hand-drawn sketch of a figure turning away from a plate of food, captioned DISCIPLINE."
@@ -49,12 +50,13 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 								IDENTITY.links.map((link) => (
 									<li>
 										<a
+											class={link.text ? 'as-text' : undefined}
 											href={link.href}
-											aria-label={link.label}
+											aria-label={link.text ? undefined : link.label}
 											target={link.href.startsWith('http') ? '_blank' : undefined}
 											rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
 										>
-											<Icon name={link.icon} />
+											{link.text ? link.text : <Icon name={link.icon} />}
 										</a>
 									</li>
 								))
@@ -338,8 +340,11 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 	}
 
-	.resume:hover {
-		text-decoration-color: var(--accent);
+	@media (hover: hover) {
+		.resume:hover {
+			text-decoration-color: var(--accent);
+	
+		}
 	}
 
 	.contacts {
@@ -347,6 +352,7 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		margin: 0;
 		padding: 0;
 		display: flex;
+		align-items: center;
 		flex-wrap: wrap;
 		gap: var(--s-2) var(--s-6);
 	}
@@ -364,8 +370,30 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		transition: color 120ms ease-out;
 	}
 
-	.contacts a:hover {
-		color: color-mix(in srgb, var(--accent) 72%, #000);
+	@media (hover: hover) {
+		.contacts a:hover {
+			color: color-mix(in srgb, var(--accent) 72%, #000);
+	
+		}
+	}
+
+	/* The address is set, not drawn, so it needs the line-height the glyphs
+	   gave up — and the mono of every other literal value on the sheet. */
+	.contacts a.as-text {
+		font-family: var(--font-geist-mono);
+		font-size: var(--t-xs);
+		letter-spacing: 0.02em;
+		line-height: 1;
+		text-decoration: underline;
+		text-underline-offset: 0.25em;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+	}
+
+	@media (hover: hover) {
+		.contacts a.as-text:hover {
+			text-decoration-color: var(--accent);
+	
+		}
 	}
 
 	.stamp {
@@ -401,8 +429,11 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		transition: background-color 120ms ease-out;
 	}
 
-	.features li:hover {
-		background: var(--wash);
+	@media (hover: hover) {
+		.features li:hover {
+			background: var(--wash);
+	
+		}
 	}
 
 	.feature-text {
@@ -423,10 +454,13 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 			color 160ms ease-out;
 	}
 
-	.feature-text a:hover,
+	@media (hover: hover) {
+		.feature-text a:hover,
 	.feature-text a:focus-visible {
-		color: var(--accent);
-		background-size: 100% var(--hairline);
+			color: var(--accent);
+			background-size: 100% var(--hairline);
+	
+		}
 	}
 
 	.features li.unconfirmed .feature-text {
@@ -457,8 +491,11 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		transition: background-color 120ms ease-out;
 	}
 
-	.project:hover {
-		background: var(--wash);
+	@media (hover: hover) {
+		.project:hover {
+			background: var(--wash);
+	
+		}
 	}
 
 	.project:first-child {
@@ -489,10 +526,13 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 			color 160ms ease-out;
 	}
 
-	.project h3 a:hover,
+	@media (hover: hover) {
+		.project h3 a:hover,
 	.project h3 a:focus-visible {
-		color: var(--accent);
-		background-size: 100% var(--hairline);
+			color: var(--accent);
+			background-size: 100% var(--hairline);
+	
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -544,21 +584,6 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		margin: 0;
 	}
 
-	.plate {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		border: var(--hairline) dashed var(--rule-strong);
-		background: var(--wash);
-		padding: var(--s-3);
-	}
-
-	.plate-spec {
-		font-size: var(--t-xs);
-		color: var(--muted);
-		line-height: 1.4;
-	}
-
 	figcaption {
 		margin-top: var(--s-2);
 		font-size: var(--t-xs);
@@ -604,5 +629,13 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 			gap: var(--s-3) var(--s-5);
 		}
 
+	}
+
+	@media (max-width: 30rem) {
+		/* 34 mono characters is wider than a 320px viewport's content box,
+		   and nowrap would push the page sideways. */
+		.stamp {
+			white-space: normal;
+		}
 	}
 </style>

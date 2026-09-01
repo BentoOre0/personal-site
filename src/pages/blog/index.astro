@@ -6,6 +6,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+import TagFilter from '../../components/TagFilter.astro';
 import TagList from '../../components/TagList.astro';
 import { SITE_TITLE } from '../../consts';
 
@@ -13,8 +14,8 @@ const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-// Tag counts drive the filter bar. Each chip is a real link to the static
-// tag page, so the filter works with JavaScript off.
+// Tag counts drive the filter bar. Each chip is a plain link to the static
+// tag page, so filtering needs no JavaScript and the URL is always honest.
 const counts = new Map<string, number>();
 for (const post of posts) {
 	for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
@@ -34,43 +35,31 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 		<Header />
 		<main class="sheet">
 			<div class="head">
-				<div class="head-line">
+				<Image class="avatar" src={avatar} width={192} densities={[1, 2]} loading="eager" alt="" />
+				<div class="head-text">
 					<h1>Blog</h1>
-				</div>
-				<div class="head-body">
 					<p class="lede">Notes on things built, measured, and got working.</p>
-					<Image
-						class="avatar"
-						src={avatar}
-						width={320}
-						densities={[1, 2]}
-						loading="eager"
-						alt=""
-					/>
 				</div>
 			</div>
 
+			<TagFilter tags={tags} total={posts.length} />
+
 			{
-				tags.length > 0 && (
-					<nav class="filter" aria-label="Filter posts by tag">
-						<a class="chip is-on" href="/blog" data-filter="" aria-current="page">
-							All <span class="count">{posts.length}</span>
-						</a>
-						{tags.map(([tag, n]) => (
-							<a class="chip" href={`/blog/tags/${tag}/`} data-filter={tag}>
-								{tag} <span class="count">{n}</span>
-							</a>
-						))}
-					</nav>
+				posts.length === 0 && (
+					<div class="plate">
+						<span class="legend">No entries</span>
+						<span class="plate-spec">
+							This section is unpopulated. Entries appear here newest first, each with
+							a title, a one-line summary, its tags and a date.
+						</span>
+					</div>
 				)
 			}
-
-			<p class="empty" hidden>No posts with that tag yet.</p>
 
 			<ol class="index">
 				{
 					posts.map((post) => (
-						<li data-tags={post.data.tags.join(' ')}>
+						<li>
 							<div class="entry">
 								<h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
 								<p class="summary">{post.data.description}</p>
@@ -86,152 +75,42 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 		</main>
 		<Footer />
 
-		<script>
-			const setup = () => {
-				const bar = document.querySelector('.filter');
-				const list = document.querySelector('.index');
-				const empty = document.querySelector('.empty');
-				if (!bar || !list || !empty) return;
-
-				const chips = Array.from(bar.querySelectorAll('[data-filter]'));
-				const items = Array.from(list.querySelectorAll('li'));
-
-				const apply = (tag) => {
-					let shown = 0;
-					for (const item of items) {
-						const tags = (item.dataset.tags || '').split(' ').filter(Boolean);
-						const match = !tag || tags.includes(tag);
-						item.hidden = !match;
-						if (match) shown++;
-					}
-					empty.hidden = shown > 0;
-					for (const chip of chips) {
-						const on = chip.dataset.filter === tag;
-						chip.classList.toggle('is-on', on);
-						if (on) chip.setAttribute('aria-current', 'page');
-						else chip.removeAttribute('aria-current');
-					}
-				};
-
-				const fromPath = (path) => {
-					const m = path.match(/\/blog\/tags\/([^/]+)\/?$/);
-					return m ? decodeURIComponent(m[1]) : '';
-				};
-
-				for (const chip of chips) {
-					chip.addEventListener('click', (event) => {
-						if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
-						event.preventDefault();
-						const tag = chip.dataset.filter;
-						apply(tag);
-						history.pushState({ tag }, '', chip.getAttribute('href'));
-					});
-				}
-
-				window.addEventListener('popstate', () => apply(fromPath(location.pathname)));
-				apply(fromPath(location.pathname));
-			};
-
-			document.addEventListener('astro:page-load', setup);
-		</script>
 	</body>
 </html>
 
 <style>
+	/* The drawing sits at a fixed size, vertically centred against the title
+	   and its subtext to the right. No rule beneath, nothing that resizes. */
 	.head {
-		padding-block: var(--s-7) var(--s-5);
-	}
-
-	.head-line {
 		display: flex;
 		align-items: center;
-		gap: var(--s-3);
-	}
-
-	.head-line::after {
-		content: '';
-		flex: 1 1 auto;
-		border-top: var(--hairline) solid var(--rule);
-	}
-
-	.head-body {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: var(--s-6);
-	}
-
-	.lede {
-		font-size: var(--t-md);
-		color: var(--muted);
-		margin: var(--s-3) 0 0 0;
-		max-width: 34ch;
+		gap: var(--s-4);
+		padding-block: var(--s-7) var(--s-6);
+		/* Text caps at the same measure the tag archives use. */
+		max-width: var(--measure);
 	}
 
 	.avatar {
-		width: 132px;
+		width: 96px;
 		height: auto;
 		flex: none;
 		/* Drawn on white, so it sits on the paper without a frame. */
 		mix-blend-mode: multiply;
 	}
 
-	@media (max-width: 40rem) {
-		.head-body {
-			flex-direction: column-reverse;
-			align-items: flex-start;
-			gap: var(--s-3);
-		}
-
-		.avatar {
-			width: 104px;
-		}
+	.head-text {
+		min-width: 0;
 	}
 
-	.filter {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--s-2);
-		margin-bottom: var(--s-5);
-	}
-
-	.chip {
-		font-family: var(--font-geist-mono);
-		font-size: var(--t-xs);
-		line-height: 1.3;
-		color: var(--accent);
-		text-decoration: none;
-		padding: 4px var(--s-2);
-		border: var(--hairline) solid color-mix(in srgb, var(--accent) 35%, transparent);
-		border-radius: 2px;
-		transition:
-			color 120ms ease-out,
-			background-color 120ms ease-out,
-			border-color 120ms ease-out;
-	}
-
-	.chip:hover {
-		border-color: var(--accent);
-		background: color-mix(in srgb, var(--accent) 7%, transparent);
-	}
-
-	.chip.is-on {
-		background: var(--accent);
-		border-color: var(--accent);
-		color: var(--paper);
-	}
-
-	.count {
-		font-variant-numeric: tabular-nums;
-		opacity: 0.65;
-	}
-
-	.empty {
-		font-family: var(--font-geist-mono);
-		font-size: var(--t-xs);
-		color: var(--muted);
-		padding-block: var(--s-5);
+	.head-text h1 {
 		margin: 0;
+	}
+
+	.lede {
+		font-size: var(--t-md);
+		color: var(--muted);
+		margin: var(--s-2) 0 0 0;
+		max-width: 46ch;
 	}
 
 	.index {
@@ -241,6 +120,7 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 	}
 
 	.index li {
+		position: relative;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) auto;
 		gap: var(--s-4);
@@ -251,8 +131,11 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 		transition: background-color 120ms ease-out;
 	}
 
-	.index li:hover {
-		background: var(--wash);
+	@media (hover: hover) {
+		.index li:hover {
+			background: var(--wash);
+	
+		}
 	}
 
 	.index h2 {
@@ -265,8 +148,25 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 		text-decoration: none;
 	}
 
-	.index h2 a:hover {
-		color: var(--accent);
+	@media (hover: hover) {
+		.index h2 a:hover {
+			color: var(--accent);
+	
+		}
+	}
+
+	/* The row washes on hover, so the whole row must actually be the
+	   target — a hover state on non-interactive text promises something
+	   it cannot deliver. The tags stay above it and clickable. */
+	.index h2 a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+
+	.entry :global(.tags) {
+		position: relative;
+		z-index: 1;
 	}
 
 	.summary {
@@ -283,7 +183,12 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 
 	@media (max-width: 40rem) {
 		.head {
-			padding-block: var(--s-6) var(--s-4);
+			gap: var(--s-3);
+			padding-block: var(--s-6) var(--s-5);
+		}
+
+		.avatar {
+			width: 72px;
 		}
 
 		.index li {

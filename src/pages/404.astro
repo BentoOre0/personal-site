@@ -1,0 +1,66 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Not found — ${SITE_TITLE}`} description="This address does not resolve." />
+	</head>
+	<body>
+		<Header />
+		<main class="sheet">
+			<div class="head">
+				<p class="designator">HTTP 404</p>
+				<h1>This address does not resolve</h1>
+				<p class="lede">
+					The page may have moved, or it may never have existed. Both are recoverable
+					from here.
+				</p>
+				<nav class="out" aria-label="Recover">
+					<a class="chip" href="/">Home</a>
+					<a class="chip" href="/blog">Blog</a>
+				</nav>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.head {
+		padding-block: var(--s-7) var(--s-8);
+		max-width: var(--measure);
+	}
+
+	.designator {
+		margin: 0 0 var(--s-3) 0;
+	}
+
+	h1 {
+		margin: 0;
+		text-wrap: balance;
+	}
+
+	.lede {
+		font-size: var(--t-md);
+		color: var(--muted);
+		margin: var(--s-3) 0 0 0;
+	}
+
+	.out {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-2);
+		margin-top: var(--s-6);
+	}
+
+	@media (max-width: 40rem) {
+		.head {
+			padding-block: var(--s-6) var(--s-7);
+		}
+	}
+</style>

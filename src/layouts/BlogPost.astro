@@ -83,8 +83,11 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 	}
 
-	.back a:hover {
-		text-decoration-color: var(--accent);
+	@media (hover: hover) {
+		.back a:hover {
+			text-decoration-color: var(--accent);
+	
+		}
 	}
 
 	.description {
@@ -207,6 +210,11 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 	}
 
 	.prose :global(table) {
+		/* Block-level so an over-wide table scrolls inside the measure
+		   instead of pushing the whole page sideways. */
+		display: block;
+		overflow-x: auto;
+		max-width: 100%;
 		width: 100%;
 		border-collapse: collapse;
 		font-size: var(--t-xs);

@@ -1,4 +1,5 @@
 ---
+import Loader from './Loader.astro';
 import { IDENTITY } from '../data/profile';
 
 const path = Astro.url.pathname;
@@ -15,6 +16,8 @@ const isNotes = path.startsWith('/blog');
 		</nav>
 	</div>
 </header>
+
+<Loader />
 
 <style>
 	header {
@@ -39,9 +42,12 @@ const isNotes = path.startsWith('/blog');
 		transition: color 120ms ease-out;
 	}
 
-	.mark:hover,
+	@media (hover: hover) {
+		.mark:hover,
 	.mark:active {
-		color: var(--accent);
+			color: var(--accent);
+	
+		}
 	}
 
 	nav {
@@ -60,14 +66,14 @@ const isNotes = path.startsWith('/blog');
 		transition: color 120ms ease-out;
 	}
 
-	nav a:hover {
-		color: var(--ink);
-	}
-
-	/* Pressed and current both read in the accent, so the colour tracks
-	   "where you are" rather than just "what you touched". */
+	@media (hover: hover) {
+		/* Hover, pressed and current all read in the accent, the same as the
+	   wordmark — the colour tracks the nav as one behaviour. */
+	nav a:hover,
 	nav a:active {
-		color: var(--accent);
+			color: var(--accent);
+	
+		}
 	}
 
 	nav a[aria-current='page'] {

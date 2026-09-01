@@ -4,6 +4,7 @@ import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import Header from '../../../components/Header.astro';
+import TagFilter from '../../../components/TagFilter.astro';
 import TagList from '../../../components/TagList.astro';
 import { SITE_TITLE } from '../../../consts';
 
@@ -24,6 +25,15 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 const count = posts.length;
+
+// The bar carries every tag, not just this one, so a reader can move
+// between tags without going back to /blog first.
+const allPosts = await getCollection('blog');
+const counts = new Map<string, number>();
+for (const post of allPosts) {
+	for (const t of post.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+}
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 ---
 
 <!doctype html>
@@ -43,11 +53,13 @@ const count = posts.length;
 				<p class="lede">{count} {count === 1 ? 'post' : 'posts'}</p>
 			</div>
 
+			<TagFilter tags={tags} total={allPosts.length} current={tag} />
+
 			<ol class="index">
 				{
 					posts.map((post) => (
 						<li>
-							<div>
+							<div class="entry">
 								<h2>
 									<a href={`/blog/${post.id}/`}>{post.data.title}</a>
 								</h2>
@@ -81,8 +93,11 @@ const count = posts.length;
 		text-decoration: none;
 	}
 
-	.head .legend a:hover {
-		color: var(--ink);
+	@media (hover: hover) {
+		.head .legend a:hover {
+			color: var(--ink);
+	
+		}
 	}
 
 	h1 {
@@ -104,6 +119,7 @@ const count = posts.length;
 	}
 
 	.index li {
+		position: relative;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) auto;
 		gap: var(--s-4);
@@ -114,8 +130,11 @@ const count = posts.length;
 		transition: background-color 120ms ease-out;
 	}
 
-	.index li:hover {
-		background: var(--wash);
+	@media (hover: hover) {
+		.index li:hover {
+			background: var(--wash);
+	
+		}
 	}
 
 	.index h2 {
@@ -128,8 +147,22 @@ const count = posts.length;
 		text-decoration: none;
 	}
 
-	.index h2 a:hover {
-		color: var(--accent);
+	@media (hover: hover) {
+		.index h2 a:hover {
+			color: var(--accent);
+	
+		}
+	}
+
+	.index h2 a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+
+	.entry :global(.tags) {
+		position: relative;
+		z-index: 1;
 	}
 
 	.summary {

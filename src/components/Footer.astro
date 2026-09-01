@@ -31,7 +31,8 @@ import { IDENTITY, REVISION } from '../data/profile';
 	}
 
 	.block {
-		padding-block: var(--s-5) var(--s-7);
+		/* The bottom pad clears the home indicator on gesture-nav phones. */
+		padding-block: var(--s-5) max(var(--s-7), env(safe-area-inset-bottom));
 	}
 
 	.spec {

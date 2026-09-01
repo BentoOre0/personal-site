@@ -31,8 +31,9 @@ It is the opposite, and the site's job is to make that legible: **proven
 algorithmic ability at national-selection level, combined with hardware that
 physically works and software that shipped.** Concretely, the intersection is:
 
-- IOI Camp Philippines, top 4 in the country — a nationally ranked,
-  externally verifiable credential that very few software applicants hold;
+- National Olympiad in Informatics, 4th in the Philippines (2024), plus
+  IOI national-team selection candidacy 2023–2025 — nationally ranked,
+  externally verifiable credentials very few software applicants hold;
 - hardware projects spanning robotics/mechatronics, mechanical CAD and
   fabrication, and PCB/embedded systems, with physical results photographed;
 - software work including an MVP and AI automation engineering.
@@ -60,24 +61,26 @@ never as a catalog of everything ever attempted.
   split**; a single flat project list ordered by impact, which is how breadth
   becomes range instead of two thin columns.
 - Competitive programming results are a credential, not a project.
-- The repository is currently the unmodified Astro blog starter. Every page,
-  post, site title, and image is placeholder content with no product truth in
-  it. Nothing in `src/pages`, `src/content/blog`, or `src/consts.ts` should be
-  treated as real.
+- The Astro starter is gone. `src/pages`, `src/consts.ts` and
+  `src/data/profile.ts` now carry real content, sourced from the résumé of
+  25 Aug 2026. **`src/content/blog/` is the exception and is still starter
+  output**: four demo posts with Lorem ipsum bodies and invented tags,
+  live at the public URL and syndicated through `rss.xml`.
 
-**Undecided, to be supplied by the owner:** display name, one-line
-description, GitHub/LinkedIn/email URLs, project titles and descriptions,
-exact credential wording. These ship as visibly marked placeholders. They are
-never invented, never approximated, and never filled with plausible-sounding
+**Still unfilled:** `IDENTITY.resume.href` in `src/data/profile.ts` is `'#'`,
+the four project figures are unshot, and `og:image` is still the Astro
+placeholder. These ship as visibly marked placeholders. They are never
+invented, never approximated, and never filled with plausible-sounding
 text.
 
 ## Evidence on Hand
 
 Real material the owner holds today:
 
-- **Competitive programming:** IOI Camp Philippines; **top 4 in the country**
-  at one point. Confirmed by the owner. The year(s) and the exact official
-  program name are still unconfirmed and must be supplied before publishing.
+- **Competitive programming:** National Olympiad in Informatics, **4th in
+  the Philippines (2024)**; top 20 nationally three years running, 2023–2025;
+  IOI selection candidate on the Philippine national team 2023–2025; APIO
+  2023–2024. Confirmed and dated, from the résumé of 25 Aug 2026.
 - **Hardware projects:** robotics/mechatronics, mechanical CAD and
   fabrication, PCB/embedded, and combined electronics+software builds. Backed
   by **photographs and good repositories**.
@@ -101,7 +104,7 @@ credential not listed above.
 ## Product Principles
 
 1. **The credential is the hook.** The strongest externally verifiable fact
-   (IOI Camp Philippines, top 4 in country) does the work in the first screen. It is stated
+   (NOI, 4th in the Philippines, 2024) does the work in the first screen. It is stated
    plainly, never buried under narrative.
 2. **Breadth is range, not a catalog.** Every project earns its slot on
    impact. Cutting a weak project strengthens the site more than adding one.
