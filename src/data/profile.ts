@@ -22,12 +22,12 @@ export const IDENTITY = {
 	/* Rotates through these, one at a time. Add or remove freely —
 	   the timing adapts. Keep them all true. */
 	rotating: [
+		'AI Slop ಠಿ_ಠ...? ',
 		'websites. ',
 		'robots [^3^]. ',
 		'rockets. ',
 		'automation solutions. ',
 		'fast algorithms. ',
-		'AI Slop ಠಿ_ಠ...? ',
 	],
 	/* A contact is either a glyph (`icon`) or the literal string (`text`). */
 	links: [
