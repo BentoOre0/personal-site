@@ -264,6 +264,13 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		letter-spacing: -0.035em;
 	}
 
+	/* The stem and the typed term share one line box, so they wrap together
+	   and the block grows a line whenever a long term is typed in — moving
+	   everything below it, mid-word, every couple of seconds. Reserving the
+	   tallest state costs nothing — measured with Geist, every one of the
+	   six terms already fills exactly three lines from 1440px to 320px;
+	   only the half-typed states are shorter — and holds the page still.
+	   (DESIGN.md claimed the split stem prevented this. It does not.) */
 	.tagline {
 		font-size: var(--t-lg);
 		line-height: 1.25;
@@ -271,6 +278,7 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		color: var(--muted);
 		margin: var(--s-4) 0 0 0;
 		max-width: 22ch;
+		min-height: 3.75em;
 	}
 
 	/* The typed term is the tail of the sentence, so characters are only
@@ -432,7 +440,6 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 	@media (hover: hover) {
 		.features li:hover {
 			background: var(--wash);
-	
 		}
 	}
 
@@ -440,6 +447,16 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		font-size: var(--t-md);
 		line-height: 1.35;
 		letter-spacing: -0.01em;
+	}
+
+	/* The list is ordered most-impressive-first, so the lead entry is the
+	   hook PRODUCT.md names. It was set identically to the last credential;
+	   the project list has carried graded legibility all along and this one
+	   never got it. */
+	.features li:first-child .feature-text {
+		font-size: var(--t-lg);
+		line-height: 1.2;
+		letter-spacing: -0.02em;
 	}
 
 	.feature-text a {
@@ -456,10 +473,18 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 
 	@media (hover: hover) {
 		.feature-text a:hover,
-	.feature-text a:focus-visible {
+		.feature-text a:focus-visible {
 			color: var(--accent);
 			background-size: 100% var(--hairline);
-	
+		}
+	}
+
+	/* No hover means no way to discover these are links. Two credentials
+	   carry the externally verifiable sources, so on touch the underline
+	   is simply always drawn. */
+	@media (hover: none) {
+		.feature-text a {
+			background-size: 100% var(--hairline);
 		}
 	}
 
@@ -528,10 +553,17 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 
 	@media (hover: hover) {
 		.project h3 a:hover,
-	.project h3 a:focus-visible {
+		.project h3 a:focus-visible {
 			color: var(--accent);
 			background-size: 100% var(--hairline);
-	
+		}
+	}
+
+	/* P2, P3 and P4 titles are links and P1/P5 are not. Without hover a
+	   phone reader cannot tell which, so the underline is always drawn. */
+	@media (hover: none) {
+		.project h3 a {
+			background-size: 100% var(--hairline);
 		}
 	}
 
@@ -625,8 +657,21 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 			gap: var(--s-3);
 		}
 
+		/* Tightened so contacts and the résumé link share one row: at the
+		   wider gaps the row measured 370px against a 342px column and the
+		   highest-intent link on the page was orphaned onto its own line. */
+		.reach {
+			gap: var(--s-3);
+		}
+
 		.contacts {
-			gap: var(--s-3) var(--s-5);
+			gap: var(--s-3);
+		}
+
+		/* Reference metadata, and the footer already prints it in full. On a
+		   phone this row was pushing the lead credential past the fold. */
+		.stamp {
+			display: none;
 		}
 
 	}

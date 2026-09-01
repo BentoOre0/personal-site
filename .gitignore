@@ -36,3 +36,6 @@ pnpm-debug.log*
 .impeccable/live/sessions/
 .impeccable/live/annotations/
 .impeccable/live/roots.json
+
+# design screenshots
+.shots/

@@ -111,6 +111,11 @@ Body measure caps at 68ch; summaries at 60ch.
 
 ### Graded legibility
 
+The credential list leads with one step above the rest: the first entry
+is set at 28px, the others at 20px. The list is ordered most-impressive
+first, so the lead entry is the hook PRODUCT.md names — it had been set
+identically to the last credential.
+
 The project list compresses as it descends: the lead entry is set at 28px
 with full-strength body copy, the middle entries at 20px in muted, the
 last at 16px. Impact order is visible in the typography itself, so the
@@ -125,8 +130,13 @@ building") above a typed line that cycles through the terms in
 1.9s with the caret blinking, erases at ~34ms, beats, then the next.
 The caret is solid while characters move and blinks only at rest.
 
-Splitting stem from typed line means the block never reflows as
-characters are added and removed. `prefers-reduced-motion` disables the
+Splitting stem from typed line does **not** prevent reflow — they share
+one line box and wrap together. Measured with Geist, every term fills
+three lines from 1440px down to 320px, but the half-typed states are
+shorter, so the block grew and shrank a line every couple of seconds
+and moved the whole page with it. `.tagline` now reserves `min-height:
+3.75em`. Because the settled state is three lines at every width, the
+reserve costs nothing. `prefers-reduced-motion` disables the
 cycle and the blink, leaving the first term static; with JavaScript off
 the first term is server-rendered, so the line is never empty.
 
@@ -196,6 +206,23 @@ It does not resize on scroll. A scroll-linked shrink was built and
 removed — scroll is user input, so it did not break the motion rule,
 but at masthead scale the drawing overpowered a 40px title and the
 movement bought nothing the fixed size does not already give.
+
+## Touch
+
+Screen width does not tell you input method, so touch adaptations key
+off `pointer`/`hover`, never a width breakpoint.
+
+- Every hover rule sits inside `@media (hover: hover)`. `:active` must
+  stay **outside** it: a tap has no hover to fall back on, and burying
+  `:active` there leaves a touch device with no feedback at all.
+- Chips get a 44px hit area from a transparent `::after`, not from
+  `min-height`. Painting a 44px box around 14px type reads as a button
+  and leaves the label adrift.
+- Links that announce themselves only on hover are invisible on a phone.
+  Credential and project-title links draw their underline permanently
+  under `@media (hover: none)`.
+- Below 30rem the `.spec` table stacks key over value. Two columns pin
+  the key at 38% of the row and collapse the value to ~14 characters.
 
 ## Naming
 

@@ -274,3 +274,60 @@ Inverting five files to `min-width` is redesign-scale churn for no
 visual change and real regression risk; the cost is that mobile parses
 a few rules it discards. Worth doing only alongside other work in those
 files.
+
+## Mobile composition pass — 1 Sep, last
+
+**The site can be seen now.** `/usr/bin/google-chrome` is installed, so
+`./scripts/shots.sh` captures every page at 390/768/1440 with no
+dependency. Every earlier pass was blind — findings came from reading
+CSS — which is exactly why visual defects survived four of them. Run it
+before judging any design change.
+
+Two capture gotchas, both cost time: `--virtual-time-budget` must exceed
+the loader's 1400ms hold (4000 is not enough, 12000 works), and virtual
+time **freezes the typed tagline**, so two captures can never show two
+different rotator terms. Also capture at `--force-device-scale-factor=3`
+— a 1× capture made the DISCIPLINE sketch look illegible and the owner
+correctly pointed out it is fine on his actual iPhone.
+
+**Owner-reported, both fixed:**
+
+1. *"The tags in the blog part for mobile are a bit chunky, way too much
+   negative space."* Correct — the previous pass gave `.chip` a
+   `min-height: 44px`, so 14px type floated in a fat pill. The 44px
+   target now comes from a transparent `::after`; the painted chip keeps
+   its desktop density.
+2. *"Add padding underneath the typing part because it causes the whole
+   page to move up and down."* Real and worse than it looked — 35px,
+   every ~2s, mid-word. `min-height: 3.75em` on `.tagline`. Measured
+   with Geist: all six terms settle at three lines from 1440 to 320, so
+   the reserve costs nothing and only the half-typed states were short.
+
+**Regression I introduced and fixed:** the adapt pass wrapped
+`nav a:hover, nav a:active` together inside `@media (hover: hover)`,
+which silently killed tap feedback on the whole nav. `:active` now sits
+outside the hover query. Worth checking for elsewhere.
+
+**Also in this pass:** the hero fits contacts + email + résumé on one row
+and drops the duplicated revision stamp, so the NOI credential is now
+fully inside a 390x844 first screen (its first line was at y=767).
+The lead credential takes the 28px step. `.spec` stacks key over value
+below 30rem, where two columns collapsed the value to ~14 characters.
+Credential and project-title links draw their underline permanently on
+touch — two of them carry the externally verifiable sources and were
+indistinguishable from plain text on a phone.
+
+**Still open, from the audit, not addressed:**
+
+- §3 Projects is 64% of the document; every project row except P5 is
+  taller than one phone viewport, and P1's summary is a 300px unbroken
+  20px paragraph.
+- The footer is 325px of duplicated Rev/date metadata at the bottom of
+  every page — half a phone screen. `max-width: 26rem` is inoperative at
+  342px and it has no media queries.
+- `--t-display` never leaves its 40px floor below a 571px viewport, so
+  the name renders the same size as the word "Blog" on every phone.
+- The blog masthead avatar spends 26% of the width and squeezes the lede
+  to 25 characters per line.
+- `/404` is the best-composed mobile page on the site — one viewport
+  tall. Worth looking at as a target for the others.

@@ -43,11 +43,15 @@ const isNotes = path.startsWith('/blog');
 	}
 
 	@media (hover: hover) {
-		.mark:hover,
-	.mark:active {
+		.mark:hover {
 			color: var(--accent);
-	
 		}
+	}
+
+	/* Outside the hover query on purpose: a tap must acknowledge itself,
+	   and a touch device has no hover to fall back on. */
+	.mark:active {
+		color: var(--accent);
 	}
 
 	nav {
@@ -66,14 +70,16 @@ const isNotes = path.startsWith('/blog');
 		transition: color 120ms ease-out;
 	}
 
-	@media (hover: hover) {
-		/* Hover, pressed and current all read in the accent, the same as the
+	/* Hover, pressed and current all read in the accent, the same as the
 	   wordmark — the colour tracks the nav as one behaviour. */
-	nav a:hover,
-	nav a:active {
+	@media (hover: hover) {
+		nav a:hover {
 			color: var(--accent);
-	
 		}
+	}
+
+	nav a:active {
+		color: var(--accent);
 	}
 
 	nav a[aria-current='page'] {

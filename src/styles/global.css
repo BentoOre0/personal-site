@@ -388,20 +388,50 @@ a.designator {
    at ~28px tall, under the 44px comfortable-target floor, so coarse
    pointers get the padding and fine pointers keep the printed density. */
 @media (pointer: coarse) {
+	/* The target is 44px; the chip is not. Painting a 44px box around 14px
+	   type leaves the label floating in empty space and reads as a button
+	   rather than a tag, so the hit area is extended invisibly instead. */
 	.chip {
-		min-height: 44px;
-		display: inline-flex;
-		align-items: center;
-		padding-inline: var(--s-3);
+		position: relative;
+	}
+
+	.chip::after {
+		content: '';
+		position: absolute;
+		inset: -8px -2px;
+	}
+
+	/* Wrapped rows need to clear each other's extended hit areas. */
+	.filter {
+		gap: var(--s-3);
 	}
 }
 
 /* Below 320px-ish the uppercase row headers cannot hold their own line
    without squeezing the value column past readability. */
+/* Under ~480px the two-column table cannot hold: "AVAILABILITY" pins the
+   key column at 38% of the row and the value collapses to ~23 characters
+   (14 at 320px, where one value becomes six one-word lines). The key
+   stacks above its value instead. */
 @media (max-width: 30rem) {
-	.spec th {
-		white-space: normal;
+	.spec tr {
+		display: block;
+		padding-block: var(--s-2);
+	}
+
+	.spec th,
+	.spec td {
+		display: block;
 		width: auto;
-		padding-right: var(--s-3);
+		white-space: normal;
+		padding: 0;
+	}
+
+	.spec th {
+		padding-bottom: var(--s-1);
+	}
+
+	.spec th:first-child {
+		padding-left: 0;
 	}
 }
