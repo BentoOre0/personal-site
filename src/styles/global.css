@@ -1,5 +1,5 @@
 /*
-  Silkscreen / Datasheet — the visual system for this site.
+  Silkscreen / Datasheet, the visual system for this site.
   See DESIGN.md. Four colors, one typeface, 4px spacing grid,
   one hairline weight. Depth comes from overlap and value, never
   from shadow or gradient.
@@ -151,7 +151,7 @@ a {
 	line-height: 1.4;
 }
 
-/* Reference designators: P1, AN-002. Never decorative — each one
+/* Reference designators: P1, AN-002. Never decorative; each one
    is a handle the document refers to. */
 .designator {
 	font-size: var(--t-xs);
@@ -276,7 +276,7 @@ a.designator {
 }
 
 /* Geist Mono, the sans's sibling. Used for measured and specified
-   values — never as a costume for "technical". */
+   values, never as a costume for "technical". */
 .mono {
 	font-family: var(--font-geist-mono);
 	font-variant-numeric: tabular-nums;
@@ -322,7 +322,7 @@ a.designator {
 /* --- Tag chip ---------------------------------------------------------
    One primitive for the filter bar and for a post's own tag list, which
    were two near-identical components with different padding, radius and
-   hover. The border sits at 65% accent, which measures 3.01:1 on paper —
+   hover. The border sits at 65% accent, which measures 3.01:1 on paper,
    the floor for a control boundary; 35% measured 1.80:1 and drew nothing.
    Hover darkens the label instead of holding the accent, which measured
    4.16:1 against its own wash and failed AA. */
@@ -380,6 +380,23 @@ a.designator {
 	color: var(--muted);
 	line-height: 1.4;
 	max-width: 60ch;
+}
+
+/* A figure slot that has been filled. Solid hairline where the empty plate
+   is dashed, so the border weight alone says "shot" or "not shot yet".
+
+   `object-fit: cover` against the slot's declared ratio is deliberate crop
+   discipline: PRODUCT.md records that the photographs are unedited raw shots
+   of uneven framing, so the page's rhythm cannot depend on them agreeing
+   with each other. The slot keeps its size and the photograph is cropped to
+   fit, rather than every row changing height to suit its picture. */
+.plate-image {
+	display: block;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	border: var(--hairline) solid var(--rule);
+	background: var(--wash);
 }
 
 

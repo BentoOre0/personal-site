@@ -1,0 +1,116 @@
+---
+/*
+  The list of posts, used by /blog and by every tag archive.
+
+  This markup and its styles were duplicated verbatim across both pages, and
+  had already drifted: below 40rem the index placed the date with
+  `grid-column: 1` and the tag archive did not, so the same list stacked
+  differently depending on which page you reached it from. One copy now.
+*/
+import FormattedDate from './FormattedDate.astro';
+import TagList from './TagList.astro';
+import type { Post } from '../lib/posts';
+
+interface Props {
+	posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ol class="index">
+	{
+		posts.map((post) => (
+			<li>
+				<div class="entry">
+					<h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+					<p class="summary">{post.data.description}</p>
+					<TagList tags={post.data.tags} />
+				</div>
+				<span class="date legend">
+					<FormattedDate date={post.data.pubDate} />
+				</span>
+			</li>
+		))
+	}
+</ol>
+
+<style>
+	.index {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.index li {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: var(--s-4);
+		align-items: baseline;
+		padding: var(--s-4) var(--s-2);
+		margin-inline: calc(-1 * var(--s-2));
+		border-radius: 2px;
+		transition: background-color 120ms ease-out;
+	}
+
+	@media (hover: hover) {
+		.index li:hover {
+			background: var(--wash);
+		}
+	}
+
+	.index h2 {
+		font-size: var(--t-md);
+		margin: 0;
+	}
+
+	.index h2 a {
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	@media (hover: hover) {
+		.index h2 a:hover {
+			color: var(--accent);
+		}
+	}
+
+	/* The row washes on hover, so the whole row must actually be the
+	   target, a hover state on non-interactive text promises something
+	   it cannot deliver. The tags stay above it and clickable. */
+	.index h2 a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+
+	.entry :global(.tags) {
+		position: relative;
+		z-index: 1;
+	}
+
+	.summary {
+		margin: var(--s-2) 0 var(--s-3) 0;
+		font-size: var(--t-xs);
+		color: var(--muted);
+		max-width: 60ch;
+	}
+
+	.date {
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 40rem) {
+		.index li {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-2);
+		}
+
+		.date {
+			grid-column: 1;
+			text-align: left;
+		}
+	}
+</style>

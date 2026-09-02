@@ -32,14 +32,14 @@ algorithmic ability at national-selection level, combined with hardware that
 physically works and software that shipped.** Concretely, the intersection is:
 
 - National Olympiad in Informatics, 4th in the Philippines (2024), plus
-  IOI national-team selection candidacy 2023–2025 — nationally ranked,
+  IOI national-team selection candidacy 2023–2025, nationally ranked,
   externally verifiable credentials very few software applicants hold;
 - hardware projects spanning robotics/mechatronics, mechanical CAD and
   fabrication, and PCB/embedded systems, with physical results photographed;
 - software work including an MVP and AI automation engineering.
 
 A neighboring portfolio can copy the layout. It cannot copy that combination.
-Breadth is presented as **range** — evidence of a builder who crosses domains —
+Breadth is presented as **range**, evidence of a builder who crosses domains,
 never as a catalog of everything ever attempted.
 
 ## Operating Context
@@ -93,7 +93,7 @@ sized. Any project layout must therefore specify its own aspect ratio and
 crop discipline and survive photos of uneven quality, rather than assuming
 art-directed imagery.
 
-Charts and diagrams are first-class evidence, not decoration — for the
+Charts and diagrams are first-class evidence, not decoration, for the
 software and AI automation work they carry the same proof burden that photos
 carry for the hardware.
 

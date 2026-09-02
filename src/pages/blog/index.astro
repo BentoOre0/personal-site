@@ -1,33 +1,26 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import avatar from '../../assets/avatar.png';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+import PostList from '../../components/PostList.astro';
 import TagFilter from '../../components/TagFilter.astro';
-import TagList from '../../components/TagList.astro';
+import { getSortedPosts, getTagCounts } from '../../lib/posts';
 import { SITE_TITLE } from '../../consts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = await getSortedPosts();
 
 // Tag counts drive the filter bar. Each chip is a plain link to the static
 // tag page, so filtering needs no JavaScript and the URL is always honest.
-const counts = new Map<string, number>();
-for (const post of posts) {
-	for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
-}
-const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+const tags = getTagCounts(posts);
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead
-			title={`Blog — ${SITE_TITLE}`}
+			title={`Blog, ${SITE_TITLE}`}
 			description="Notes on things built, measured, and got working."
 		/>
 	</head>
@@ -56,22 +49,7 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 				)
 			}
 
-			<ol class="index">
-				{
-					posts.map((post) => (
-						<li>
-							<div class="entry">
-								<h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
-								<p class="summary">{post.data.description}</p>
-								<TagList tags={post.data.tags} />
-							</div>
-							<span class="date legend">
-								<FormattedDate date={post.data.pubDate} />
-							</span>
-						</li>
-					))
-				}
-			</ol>
+			<PostList posts={posts} />
 		</main>
 		<Footer />
 
@@ -113,74 +91,6 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 		max-width: 46ch;
 	}
 
-	.index {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.index li {
-		position: relative;
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) auto;
-		gap: var(--s-4);
-		align-items: baseline;
-		padding: var(--s-4) var(--s-2);
-		margin-inline: calc(-1 * var(--s-2));
-		border-radius: 2px;
-		transition: background-color 120ms ease-out;
-	}
-
-	@media (hover: hover) {
-		.index li:hover {
-			background: var(--wash);
-	
-		}
-	}
-
-	.index h2 {
-		font-size: var(--t-md);
-		margin: 0;
-	}
-
-	.index h2 a {
-		color: var(--ink);
-		text-decoration: none;
-	}
-
-	@media (hover: hover) {
-		.index h2 a:hover {
-			color: var(--accent);
-	
-		}
-	}
-
-	/* The row washes on hover, so the whole row must actually be the
-	   target — a hover state on non-interactive text promises something
-	   it cannot deliver. The tags stay above it and clickable. */
-	.index h2 a::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-	}
-
-	.entry :global(.tags) {
-		position: relative;
-		z-index: 1;
-	}
-
-	.summary {
-		margin: var(--s-2) 0 var(--s-3) 0;
-		font-size: var(--t-xs);
-		color: var(--muted);
-		max-width: 60ch;
-	}
-
-	.date {
-		text-align: right;
-		white-space: nowrap;
-	}
-
 	@media (max-width: 40rem) {
 		.head {
 			gap: var(--s-3);
@@ -191,14 +101,5 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 			width: 72px;
 		}
 
-		.index li {
-			grid-template-columns: minmax(0, 1fr);
-			gap: var(--s-2);
-		}
-
-		.date {
-			grid-column: 1;
-			text-align: left;
-		}
 	}
 </style>

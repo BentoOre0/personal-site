@@ -5,9 +5,37 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Icon from '../components/Icon.astro';
+import SectionHead from '../components/SectionHead.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profile';
 
+/* The homepage's sections, in the order they appear. §N is derived from this
+   list, so inserting a section renumbers everything after it automatically.
+   The numbers used to be literal text in three places; a missed renumber gave
+   the page two §3s with a green build and no warning.
+
+   `id`s are permalink targets and are historical, `features` renders as
+   "Credentials", `specs` as "Details", `work` as "Projects". Do not rename
+   them; someone may have saved a link. */
+const SECTIONS = [
+	{ id: 'features', title: 'Credentials' },
+	{ id: 'specs', title: 'Details' },
+	{ id: 'work', title: 'Projects' },
+] as const;
+
+const section = (id: (typeof SECTIONS)[number]['id']) => {
+	const i = SECTIONS.findIndex((s) => s.id === id);
+	return { ...SECTIONS[i], n: i + 1 };
+};
+
+/* Figure numbers count only the projects that actually carry a figure, keyed
+   by the project's index. Numbering off the project index instead skips a
+   number the moment a figure-less project sits anywhere but last; it lined
+   up only because the one entry without a figure happened to be at the end. */
+const figureNumber = new Map<number, number>();
+PROJECTS.forEach((p, i) => {
+	if (p.figure) figureNumber.set(i, figureNumber.size + 1);
+});
 ---
 
 <!doctype html>
@@ -74,10 +102,7 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 
 			<!-- Features: the credential list -->
 			<section class="sheet section" aria-labelledby="features">
-				<div class="section-head">
-					<a class="designator anchor" href="#features">§1</a>
-					<h2 id="features">Credentials</h2>
-				</div>
+				<SectionHead {...section('features')} />
 				<ul class="features">
 					{
 						CREDENTIALS.map((c) => (
@@ -100,10 +125,7 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 
 			<!-- Specifications -->
 			<section class="sheet section" aria-labelledby="specs">
-				<div class="section-head">
-					<a class="designator anchor" href="#specs">§2</a>
-					<h2 id="specs">Details</h2>
-				</div>
+				<SectionHead {...section('specs')} />
 				<table class="spec">
 					<tbody>
 						{
@@ -120,24 +142,47 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 
 			<!-- Selected work -->
 			<section class="sheet section" aria-labelledby="work">
-				<div class="section-head">
-					<a class="designator anchor" href="#work">§3</a>
-					<h2 id="work">Projects</h2>
-				</div>
+				<SectionHead {...section('work')} />
 
 				<ol class="projects">
 					{
 						PROJECTS.map((p, i) => (
-							<li class="project" class:list={[`rank-${i + 1}`]}>
+							<li class="project">
 								<div class="project-body">
-									<span class="designator">{p.id}</span>
+									<span class="designator">P{i + 1}</span>
 									<h3>
-										{p.links[0] ? (
-											<a href={p.links[0].href}>{p.title}</a>
-										) : (
-											p.title
-										)}
+										{p.titleHref ? <a href={p.titleHref}>{p.title}</a> : p.title}
 									</h3>
+
+									{p.figure && (
+										<figure class="figure">
+											{p.figure.src ? (
+												<Image
+													class="plate-image"
+													src={p.figure.src}
+													alt={p.figure.alt ?? ''}
+													widths={[400, 640, 960]}
+													sizes="(max-width: 52rem) 92vw, 480px"
+													style={`aspect-ratio: ${p.figure.ratio};`}
+												/>
+											) : (
+												<div
+													class="plate"
+													role="img"
+													aria-label={`Figure ${figureNumber.get(i)} placeholder`}
+													style={`aspect-ratio: ${p.figure.ratio};`}
+												>
+													<span class="legend">Fig. {figureNumber.get(i)}</span>
+													<span class="plate-spec">{p.figure.spec}</span>
+												</div>
+											)}
+											<figcaption>
+												<span class="designator">Fig. {figureNumber.get(i)}</span>
+												{' '}{p.figure.caption}
+											</figcaption>
+										</figure>
+									)}
+
 									<p class="summary">{p.summary}</p>
 									<table class="spec params">
 										<tbody>
@@ -157,24 +202,6 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 										))}
 									</ul>
 								</div>
-
-								{p.figure && (
-									<figure class="figure">
-										<div
-											class="plate"
-											role="img"
-											aria-label={`Figure ${i + 1} placeholder`}
-											style={`aspect-ratio: ${p.figure.ratio};`}
-										>
-											<span class="legend">Fig. {i + 1}</span>
-											<span class="plate-spec">{p.figure.spec}</span>
-										</div>
-										<figcaption>
-											<span class="designator">Fig. {i + 1}</span>
-											{' '}{p.figure.caption}
-										</figcaption>
-									</figure>
-								)}
 							</li>
 						))
 					}
@@ -187,7 +214,7 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 
 		<script>
 			// Module scripts run once, but the client router swaps pages without
-			// a reload — so init on every page load, and clear the pending timer
+			// a reload, so init on every page load, and clear the pending timer
 			// or two loops end up racing on the same element.
 			let timer;
 
@@ -263,11 +290,11 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 	}
 
 	/* The stem and the typed term share one line box, so they wrap together
-	   and the block grows a line whenever a long term is typed in — moving
+	   and the block grows a line whenever a long term is typed in, moving
 	   everything below it, mid-word, every couple of seconds. Reserving the
-	   tallest state costs nothing — measured with Geist, every one of the
+	   tallest state costs nothing, measured with Geist, every one of the
 	   six terms already fills exactly three lines from 1440px to 320px;
-	   only the half-typed states are shorter — and holds the page still.
+	   only the half-typed states are shorter, and holds the page still.
 	   (DESIGN.md claimed the split stem prevented this. It does not.) */
 	.tagline {
 		font-size: var(--t-lg);
@@ -384,7 +411,7 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 	}
 
 	/* The address is set, not drawn, so it needs the line-height the glyphs
-	   gave up — and the mono of every other literal value on the sheet. */
+	   gave up, and the mono of every other literal value on the sheet. */
 	.contacts a.as-text {
 		font-family: var(--font-geist-mono);
 		font-size: var(--t-xs);
@@ -503,11 +530,13 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		padding: 0;
 	}
 
+	/* One column at every width. The figure used to be a second column
+	   floated beside the text, which put it *after* the summary, parameters
+	   and links in source order, so on a phone, where the row collapses to
+	   one column, the picture landed at the bottom of the block it was there
+	   to introduce. It now follows the title directly: name, artifact,
+	   details. That is also the order a screen reader announces. */
 	.project {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
-		gap: var(--s-6);
-		align-items: start;
 		padding: var(--s-6) var(--s-2);
 		margin-inline: calc(-1 * var(--s-2));
 		border-radius: 2px;
@@ -528,7 +557,7 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 	/* A hanging indent: the designator sits in its own gutter and the title,
 	   summary, parameters and links all share one left edge. Previously the
 	   title was a flex sibling of the designator, so it started ~50px in
-	   while everything below it was flush left — invisible on desktop where
+	   while everything below it was flush left, invisible on desktop where
 	   the title fits one line, glaring on a phone where it wraps to three. */
 	.project-body {
 		display: grid;
@@ -581,8 +610,10 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		}
 	}
 
-	/* P2, P3 and P4 titles are links and P1/P5 are not. Without hover a
-	   phone reader cannot tell which, so the underline is always drawn. */
+	/* A project title is a link only when it has a `titleHref`, so some are and
+	   some are not. Without hover a phone reader cannot tell which, so the
+	   underline is always drawn. (Naming the specific rows here went stale the
+	   first time the list was reordered.) */
 	@media (hover: none) {
 		.project h3 a {
 			background-size: 100% var(--hairline);
@@ -596,7 +627,12 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 	}
 
 
-	.rank-1 h3 {
+	/* Graded legibility, carried to eight rows. Written in :nth-child so the
+	   curve tracks the list's length rather than a rank number someone has to
+	   remember to move. It was `.rank-4`, hardcoded as "the last one", so at
+	   eight entries row 4 shrank while rows 5-8 below it stayed full size,
+	   the curve inverted exactly where it was supposed to keep descending. */
+	.project:first-child h3 {
 		font-size: var(--t-lg);
 		letter-spacing: -0.025em;
 	}
@@ -607,15 +643,28 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 		max-width: 60ch;
 	}
 
-	.rank-1 .summary {
+	.project:first-child .summary {
 		color: var(--ink);
 		font-size: var(--t-md);
 		line-height: 1.5;
 	}
 
-	.rank-4 .summary,
-	.rank-4 h3 {
+	/* Row five is where the list stops arguing and starts listing. */
+	.project:nth-child(n + 5) h3,
+	.project:nth-child(n + 5) .summary {
 		font-size: var(--t-base);
+	}
+
+	/* Seven and beyond close up: the summary's bottom margin is the largest
+	   single contributor to a row's height once the type has stopped
+	   shrinking. §3 is already 64% of the document at 390px, so the tail has
+	   to cost less per row than the head does. */
+	.project:nth-child(n + 7) {
+		padding-block: var(--s-4);
+	}
+
+	.project:nth-child(n + 7) .summary {
+		margin-bottom: var(--s-2);
 	}
 
 	.params {
@@ -634,8 +683,13 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 	}
 
 	/* --- Figures. The photo slot states the shot it needs. --- */
+	/* Capped at the summary's own measure so the artifact sits inside the
+	   text block's edges rather than spanning the full 960 sheet. A 16:9
+	   plate at full width would be 540px tall and push the parameters off
+	   the first screen on desktop, which is the reverse of the fix. */
 	.figure {
-		margin: 0;
+		margin: var(--s-3) 0 var(--s-5) 0;
+		max-width: 30rem;
 	}
 
 	figcaption {
@@ -665,17 +719,22 @@ import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profil
 			grid-row: auto;
 		}
 
-		.project {
-			grid-template-columns: minmax(0, 1fr);
-			gap: var(--s-4);
-		}
-
 		.figure {
 			max-width: 20rem;
 		}
 	}
 
 	@media (max-width: 40rem) {
+		/* The lead summary is set at 20px, which cannot reach a comfortable
+		   line in a 342px column, measured at ~35 characters against the
+		   45-75 the type wants. Size gives way to measure here; the lead
+		   keeps its rank through ink colour and its 28px title, neither of
+		   which costs the reader anything. */
+		.project:first-child .summary {
+			font-size: var(--t-base);
+			line-height: 1.6;
+		}
+
 		.title {
 			padding-block: var(--s-6) var(--s-5);
 		}
