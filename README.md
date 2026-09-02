@@ -24,17 +24,12 @@ the site breaks its own pinned design brief, I asked for the exception and the
 reasoning is recorded in `DESIGN.md`.
 
 **Code review.** I read what the agent reported back and pushed on it. Asking
-what a field was actually for turned up a `placeholder` boolean that no code
-had ever read, in any commit, since the day it was written; it is gone now.
-Asking for a sweep of poor practice turned up a post list duplicated across two
-pages that had already silently drifted apart, section numbers typed in by hand
-where they should have been derived, and an RSS feed that was never sorted.
-I pointed at the useless or badly built parts and then had them changed.
+why there were useless fields that no code had ever read, in any commit; it is gone now.
+Finding section numbers typed in by hand where they should have been derived,
+pointed at the useless or badly built parts and then had them changed. 
 
-**The lesson.** An agent will produce something that builds, passes, and looks
-finished while still containing code that does nothing and duplication that is
-already broken. It does not volunteer that. You have to ask, and then you have
-to actually check the answer.
+**AI Development Litieracy** I needed to learn how to use these new tools in modern software development.
+I personally think it's akin to learning how to use the internet.
 
 ## How it is built
 
