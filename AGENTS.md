@@ -22,6 +22,12 @@ deliberately not a section on the homepage.
 - No database, no backend, no auth. Static only.
 - `npm run build` must pass before any commit.
 - Do not add dependencies without asking.
+- **Never use em dashes or emojis.** The em dash is U+2014, the long dash.
+  This applies everywhere: page content, blog posts, documentation, code
+  comments, and commit messages. Use a comma, a colon, a semicolon, or a
+  full stop instead. The en dash U+2013, used in number and date ranges
+  such as `2023–2025`, is a different character and is correct; leave
+  those alone.
 
 ## Development
 

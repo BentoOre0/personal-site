@@ -35,7 +35,7 @@ Datasheets have numbered figures, so photographs have a native home:
 `Fig. N` with a caption and a parameter table. Hardware entries show a
 photograph; software entries show a chart or architecture diagram in the
 same slot, at the same size, under the same numbering. This is why the
-world was viable at all — the alternative directions had no grammar for
+world was viable at all, the alternative directions had no grammar for
 a photograph.
 
 Photographs are unshot at time of writing, so each empty figure slot
@@ -49,7 +49,7 @@ washes are derived from `--muted` with `color-mix` so the count holds.
 
 | Token | Value | Role |
 |---|---|---|
-| `--paper` | `#ffffff` | ground — the page is printed paper |
+| `--paper` | `#ffffff` | ground; the page is printed paper |
 | `--ink` | `#101418` | foreground, near-black, never pure black |
 | `--muted` | `#6f757d` | secondary text, labels, rules (4.65:1 on paper) |
 | `--accent` | `#e51b23` | links, marks, and tags (4.65:1 on paper) |
@@ -65,7 +65,7 @@ It also paints the rotating term, the caret, the contact glyphs, the
 revision stamp, and every tag chip. What keeps that from becoming
 confetti is rank, not restraint: the homepage's accent spans 28px and
 14px, so the small marks sit under a large one. Any surface that uses
-the accent only at 14px reads as speckle — the blog index currently
+the accent only at 14px reads as speckle, the blog index currently
 does, with eleven resting accent marks against the homepage's eight.
 
 Light only, committed. The use scene is a recruiter skimming on a laptop
@@ -78,23 +78,23 @@ One superfamily: **Geist** and **Geist Mono**, self-hosted variable
 woff2 (`400 700`) via Astro's local font provider. The mono is the sans's
 sibling, not a second family, so the one-typeface rule survives.
 
-Geist Mono carries measured and specified values only — project titles,
+Geist Mono carries measured and specified values only, project titles,
 spec tables, labels, designators, tags. It is never a costume for
 "technical" applied to running prose.
 
 Scale is `14 / 16 / 20 / 28 / 40`, no intermediate sizes, plus one
 display step above it for the name alone:
 
-- `--t-display` `clamp(40px, 7vw, 72px)` — the name, once per page.
+- `--t-display` `clamp(40px, 7vw, 72px)`, the name, once per page.
   This extends the pinned scale at the owner's request; nothing else on
   the site may use it.
 
 
-- `--t-xl` 40 — the name, once per page
-- `--t-lg` 28 — the tagline and the lead project title
-- `--t-md` 20 — section headings, lead paragraphs, project titles
-- `--t-base` 16 — body, 1.6 line height
-- `--t-xs` 14 — labels, tables, figure captions, metadata
+- `--t-xl` 40, the name, once per page
+- `--t-lg` 28, the tagline and the lead project title
+- `--t-md` 20, section headings, lead paragraphs, project titles
+- `--t-base` 16, body, 1.6 line height
+- `--t-xs` 14, labels, tables, figure captions, metadata
 
 Body measure caps at 68ch; summaries at 60ch.
 
@@ -113,13 +113,13 @@ Body measure caps at 68ch; summaries at 60ch.
 
 The credential list leads with one step above the rest: the first entry
 is set at 28px, the others at 20px. The list is ordered most-impressive
-first, so the lead entry is the hook PRODUCT.md names — it had been set
+first, so the lead entry is the hook PRODUCT.md names; it had been set
 identically to the last credential.
 
 The project list compresses as it descends: the lead entry is set at 28px
 with full-strength body copy, the middle entries at 20px in muted, the
 last at 16px. Impact order is visible in the typography itself, so the
-list does not shout uniformly. Ordering is by impact, per CLAUDE.md —
+list does not shout uniformly. Ordering is by impact, per CLAUDE.md,
 never grouped by discipline, never by date.
 
 ### The typed tagline
@@ -130,7 +130,7 @@ building") above a typed line that cycles through the terms in
 1.9s with the caret blinking, erases at ~34ms, beats, then the next.
 The caret is solid while characters move and blinks only at rest.
 
-Splitting stem from typed line does **not** prevent reflow — they share
+Splitting stem from typed line does **not** prevent reflow; they share
 one line box and wrap together. Measured with Geist, every term fills
 three lines from 1440px down to 320px, but the half-typed states are
 shorter, so the block grew and shrank a line every couple of seconds
@@ -151,7 +151,7 @@ noisy; project titles are now plain.
 gutter and the title, summary, parameter table and links all share the
 content column's left edge. The title used to be a flex sibling of the
 designator, which indented it ~50px while everything beneath it stayed
-flush left — invisible at desktop width where the title fits one line,
+flush left, invisible at desktop width where the title fits one line,
 and obvious on a phone where it wraps to three. The `.spec` inset is
 zeroed inside a project for the same reason.
 
@@ -167,21 +167,21 @@ resolve; if they ever stop linking, delete them.
 
 ## Components
 
-- `.legend` — tracked uppercase 14px label naming a field, column, or figure.
-- `.designator` — reference handles (`P1`, `AN-003`, `§2`, `Fig. 1`).
-- `.spec` — the parameter table: hairline rows, tabular figures, uppercase
+- `.legend`, tracked uppercase 14px label naming a field, column, or figure.
+- `.designator`, reference handles (`P1`, `AN-003`, `§2`, `Fig. 1`).
+- `.spec`, the parameter table: hairline rows, tabular figures, uppercase
   row headers in muted.
-- `.sheet` / `.column` — the 960 and 720 measures.
-- `.plate` — an unshot figure slot printing its own shot spec.
+- `.sheet` / `.column`, the 960 and 720 measures.
+- `.plate`, an unshot figure slot printing its own shot spec.
 
 ## Motion
 
-Nothing moves without user input — a pinned rule and a hard constraint.
+Nothing moves without user input, a pinned rule and a hard constraint.
 Two documented exceptions carry autonomous motion: the typed tagline,
 and the loading screen (`Loader.astro`), where an indicator that does
 not move is not an indicator. The loader runs three layers on separate
-clocks — the figure trots at 660ms, the notes bob at 900ms, the Z's
-jitter at 420ms on `steps()` so they snap rather than glide — and exits
+clocks, the figure trots at 660ms, the notes bob at 900ms, the Z's
+jitter at 420ms on `steps()` so they snap rather than glide, and exits
 by sliding the whole sheet up, never by fading. Both are off entirely
 under `prefers-reduced-motion`, and the overlay carries a 6s CSS
 failsafe so a dead script cannot seal the page shut.
@@ -200,14 +200,14 @@ Name and tagline sit left; the sketch is anchored top-right at a fixed
 200px and does not move as the text grows. Beneath both, one row holds
 the contact links on the left and the revision stamp on the right, set
 as a single quiet mono line at 14px. The stamp was originally a
-three-row block beside the sketch and was reduced — it is reference
+three-row block beside the sketch and was reduced; it is reference
 metadata, not a headline, and the footer carries it in full.
 
 ### One title, two roles
 
 `/blog` sets its `h1` in the sans; a tag archive sets its `h1` in the
 mono. That is not drift. The word "Blog" is a section name, and a tag
-is a literal value — and mono carries measured and specified values.
+is a literal value, and mono carries measured and specified values.
 
 ### The blog masthead
 
@@ -217,7 +217,7 @@ no rule beneath it: a hairline there cut the title off from the list it
 introduces, and the drawing had nothing to attach to.
 
 It does not resize on scroll. A scroll-linked shrink was built and
-removed — scroll is user input, so it did not break the motion rule,
+removed, scroll is user input, so it did not break the motion rule,
 but at masthead scale the drawing overpowered a 40px title and the
 movement bought nothing the fixed size does not already give.
 
@@ -242,8 +242,8 @@ off `pointer`/`hover`, never a width breakpoint.
 
 Headings use plain language matching the content structure in CLAUDE.md:
 **Credentials, Details, Projects, Blog**. The datasheet framing survives
-in the document's structure — features column, spec tables, numbered
-figures, revision block — not in its labels. Earlier drafts called the
+in the document's structure, features column, spec tables, numbered
+figures, revision block; not in its labels. Earlier drafts called the
 blog "Application notes"; it was dropped because the reference did not
 land, and wayfinding must never be a puzzle for someone with eight
 seconds.
@@ -283,7 +283,7 @@ wash and failed AA.
 ## Placeholder discipline
 
 The document is stamped `PRELIMINARY` with a revision number while
-content is incomplete, and unfilled values read `TBD` — both native to
+content is incomplete, and unfilled values read `TBD`; both native to
 the format, so honesty costs the design nothing. All page content lives
 in `src/data/profile.ts`, with every placeholder marked. All five
 credentials on the page are now confirmed and sourced from the résumé
@@ -292,6 +292,6 @@ Nothing on this site may be invented to fill a gap.
 
 The blog is the one surface where that rule is currently broken, and
 not by the design: `src/content/blog/` still holds four Astro demo
-posts whose bodies are Lorem ipsum and whose tags — `embedded`,
-`robotics`, `algorithms` — are invented. They are live and syndicated
+posts whose bodies are Lorem ipsum and whose tags, `embedded`,
+`robotics`, `algorithms`, are invented. They are live and syndicated
 through `rss.xml`.

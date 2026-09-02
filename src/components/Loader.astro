@@ -4,12 +4,12 @@
 
   An all-red ground was tried and rejected: the accent marks disappear
   into it. Ink keeps the Z's and the music notes as the only colour on
-  the screen. Three layers, each on its own clock — the figure trots,
+  the screen. Three layers, each on its own clock, the figure trots,
   the notes bob against it, the Z's jitter.
 
   This is the site's second piece of motion and the only autonomous one
   besides the typed tagline. A loading indicator that does not move is
-  not a loading indicator, so it earns the exception — and it is off
+  not a loading indicator, so it earns the exception, and it is off
   entirely under prefers-reduced-motion.
 */
 ---
@@ -54,7 +54,7 @@
 		background: var(--ink);
 		transform: translateY(0);
 		visibility: visible;
-		/* The sheet is pulled off the page rather than dissolved — a fade
+		/* The sheet is pulled off the page rather than dissolved, a fade
 		   leaves the art hanging half-visible over the content behind it. */
 		transition:
 			transform 480ms cubic-bezier(0.66, 0, 0.2, 1),
@@ -178,7 +178,7 @@
 	let swapped = false;
 
 	// A client-side navigation brings in fresh markup with the overlay
-	// visible. Kill it immediately — only a full load or an explicit
+	// visible. Kill it immediately, only a full load or an explicit
 	// replay should show the loading screen.
 	document.addEventListener('astro:after-swap', () => {
 		swapped = true;

@@ -1,0 +1,28 @@
+---
+/*
+  A section's heading: its §N designator, its title, and the hairline that
+  runs out to the right edge (drawn by `.section-head::after` in global.css).
+
+  The markup was written out three times in index.astro with the section
+  number typed in as literal text. Inserting a section in the middle meant
+  renumbering every one after it by hand, and a miss produced two §3s with a
+  passing build and a page that looked fine at a glance. The number now comes
+  from position in the SECTIONS list, see index.astro.
+
+  `id` is a permalink target. Existing ids do not match their visible titles
+  (`features` is Credentials, `specs` is Details, `work` is Projects); they
+  are historical and must not be renamed, since links to them may exist.
+*/
+interface Props {
+	n: number;
+	id: string;
+	title: string;
+}
+
+const { n, id, title } = Astro.props;
+---
+
+<div class="section-head">
+	<a class="designator anchor" href={`#${id}`}>§{n}</a>
+	<h2 id={id}>{title}</h2>
+</div>
