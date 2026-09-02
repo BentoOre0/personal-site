@@ -1,0 +1,45 @@
+---
+/*
+  schema.org Person as JSON-LD, homepage only.
+
+  The problem this solves is not ranking, it is identity. "Jeremy Yu" is a
+  common enough name that a search engine has no way to know which pages
+  are the same person. `sameAs` is the answer: it names the GitHub and
+  LinkedIn profiles as the same entity as this page, and both of those
+  already link back here, so the claim is checkable rather than asserted.
+
+  Every value is read from `profile.ts`. Nothing is written here, because
+  structured data that disagrees with the visible page is a liability.
+*/
+import avatar from '../assets/avatar.png';
+import { IDENTITY, SEO } from '../data/profile';
+
+// `Astro.site` can be missing behind a stale dev server. A URL built on
+// `undefined` throws and takes the page down, so every absolute URL below
+// is conditional. Omitting a field is valid JSON-LD; crashing is not.
+const site = Astro.site;
+
+const email = IDENTITY.links.find((l) => l.href.startsWith('mailto:'));
+const profiles = IDENTITY.links
+	.filter((l) => !l.href.startsWith('mailto:'))
+	.map((l) => l.href);
+
+const person = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: IDENTITY.name,
+	description: IDENTITY.tagline,
+	jobTitle: SEO.person.jobTitle,
+	url: site?.href,
+	image: site ? new URL(avatar.src, site).href : undefined,
+	email: email?.href.replace('mailto:', ''),
+	sameAs: profiles,
+	affiliation: {
+		'@type': 'CollegeOrUniversity',
+		name: SEO.person.affiliation.name,
+		url: SEO.person.affiliation.url,
+	},
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(person)} />

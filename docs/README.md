@@ -10,6 +10,7 @@ need them.
 | Write a blog post | [writing-a-post.md](writing-a-post.md) |
 | Add a whole new section to the homepage | [adding-a-section.md](adding-a-section.md) |
 | Run it locally, check it, put it live | [build-and-ship.md](build-and-ship.md) |
+| Get the site to show up on Google | [search-visibility.md](search-visibility.md) |
 
 Roughly in order of how often you will need them. The first three are editing
 data in one file; the fourth changes the shape of the document and is the only

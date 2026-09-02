@@ -4,6 +4,9 @@ description: 'Here is a sample of some basic Markdown syntax that can be used wh
 tags: ['meta']
 pubDate: 'Jun 19 2024'
 heroImage: '../../assets/blog-placeholder-1.jpg'
+# Astro demo content, kept on the site on purpose but kept out of
+# search results. Delete this line when the post is real.
+noindex: true
 ---
 
 Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.

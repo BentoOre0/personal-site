@@ -1,0 +1,151 @@
+---
+/*
+  A closing note at the foot of /blog. One quote at a time, cycling.
+
+  Three things about how this is built are deliberate.
+
+  **All quotes are in the DOM at once, stacked in one grid cell.** Every
+  quote sits at `grid-area: 1 / 1`, so the bar is always as tall as the
+  longest of them and cycling cannot move the page. The typed tagline
+  needed a measured `min-height` to achieve the same thing, which has to be
+  re-measured whenever a term changes; this needs nothing, at any width.
+
+  **The author sits inside the quote, not under the bar.** It fades with
+  the words it belongs to, so a second author's quote brings its own name
+  with it and nothing has to be kept in step by hand.
+
+  **The first quote is visible with no JavaScript.** It carries `is-on`
+  from the server. If the script never runs, the note is a normal static
+  blockquote rather than an empty box.
+
+  Hidden quotes use `visibility: hidden`, not just `opacity: 0`. That takes
+  them out of the accessibility tree and out of text selection, so a screen
+  reader reads the one on show and a copy of the page does not silently
+  carry three overlapping quotes.
+*/
+import { QUOTES } from '../data/profile';
+---
+
+<aside class="note">
+	<div class="stack" data-quotes>
+		{
+			QUOTES.map((q, i) => (
+				<blockquote class:list={['quote', { 'is-on': i === 0 }]}>
+					<p>&ldquo;{q.text}&rdquo;</p>
+					<footer>
+						{q.href ? (
+							<a href={q.href} target="_blank" rel="noopener noreferrer">
+								{q.author}
+							</a>
+						) : (
+							q.author
+						)}
+					</footer>
+				</blockquote>
+			))
+		}
+	</div>
+</aside>
+
+<style>
+	/* No rule above it and no label. The note is quieter than the list it
+	   follows, so the space alone separates them. */
+	.note {
+		max-width: var(--measure);
+		margin: var(--s-8) auto 0;
+	}
+
+	.stack {
+		display: grid;
+	}
+
+	/* Every quote occupies the same cell, so the tallest sets the height
+	   once and nothing reflows when the visible one changes. */
+	.quote {
+		grid-area: 1 / 1;
+		margin: 0;
+		text-align: center;
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 400ms ease-out,
+			visibility 0s linear 400ms;
+	}
+
+	.quote.is-on {
+		opacity: 1;
+		visibility: visible;
+		transition:
+			opacity 400ms ease-out,
+			visibility 0s;
+	}
+
+	.quote p {
+		margin: 0 auto;
+		/* Narrower than the page measure. Centred text is harder to track
+		   back to the start of the next line, so the lines are kept short. */
+		max-width: 48ch;
+		font-size: var(--t-base);
+		line-height: 1.55;
+		color: var(--muted);
+		text-wrap: pretty;
+	}
+
+	.quote footer {
+		margin-top: var(--s-3);
+		font-size: var(--t-xs);
+		color: var(--muted);
+	}
+
+	@media (max-width: 40rem) {
+		.note {
+			margin-top: var(--s-7);
+		}
+	}
+
+	/* The script does not start under reduced motion, so the first quote
+	   simply stays. Killing the transition too means nothing can fade even
+	   if a class is toggled by something else. */
+	@media (prefers-reduced-motion: reduce) {
+		.quote,
+		.quote.is-on {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	/* Module scope, not per-listener: with the ClientRouter in play,
+	   astro:page-load fires again on every navigation, and without this the
+	   old page's timer keeps running and cycles a bar that is gone. The
+	   typed tagline had the same problem and is fixed the same way. */
+	let timer: ReturnType<typeof setTimeout> | undefined;
+
+	const HOLD_MS = 7000;
+
+	document.addEventListener('astro:page-load', () => {
+		clearTimeout(timer);
+
+		const stack = document.querySelector('[data-quotes]');
+		if (!stack) return;
+
+		const quotes = Array.from(stack.querySelectorAll('.quote'));
+		if (quotes.length < 2) return;
+
+		/* Autonomous motion is off entirely here, not merely slowed. The
+		   first quote is already showing, so this degrades to a static
+		   note rather than to a blank one. */
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		let i = 0;
+		const step = () => {
+			if (!stack.isConnected) return;
+			quotes[i].classList.remove('is-on');
+			i = (i + 1) % quotes.length;
+			quotes[i].classList.add('is-on');
+			timer = setTimeout(step, HOLD_MS);
+		};
+
+		timer = setTimeout(step, HOLD_MS);
+	});
+</script>

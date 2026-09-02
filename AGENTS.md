@@ -18,6 +18,21 @@ impressive first.
 The blog is its own route at /blog, reached from the nav. It is
 deliberately not a section on the homepage.
 
+## Scope
+
+**This repository only.** Work here is limited to the personal site. The
+owner's other repositories are handled separately and their state is not
+yours to correct.
+
+- Read them freely when a link or a fact needs checking. Never edit them, and
+  do not open issues or pull requests against them.
+- Their READMEs are the owner's own writing and are legitimate source material
+  for site copy. Quoting or condensing them is sourcing, not inventing.
+  Writing new prose in his voice is still off limits.
+- Links pointing at other repositories can move without warning. If one
+  breaks, repoint it here; do not go and fix the other repository.
+- If something over there looks wrong, say so and leave it.
+
 ## Rules
 - No database, no backend, no auth. Static only.
 - `npm run build` must pass before any commit.
