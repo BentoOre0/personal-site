@@ -1,0 +1,211 @@
+---
+/*
+  A project figure: the plate, its panels, and the caption.
+
+  Extracted from `index.astro` when figures learned to cycle, because a
+  timer and its cleanup do not belong in a page that is otherwise layout.
+  `PostList` came out for the same reason.
+
+  A figure is one of four things, in this order:
+
+  - **A spec.** No panels yet, so the empty plate prints the shot it needs.
+  - **One panel.** A plain figure.
+  - **A collage** (`plates` of two or more). Side by side where there is
+    room, stacked where there is not.
+  - **A window** (`cycle`). One panel at a time, swapping every 8s.
+
+  On the window: every panel sits in the same grid cell, so the figure is
+  as tall as the tallest and swapping cannot move the page. The first panel
+  carries `is-on` from the server, so with no JavaScript, or under
+  `prefers-reduced-motion` where the script deliberately never starts, the
+  figure is a normal static one showing panel (a).
+*/
+import { Image } from 'astro:assets';
+import type { Project } from '../data/profile';
+
+interface Props {
+	figure: NonNullable<Project['figure']>;
+	/* Figure number, derived from position by the page. Never typed. */
+	n: number;
+}
+
+const { figure, n } = Astro.props;
+
+const plates = figure.plates ?? [];
+const many = plates.length > 1;
+
+/* (a), (b), (c) from position, for the same reason every other designator
+   on this page is: a hand-typed letter survives a reorder and lies. */
+const letter = (i: number) => String.fromCharCode(97 + i);
+---
+
+<figure class:list={['figure', { wide: figure.wide }]}>
+	{
+		plates.length > 0 ? (
+			<div class:list={['plates', { collage: many && !figure.cycle, cycle: figure.cycle }]} data-cycle={figure.cycle ? '' : undefined}>
+				{plates.map((plate, i) => (
+					<div class:list={['panel', { 'is-on': i === 0 }]}>
+						<picture>
+							{/* Chosen by the browser, with no script. The animation
+								goes only to a reader who has not asked for less
+								motion; everyone else gets the still, which is also
+								the fallback if the animation never arrives. */}
+							{plate.motion && (
+								<source media="(prefers-reduced-motion: no-preference)" srcset={plate.motion} />
+							)}
+							<Image
+								class="plate-image"
+								src={plate.still}
+								alt={plate.alt}
+								widths={[400, 640, 960, 1280]}
+								sizes={figure.wide ? '(max-width: 60rem) 92vw, 860px' : '(max-width: 52rem) 92vw, 480px'}
+								style={`aspect-ratio: ${figure.ratio};`}
+							/>
+						</picture>
+						{plate.label && (
+							<p class="panel-label">
+								<span class="designator">
+									Fig. {n}
+									{many && `(${letter(i)})`}
+								</span>
+								{' '}{plate.label}
+							</p>
+						)}
+					</div>
+				))}
+			</div>
+		) : (
+			<div
+				class="plate"
+				role="img"
+				aria-label={`Figure ${n} placeholder`}
+				style={`aspect-ratio: ${figure.ratio};`}
+			>
+				<span class="legend">Fig. {n}</span>
+				<span class="plate-spec">{figure.spec}</span>
+			</div>
+		)
+	}
+	<figcaption>
+		<span class="designator">Fig. {n}</span>
+		{' '}{figure.caption}
+	</figcaption>
+</figure>
+
+<style>
+	/* Capped at the summary's own measure so the artifact sits inside the
+	   text block's edges rather than spanning the full 960 sheet. A 16:9
+	   plate at full width would be 540px tall and push the parameters off
+	   the first screen on desktop, which is the reverse of the fix. */
+	.figure {
+		margin: var(--s-3) 0 var(--s-5) 0;
+		max-width: 30rem;
+	}
+
+	/* Diagrams only. See the note on `wide` in profile.ts: a diagram's own
+	   type does not reflow, so at 30rem it stops being readable. */
+	.figure.wide {
+		max-width: var(--wide);
+	}
+
+	/* A collage sits side by side where there is room and stacks where
+	   there is not, with no breakpoint of its own: `auto-fit` plus a
+	   minimum panel width decides it from the space actually available,
+	   so it stays right inside a figure of any width. */
+	.plates.collage {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+		gap: var(--s-3);
+	}
+
+	/* Every panel in one cell: the figure is as tall as the tallest and
+	   the swap cannot move the page, at any width, without measuring
+	   anything. */
+	.plates.cycle {
+		display: grid;
+	}
+
+	.plates.cycle > .panel {
+		grid-area: 1 / 1;
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 500ms ease-out,
+			visibility 0s linear 500ms;
+	}
+
+	.plates.cycle > .panel.is-on {
+		opacity: 1;
+		visibility: visible;
+		transition:
+			opacity 500ms ease-out,
+			visibility 0s;
+	}
+
+	.panel-label {
+		margin: var(--s-1) 0 0 0;
+		font-size: var(--t-xs);
+		line-height: 1.4;
+		color: var(--muted);
+	}
+
+	figcaption {
+		margin-top: var(--s-2);
+		font-size: var(--t-xs);
+		color: var(--muted);
+	}
+
+	@media (max-width: 52rem) {
+		.figure {
+			max-width: 20rem;
+		}
+
+		/* A wide figure is wide because its own type is small. Shrinking it
+		   to 20rem would defeat the point, so it takes the column. */
+		.figure.wide {
+			max-width: 100%;
+		}
+	}
+
+	/* The script does not start under reduced motion, so panel (a) simply
+	   stays. Killing the transition too means nothing can fade even if a
+	   class is toggled by something else. */
+	@media (prefers-reduced-motion: reduce) {
+		.plates.cycle > .panel,
+		.plates.cycle > .panel.is-on {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	/* Module scope, not per-listener: with the ClientRouter in play,
+	   astro:page-load fires again on every navigation, and without this the
+	   old page's timers keep running against a detached DOM. */
+	let timers: ReturnType<typeof setTimeout>[] = [];
+
+	const HOLD_MS = 8000;
+
+	document.addEventListener('astro:page-load', () => {
+		timers.forEach(clearTimeout);
+		timers = [];
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		document.querySelectorAll('[data-cycle]').forEach((stack) => {
+			const panels = Array.from(stack.querySelectorAll('.panel'));
+			if (panels.length < 2) return;
+
+			let i = 0;
+			const step = () => {
+				if (!stack.isConnected) return;
+				panels[i].classList.remove('is-on');
+				i = (i + 1) % panels.length;
+				panels[i].classList.add('is-on');
+				timers.push(setTimeout(step, HOLD_MS));
+			};
+
+			timers.push(setTimeout(step, HOLD_MS));
+		});
+	});
+</script>

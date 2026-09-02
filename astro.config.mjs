@@ -1,8 +1,30 @@
 // @ts-check
 
+import { readFileSync, readdirSync } from 'node:fs';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
+
+/*
+  URLs that carry `noindex` must not be listed in the sitemap. The two are
+  contradictory instructions, and Search Console reports the pair as an
+  error ("Submitted URL marked noindex") rather than quietly preferring one.
+
+  Content collections are not available inside this file, so the frontmatter
+  is read straight off disk. A post's URL is /blog/<filename without
+  extension>/, which is what `[...slug].astro` builds from `post.id`; if that
+  route ever stops using the file id, this has to follow it.
+*/
+const BLOG_DIR = new URL('./src/content/blog/', import.meta.url);
+
+const noindexedPostPaths = readdirSync(BLOG_DIR)
+	.filter((file) => /\.(md|mdx)$/.test(file))
+	.filter((file) => {
+		const source = readFileSync(new URL(file, BLOG_DIR), 'utf-8');
+		const frontmatter = source.split('---')[1] ?? '';
+		return /^noindex:\s*true\s*$/m.test(frontmatter);
+	})
+	.map((file) => `/blog/${file.replace(/\.(md|mdx)$/, '')}/`);
 
 const sansFallbacks = [
 	'ui-sans-serif',
@@ -26,7 +48,12 @@ const monoFallbacks = [
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://jeremyaidanhernandezyu.vercel.app',
-	integrations: [mdx(), sitemap()],
+	integrations: [
+		mdx(),
+		sitemap({
+			filter: (page) => !noindexedPostPaths.includes(new URL(page).pathname),
+		}),
+	],
 	fonts: [
 		{
 			provider: fontProviders.local(),

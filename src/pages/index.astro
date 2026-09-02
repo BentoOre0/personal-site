@@ -4,7 +4,9 @@ import discipline from '../assets/discipline-crop2.png';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import Figure from '../components/Figure.astro';
 import Icon from '../components/Icon.astro';
+import PersonLd from '../components/PersonLd.astro';
 import SectionHead from '../components/SectionHead.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profile';
@@ -42,6 +44,7 @@ PROJECTS.forEach((p, i) => {
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<PersonLd />
 	</head>
 	<body>
 		<Header />
@@ -116,7 +119,29 @@ PROJECTS.forEach((p, i) => {
 										c.text
 									)}
 								</span>
-								<span class="feature-note">{c.note}</span>
+								{c.sources ? (
+									<details class="feature-source">
+										<summary>
+											<span class="feature-note">{c.note}</span>
+										</summary>
+										{c.sources.map((q) => (
+											<blockquote>
+												<p>&ldquo;{q.text}&rdquo;</p>
+												<cite>
+													{q.href ? (
+														<a href={q.href} target="_blank" rel="noopener noreferrer">
+															{q.source}
+														</a>
+													) : (
+														q.source
+													)}
+												</cite>
+											</blockquote>
+										))}
+									</details>
+								) : (
+									<span class="feature-note">{c.note}</span>
+								)}
 							</li>
 						))
 					}
@@ -154,34 +179,7 @@ PROJECTS.forEach((p, i) => {
 										{p.titleHref ? <a href={p.titleHref}>{p.title}</a> : p.title}
 									</h3>
 
-									{p.figure && (
-										<figure class="figure">
-											{p.figure.src ? (
-												<Image
-													class="plate-image"
-													src={p.figure.src}
-													alt={p.figure.alt ?? ''}
-													widths={[400, 640, 960]}
-													sizes="(max-width: 52rem) 92vw, 480px"
-													style={`aspect-ratio: ${p.figure.ratio};`}
-												/>
-											) : (
-												<div
-													class="plate"
-													role="img"
-													aria-label={`Figure ${figureNumber.get(i)} placeholder`}
-													style={`aspect-ratio: ${p.figure.ratio};`}
-												>
-													<span class="legend">Fig. {figureNumber.get(i)}</span>
-													<span class="plate-spec">{p.figure.spec}</span>
-												</div>
-											)}
-											<figcaption>
-												<span class="designator">Fig. {figureNumber.get(i)}</span>
-												{' '}{p.figure.caption}
-											</figcaption>
-										</figure>
-									)}
+									{p.figure && <Figure figure={p.figure} n={figureNumber.get(i)!} />}
 
 									<p class="summary">{p.summary}</p>
 									<table class="spec params">
@@ -523,6 +521,80 @@ PROJECTS.forEach((p, i) => {
 		color: var(--muted);
 	}
 
+	/* Somebody else's words under a credential, folded away until asked for.
+	   Several lines of quotation outweigh the credential they support, so
+	   the evidence is available rather than spent: the reader sees an arrow
+	   and opens it only if the claim needs settling.
+
+	   The note itself is the control, with the arrow after it, so the
+	   disclosure costs no extra line and the target is a whole line of text
+	   rather than a glyph.
+
+	   `<details>` is the entire mechanism. No script, so it works with
+	   scripts blocked, and because it opens only on user input it sits
+	   inside the "nothing moves without user input" rule rather than beside
+	   it as another exception. */
+	.feature-source summary {
+		display: block;
+		width: fit-content;
+		cursor: pointer;
+		/* Padding for the touch target, negative margin to give back the
+		   space, so the note sits exactly where it does without a
+		   disclosure and the two kinds of credential still line up. */
+		padding-block: var(--s-2);
+		margin-block: calc(-1 * var(--s-2));
+		/* Firefox, and modern Chrome. */
+		list-style: none;
+	}
+
+	/* Safari, and Chrome before it honoured `list-style` here. */
+	.feature-source summary::-webkit-details-marker {
+		display: none;
+	}
+
+	/* Drawn rather than the platform triangle, and swapped rather than
+	   rotated: a glyph change needs no motion to read as a state change. */
+	.feature-source summary::after {
+		content: '\25B8';
+		margin-left: 0.45em;
+		color: var(--accent);
+	}
+
+	.feature-source[open] summary::after {
+		content: '\25BE';
+	}
+
+	@media (hover: hover) {
+		.feature-source summary:hover .feature-note {
+			color: var(--ink);
+		}
+	}
+
+	/* The rule down the left is what marks the block as quoted rather than
+	   as a second note; it and the note both sit at 14px in the muted
+	   colour, so without it they would read as one run-on line. */
+	.feature-source blockquote {
+		margin: var(--s-3) 0 0 0;
+		padding-left: var(--s-3);
+		border-left: var(--hairline) solid var(--rule);
+		max-width: 62ch;
+	}
+
+	.feature-source blockquote p {
+		margin: 0;
+		font-size: var(--t-xs);
+		line-height: 1.5;
+		color: var(--muted);
+		text-wrap: pretty;
+	}
+
+	.feature-source cite {
+		display: block;
+		margin-top: var(--s-1);
+		font-size: var(--t-xs);
+		font-style: normal;
+	}
+
 	/* --- Projects. Graded legibility: the list compresses downward. --- */
 	.projects {
 		list-style: none;
@@ -576,6 +648,16 @@ PROJECTS.forEach((p, i) => {
 
 	.project-body > h3 {
 		grid-row: 1;
+	}
+
+	/* The figure is rendered by `Figure.astro`, so it carries that
+	   component's scope id and not this page's. The scoped
+	   `> :not(.designator)` above cannot see across that boundary, and
+	   without this the figure falls into the designator's gutter column
+	   and squeezes the whole row to a sliver. It looks like a grid bug and
+	   is a scoping one. */
+	.project-body > :global(figure) {
+		grid-column: 2;
 	}
 
 	/* The params table is inset 8px by the shared .spec rule, which would
@@ -683,22 +765,6 @@ PROJECTS.forEach((p, i) => {
 	}
 
 	/* --- Figures. The photo slot states the shot it needs. --- */
-	/* Capped at the summary's own measure so the artifact sits inside the
-	   text block's edges rather than spanning the full 960 sheet. A 16:9
-	   plate at full width would be 540px tall and push the parameters off
-	   the first screen on desktop, which is the reverse of the fix. */
-	.figure {
-		margin: var(--s-3) 0 var(--s-5) 0;
-		max-width: 30rem;
-	}
-
-	figcaption {
-		margin-top: var(--s-2);
-		font-size: var(--t-xs);
-		color: var(--muted);
-	}
-
-
 	/* --- Adaptation. Mobile is the default case. --- */
 	@media (max-width: 52rem) {
 		/* Full width matters more than the gutter at this size: the
@@ -710,6 +776,7 @@ PROJECTS.forEach((p, i) => {
 
 		.project-body > .designator,
 		.project-body > h3,
+		.project-body > :global(figure),
 		.project-body > :not(.designator) {
 			grid-column: 1;
 		}

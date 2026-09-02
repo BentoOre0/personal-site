@@ -63,6 +63,7 @@ updatedDate: 'Sep 10 2026'
 | `tags` | no | Defaults to `[]`. See below. |
 | `heroImage` | no | A path to an image. See below. |
 | `updatedDate` | no | Only if you edit the post after publishing. |
+| `noindex` | no | Defaults to `false`. `true` keeps the post off Google while leaving it published and listed on `/blog`. Set on the Astro demo posts. See [search-visibility.md](search-visibility.md). |
 
 Quote the strings. If a title contains an apostrophe, use double quotes around
 it: `title: "The rocket's avionics bay"`.
@@ -133,6 +134,7 @@ this.
 - [ ] Tags reuse existing vocabulary where they can
 - [ ] `npm run build` passes
 - [ ] Read the post at `/blog/<slug>/` before shipping
+- [ ] No `noindex: true` left in the frontmatter, unless you meant it
 
 ---
 

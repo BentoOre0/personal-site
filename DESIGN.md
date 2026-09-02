@@ -38,9 +38,30 @@ same slot, at the same size, under the same numbering. This is why the
 world was viable at all, the alternative directions had no grammar for
 a photograph.
 
-Photographs are unshot at time of writing, so each empty figure slot
+Most photographs are unshot at time of writing, so each empty figure slot
 states the shot it needs: aspect ratio, view, and lighting. The plate is
 a spec, not a grey box.
+
+Fig. 1 is filled and is the exception that proves the grammar holds: it is
+a 1:1 poster on kraft paper, not a 16:9 screenshot, and it is the only
+warm ground anywhere on the site. A figure is allowed its own colour
+because it is evidence rather than chrome; the four-colour rule governs
+the page around it, not what a photograph happens to contain.
+
+A figure can hold more than one panel. Two or more sit side by side where
+there is room and stack where there is not, sharing the figure's `ratio`
+so a collage of mismatched crops is not possible by accident. Panels are
+lettered from position, `Fig. 5(a)`, like every other designator here.
+
+`cycle` shows one panel at a time instead, and the choice between the two
+is legibility, not taste. In a 30rem figure a two-panel collage gives each
+about 232px, which is fine for a poster and useless for a field of specks.
+
+`wide` lets a figure run to the full sheet, and is for diagrams only. A
+diagram carries type of its own, and type inside a picture does not
+reflow: the SEAOIL state machine's fourteen labelled boxes land at about
+five pixels each at 30rem, at which point the figure is decoration. A
+photograph never needs this, having no small type to lose.
 
 ## Palette
 
@@ -177,9 +198,19 @@ resolve; if they ever stop linking, delete them.
 ## Motion
 
 Nothing moves without user input, a pinned rule and a hard constraint.
-Two documented exceptions carry autonomous motion: the typed tagline,
-and the loading screen (`Loader.astro`), where an indicator that does
-not move is not an indicator. The loader runs three layers on separate
+Four documented exceptions carry autonomous motion, each at the owner's
+request: the typed tagline; the loading screen (`Loader.astro`), where an
+indicator that does not move is not an indicator; the closing note at the
+foot of `/blog` (`QuoteBar.astro`), one quote at a time on a 7s hold and a
+400ms cross-fade; and project figures (`Figure.astro`), which may hold an
+animation and may cycle between panels on an 8s hold.
+
+All four are off under `prefers-reduced-motion`. The figures are the only
+one where the browser does it rather than a script: an animated panel is a
+`<picture>` whose animated `<source>` carries
+`media="(prefers-reduced-motion: no-preference)"`, so a reader who has
+asked for less motion is served the still and never downloads the
+animation at all. The loader runs three layers on separate
 clocks, the figure trots at 660ms, the notes bob at 900ms, the Z's
 jitter at 420ms on `steps()` so they snap rather than glide, and exits
 by sliding the whole sheet up, never by fading. Both are off entirely
@@ -187,6 +218,52 @@ under `prefers-reduced-motion`, and the overlay carries a 6s CSS
 failsafe so a dead script cannot seal the page shut.
 The only transitions are 120ms ease-out color and underline changes on
 hover and focus. `prefers-reduced-motion` is honoured globally.
+
+### Evidence folds, it is not spent
+
+A credential may carry verbatim passages from the bodies that run the
+things it names. The note itself becomes the control, with a small arrow
+after it in the accent, `\25B8` closed and `\25BE` open.
+
+The reasoning is proportion. The quotations are longer than the credential
+they support, so left open they invert the weight of §1 and the list stops
+being skimmable. Folded, they cost the reader an arrow.
+
+Putting the arrow on the note rather than on a labelled row of its own is
+what keeps the cost that low: the disclosure takes no extra line, and the
+target is a whole line of text instead of a glyph. The summary carries
+`padding-block` for touch with an equal negative margin, so a credential
+with a disclosure sits exactly where one without it does.
+
+The marker is drawn rather than the platform triangle, and swapped rather
+than rotated, because a glyph change reads as a state change without
+motion. The summary is `width: fit-content`; a summary is
+`display: list-item` and would otherwise span the column, so a stray click
+anywhere on the row would toggle it.
+
+`<details>` carries no script, and opening on a click is user input, so
+this adds no further exception to the motion rule.
+
+### The closing note
+
+A quote at the foot of `/blog`, centred, at `--t-base` in the muted
+colour, with no rule above it and no label. It is the quietest block on
+the site on purpose: it follows the post list and must not compete with
+it, so the separation is `--s-8` of space rather than a line.
+
+Every quote occupies the same CSS grid cell, so the block is as tall as
+the longest of them and cycling cannot move the page. This is the same
+problem the typed tagline solves with a measured `min-height`, solved
+without the measurement, so it holds at any width and survives an edit to
+the quotes.
+
+The author sits inside the quote and fades with it, so a second author's
+words bring their own name. Hidden quotes are `visibility: hidden`, not
+merely transparent, which keeps them out of the accessibility tree and out
+of a text selection. The first quote carries its `is-on` class from the
+server, so with no JavaScript, or under `prefers-reduced-motion` where the
+script deliberately never starts, the note is a static blockquote rather
+than an empty box.
 
 ## Browser surfaces
 

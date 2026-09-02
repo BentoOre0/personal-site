@@ -48,7 +48,7 @@ each project's position in the array. Move a project and its number follows
 automatically; you never renumber anything by hand. `placeholder` was a
 boolean meant to mark a row as unfinished; it was never wired to anything and
 was removed. To mark a project unfinished, give its `params` values `TBD` and
-its figure a `spec` rather than a `src`; both of which do show on the page.
+its figure a `spec` rather than `plates`; both of which do show on the page.
 
 ---
 
@@ -147,27 +147,41 @@ import avionicsBay from '../assets/avionics-bay.jpg';
 optimise the file, and what turns a typo into a build error instead of a broken
 image on the live site.
 
-**2. Point the figure at the imported name:**
+**2. Give the figure a `plates` list naming it:**
 
 ```ts
 figure: {
-  src: avionicsBay,
   caption: 'Avionics bay, assembled.',
   ratio: '4 / 3',
-  alt: 'A circuit board mounted in a machined aluminium sled.',
+  plates: [
+    {
+      still: avionicsBay,
+      alt: 'A circuit board mounted in a machined aluminium sled.',
+    },
+  ],
 },
 ```
 
 | Field | Notes |
 |---|---|
-| `src` | The imported image. Its presence is what switches the slot from placeholder to photo. |
-| `caption` | Printed under the figure, after `Fig. N`. |
-| `ratio` | The slot's shape, `'16 / 9'`, `'4 / 3'`, `'1 / 1'`. |
-| `alt` | Optional. See below. |
+| `caption` | Printed under the whole figure, after `Fig. N`. |
+| `ratio` | The slot's shape, `'16 / 9'`, `'4 / 3'`, `'1 / 1'`. Every panel shares it. |
+| `plates` | The panels. One is a plain figure; more than one is a collage or a window. |
+| `spec` | Instead of `plates`, for a shot not yet taken. See below. |
+| `wide` | Optional. Diagrams only. See below. |
+| `cycle` | Optional. Show one panel at a time. See below. |
 
-Astro handles the rest: the image is converted to WebP, emitted at 400, 640 and
-960 pixels wide with a `srcset` so a phone never downloads a desktop-sized file,
-and lazy-loaded.
+And inside a plate:
+
+| Field | Notes |
+|---|---|
+| `still` | The imported image. **Required**, even for an animation. |
+| `alt` | **Required.** One caption cannot describe several panels. |
+| `motion` | Optional. A URL into `public/` for an animated file. See below. |
+| `label` | Optional. A line under this panel, prefixed `Fig. 5(a)`. |
+
+Astro handles the rest: WebP, emitted at several widths with a `srcset` so a
+phone never downloads a desktop-sized file, and lazy-loaded.
 
 **The photo is cropped to `ratio`, not squashed.** `object-fit: cover` means the
 slot keeps its declared shape and the image fills it, losing the edges if the
@@ -175,14 +189,90 @@ proportions disagree. That is deliberate, your photos are unedited raw shots of
 uneven framing, and the page's rhythm cannot depend on them all agreeing. Check
 that nothing important sits at the very edge of a shot.
 
-**About `alt`:** leave it out when the caption already says what the picture
-shows. The caption sits in the `<figcaption>` and is read aloud anyway, so
-repeating it in `alt` makes a screen reader say the same sentence twice. Write
-an `alt` only when the image shows something the caption does not say.
+**`alt` is required on a plate**, unlike the caption-only case it replaced. A
+collage has one caption and several pictures, so the caption cannot be standing
+in for all of them.
 
-### If you want to have a Dummy Photo and want to see the size 
+### More than one picture: collage or window
 
-Give it `spec` instead of `src`:
+Put two or more plates in the list and you get a **collage**: side by side
+where there is room, stacked where there is not. There is no breakpoint to
+pick; the grid decides from the space actually available, so it stays right
+inside a figure of any width.
+
+Add `cycle: true` and you get a **window** instead: one panel at a time,
+swapping every 8 seconds with a fade.
+
+Choose by how much each picture needs to be seen. In a 30rem figure a two-panel
+collage gives each about 232px. That is fine for a poster or a photograph and
+useless for anything dense: GravSim's simulations are fields of specks, which at
+232px are texture rather than a simulation, so that figure is a window.
+
+Every panel of a window sits in the same grid cell, so the figure is as tall as
+its tallest panel and the swap cannot move the page. Panel (a) is visible
+without JavaScript.
+
+### Animated GIFs
+
+**A GIF cannot go in `src/assets/`.** Astro runs imported images through sharp,
+which takes the first frame and throws the rest away *silently*: the build
+passes and the page shows a frozen picture. Nothing warns you.
+
+So convert it, put the animation in `public/`, and keep a still beside it:
+
+```bash
+# sharp is already a dependency; no new tooling. Run from the repo root.
+node -e "
+const sharp = require('sharp');
+sharp('in.gif', { animated: true }).resize({ width: 640 })
+  .webp({ quality: 50, effort: 6 }).toFile('public/gravsim/out.webp');
+sharp('in.gif', { page: 0 }).resize({ width: 640 })
+  .png({ palette: true }).toFile('src/assets/out-still.png');
+"
+```
+
+```ts
+{
+  still: quadtreeStill,                        // imported, from src/assets
+  motion: '/gravsim/quadtree-subdivision.webp', // URL, from public/
+  alt: 'An animated view of the quadtree re-subdividing every frame …',
+  label: 'Quadtree subdivision, rebuilt every frame',
+}
+```
+
+**Convert, do not ship the GIF.** The two GravSim GIFs were 3.4MB and 3.1MB.
+As animated WebP at 640px they are 478KB and 743KB, the same 44 and 60 frames.
+That is a 78% cut, and it is still by far the heaviest thing on the site.
+
+**`still` is not optional and not a nicety.** The page renders a `<picture>`
+whose animated `<source>` is served only when the reader has *not* asked for
+reduced motion. Under `prefers-reduced-motion` they get the still instead,
+chosen by the browser with no JavaScript. It is also the fallback if the
+animation fails to arrive. Leave it out and a reader who dislikes motion gets
+nothing.
+
+Check your work: an animated WebP contains an `ANIM` chunk and one `ANMF` per
+frame.
+
+```bash
+python3 -c "b=open('public/gravsim/x.webp','rb').read(); print(b.count(b'ANMF'))"
+```
+
+Zero frames means sharp flattened it and you forgot `{ animated: true }`.
+
+### Wide figures, for diagrams only
+
+`wide: true` lets a figure run to the full sheet instead of 30rem.
+
+Use it for diagrams and nothing else. A diagram carries type of its own, and
+**type inside a picture does not reflow**: the SEAOIL state machine has fourteen
+labelled boxes, which at 30rem land at about five pixels each. The figure is
+then decoration and the reader learns nothing. A photograph never needs this,
+because it has no small type to lose.
+
+### If you want a dummy photo and want to see the size
+
+Give it `spec` instead of `plates`:
 
 ```ts
 figure: {
@@ -197,8 +287,8 @@ stating its own requirement. That is why the unfilled figures on the live site
 read as deliberate rather than broken, and it means every empty slot tells you
 exactly what shot to go take.
 
-Once you have the photo, add `src` and the plate becomes the image. You can
-leave `spec` in place; it is ignored when `src` is set.
+Once you have the photo, add `plates` and the plate becomes the image. You can
+leave `spec` in place; it is ignored when `plates` is set.
 
 A dashed border means unshot, a solid one means done. Real and specified figures
 can sit side by side in the list with no problem.
