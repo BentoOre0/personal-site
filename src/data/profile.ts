@@ -410,7 +410,7 @@ export const PROJECTS: Project[] = [
 			'Firmware and build work on Nova SM3, a Spot-Mini Micro clone quadruped, forked from Chris Locke\'s open-source design. The mechanical design, gait development and servo motion engine are his; mine is the firmware and the physical build. The monolithic sketch is split into a Teensy 4.0 master and Arduino Nano slave, with pins and feature flags lifted into a config header and the I2C command bytes into a protocol header shared by both boards, so master and slave cannot disagree about what a byte means. Input comes from a PS2 remote, whose protocol is bit-banged in software. Standalone bring-up sketches let a hardware fault be isolated one subsystem at a time without flashing the full firmware. On the hardware side, soldering and testing the boards, and modifying the STL files to print the parts.',
 		params: [
 			{ key: 'Role', value: 'Firmware and hardware · fork of an open-source design' },
-			{ key: 'Stack', value: 'C++ · Teensy 4.0, Arduino Nano, Raspberry Pi (for testing) · I2C, PWM, bit-banged PS2 remote control · PCB soldering and testing · 3D printing' },
+			{ key: 'Stack', value: 'C++ · Teensy 4.0, Arduino Nano, Raspberry Pi (for testing), MPU-6050 IMU · I2C, PWM, bit-banged PS2 remote control · PCB soldering and testing · 3D printing' },
 			{ key: 'Status', value: 'Ongoing' },
 			{ key: 'Year', value: '2026–present' },
 		],
