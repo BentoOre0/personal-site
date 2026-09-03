@@ -15,7 +15,6 @@ import type { ImageMetadata } from 'astro';
 import anthRopic from '../assets/anth-ropic.png';
 import galaxyStill from '../assets/galaxy-formation-still.png';
 import quadtreeStill from '../assets/quadtree-subdivision-still.png';
-import seaoilDispatchIcon from '../assets/seaoil-dispatch-icon.png';
 import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
 
 export const REVISION = {
@@ -433,44 +432,7 @@ export const PROJECTS: Project[] = [
 			{ key: 'Year', value: '2025' },
 		],
 		titleHref: 'https://github.com/BentoOre0/JAHY-Seaoil-Work',
-		figure: {
-			caption: 'Cylinder delivery, the operation this system dispatches.',
-			/* 1952x1464, exactly 4:3, matching the other project slots on
-			   the page so the column keeps one rhythm. An icon, not a
-			   photograph and not a diagram, so it is decorative: it says
-			   what the system is for, it does not show how the system works.
-
-			   The source icon is 500x500 with a transparent ground, so it is
-			   composited onto #fefefe here rather than left to show the
-			   plate's own wash through, and scaled 2.2x to fill the same
-			   1081px the previous icon did. That upscale is why the canvas
-			   is bigger than the source: flat art survives it, but a larger
-			   export or an SVG would be sharper on a retina screen.
-
-			   The icon this replaced was 1163x1353 portrait, which at the
-			   30rem figure came out 480x558, taller than anything near it. The
-			   plate is `object-fit: cover`, so widening the ratio alone
-			   would have cropped the cylinder's top and bottom rather than
-			   shrinking it. The icon is therefore re-canvassed: the artwork
-			   is centred on a 4:3 ground in its own #fefefe, and the ratio
-			   here matches the file exactly, so CSS crops nothing. The
-			   plate is now 480x360 with a 151x266 cylinder inside it.
-
-			   This replaced the rider and order state machine export, which
-			   is deleted, not merely unreferenced: recovering it means going
-			   back through git history. That diagram needed `wide: true`,
-			   because fourteen labelled boxes at the usual 30rem figure
-			   width land at about five pixels of type each. An icon carries
-			   no type, so it takes the normal width like every photograph
-			   on the page. */
-			plates: [
-				{
-					still: seaoilDispatchIcon,
-					alt: 'A flat illustration of a blue gas cylinder with a red valve handle. Across its face, a white binary tree of seven round nodes: one at the top, branching into two, and each of those branching into two more.',
-				},
-			],
-			ratio: '4 / 3',
-		},
+		figure: null,
 		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/JAHY-Seaoil-Work' }],
 	},
 	{
