@@ -260,6 +260,59 @@ python3 -c "b=open('public/gravsim/x.webp','rb').read(); print(b.count(b'ANMF'))
 
 Zero frames means sharp flattened it and you forgot `{ animated: true }`.
 
+### From a phone video
+
+**There is no ffmpeg on this machine**, and adding one is a dependency
+decision. GStreamer is installed and decodes an iPhone `.MOV` (HEVC) fine, so
+the path from a clip to a figure is: decode to PNG frames, fix the frames in
+Pillow, then let sharp join them.
+
+```bash
+# 1. Frames. videorate picks the output rate; scale here, not later.
+gst-launch-1.0 -q filesrc location="clip.MOV" ! qtdemux name=d d.video_0 \
+  ! queue ! h265parse ! avdec_h265 ! videoconvert ! videoscale \
+  ! video/x-raw,width=1280,height=960 ! videorate \
+  ! video/x-raw,framerate=12/1 ! pngenc ! multifilesink location="raw/r_%04d.png"
+```
+
+`gst-discoverer-1.0 clip.MOV` prints the duration, the real dimensions and the
+codec. It does not print rotation, and a phone clip is almost always rotated:
+the frames come out of GStreamer in **storage** orientation, with the display
+rotation left in the container's `tkhd` matrix. Read it before assuming the
+video is landscape.
+
+```bash
+python3 - <<'EOF'
+import struct
+d = open('clip.MOV','rb').read()
+i = d.find(b'tkhd')
+print([x / 65536 for x in struct.unpack('>9i', d[i+44:i+80])[:8]])
+EOF
+```
+
+A matrix of `[0, 1, 0, -1, 0, 0, ...]` is 90 degrees clockwise, which is what
+`Image.rotate(-90, expand=True)` undoes. Rotate, crop to the figure's `ratio`,
+and resize every frame in Pillow before sharp ever sees them.
+
+**Do not call `.resize()` on a joined frame list.** Resizing a decoded animated
+file is safe, because the input carries `pageHeight` through the pipeline:
+
+```js
+sharp('in.webp', { animated: true }).resize({ width: 640 })   // 31 frames, fine
+sharp(files, { join: { animated: true } }).resize({ width: 640 })  // 1 frame
+```
+
+The second silently drops every frame but the first, exactly like the sharp
+trap above, and the only symptom is a suspiciously small file. Size the PNG
+frames instead. Check `ANMF` afterwards either way.
+
+**Video is heavier than a rendered animation.** Handheld footage changes every
+pixel of every frame, so inter-frame compression has almost nothing to work
+with. Clifford's three seconds are 525KB at 640px and 10fps, against GravSim's
+478KB for four seconds of a sparse simulation. Cut the clip to the seconds that
+carry the point, drop the frame rate to 10 or 12, and check the size before
+committing it.
+
 ### Wide figures, for diagrams only
 
 `wide: true` lets a figure run to the full sheet instead of 30rem.

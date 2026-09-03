@@ -13,6 +13,9 @@ import type { ImageMetadata } from 'astro';
 /* Project figures. Imported here, at the top, and referenced by the
    imported name in a project's `figure.src`. */
 import anthRopic from '../assets/anth-ropic.png';
+import baybayinGlyph from '../assets/baybayin-glyph.png';
+import cliffordBench from '../assets/clifford-bench.jpg';
+import cliffordWalkStill from '../assets/clifford-walk-still.jpg';
 import galaxyStill from '../assets/galaxy-formation-still.png';
 import quadtreeStill from '../assets/quadtree-subdivision-still.png';
 import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
@@ -144,6 +147,22 @@ export type Credential = {
 };
 export const CREDENTIALS: Credential[] = [
 	{
+		text: 'National Olympiad in Informatics: 4th in the Philippines (2024)',
+		note: 'Top 20 nationally for three consecutive years, 2023–2025',
+		href: 'https://noi.ph/2024-national-eliminations/',
+		/* "National Olympiad in Informatics" means nothing to a reader who
+		   has not competed. NOI.PH's own about page says what it is and what
+		   placing in it leads to, in one sentence each. */
+		sources: [
+			{
+				text: 'The National Olympiad in Informatics – Philippines (NOI.PH) is an annual programming contest for Filipino high school students held by the non-government organization of the same name. Top scorers of this competition will be among the training pool of the Philippines for the International Olympiad in Informatics.',
+				source: 'NOI.PH',
+				href: 'https://noi.ph/about/',
+			},
+		],
+		confirmed: true,
+	},
+	{
 		text: 'BASc Engineering Physics, University of British Columbia',
 		note: '2025–present · 92.3%',
 		/* Most readers do not know what engineering physics is. This is the
@@ -164,22 +183,6 @@ export const CREDENTIALS: Credential[] = [
 			{
 				text: 'Basically a triple major of engineering, physics and cs',
 				source: 'My uncle, UBC Engineering Physics 1999',
-			},
-		],
-		confirmed: true,
-	},
-	{
-		text: 'National Olympiad in Informatics: 4th in the Philippines (2024)',
-		note: 'Top 20 nationally for three consecutive years, 2023–2025',
-		href: 'https://noi.ph/2024-national-eliminations/',
-		/* "National Olympiad in Informatics" means nothing to a reader who
-		   has not competed. NOI.PH's own about page says what it is and what
-		   placing in it leads to, in one sentence each. */
-		sources: [
-			{
-				text: 'The National Olympiad in Informatics – Philippines (NOI.PH) is an annual programming contest for Filipino high school students held by the non-government organization of the same name. Top scorers of this competition will be among the training pool of the Philippines for the International Olympiad in Informatics.',
-				source: 'NOI.PH',
-				href: 'https://noi.ph/about/',
 			},
 		],
 		confirmed: true,
@@ -407,7 +410,7 @@ export const PROJECTS: Project[] = [
 	{
 		title: 'Clifford Spot Micro: Robot Dog',
 		summary:
-			'Firmware and build work on Nova SM3, a Spot-Mini Micro clone quadruped, forked from Chris Locke\'s open-source design. The mechanical design, gait development and servo motion engine are his; mine is the firmware and the physical build. The monolithic sketch is split into a Teensy 4.0 master and Arduino Nano slave, with pins and feature flags lifted into a config header and the I2C command bytes into a protocol header shared by both boards, so master and slave cannot disagree about what a byte means. Input comes from a PS2 remote, whose protocol is bit-banged in software. Standalone bring-up sketches let a hardware fault be isolated one subsystem at a time without flashing the full firmware. On the hardware side, soldering and testing the boards, and modifying the STL files to print the parts.',
+			'Firmware and build work on Nova SM3, a Spot-Mini Micro clone quadruped, forked from Chris Locke\'s open-source design. The mechanical design, gait development and servo motion engine are his; mine is the firmware and the physical build.',
 		params: [
 			{ key: 'Role', value: 'Firmware and hardware · fork of an open-source design' },
 			{ key: 'Stack', value: 'C++ · Teensy 4.0, Arduino Nano, Raspberry Pi (for testing), MPU-6050 IMU · I2C, PWM, bit-banged PS2 remote control · PCB soldering and testing · 3D printing' },
@@ -416,9 +419,30 @@ export const PROJECTS: Project[] = [
 		],
 		titleHref: 'https://github.com/BentoOre0/Modded-Nova-SM3',
 		figure: {
-			caption: 'The assembled quadruped.',
-			spec: '4:3 · side view · plain ground · raking light',
-			ratio: '4 / 3',
+			caption: 'Clifford walking, and on the bench with its shell off.',
+			/* The slot asked for a still side view. A gait is the thing this
+			   build either does or does not do, so panel (a) is three
+			   seconds cut from the owner's own demo clip, cropped square
+			   from a portrait phone video. Panel (b) is the row's other
+			   half: this is a firmware and hardware project, and the walk
+			   shows none of the hardware. Both are the owner's own. */
+			plates: [
+				{
+					still: cliffordWalkStill,
+					motion: '/clifford/walk.webp',
+					alt: 'A red, blue and white 3D-printed quadruped robot stepping towards the camera on a wooden floor beside a desk, its servo-driven legs swinging in turn and its wiring running along the body.',
+					label: 'Walking, seen head-on',
+				},
+				{
+					still: cliffordBench,
+					alt: 'The same quadruped on a workbench with its top shell removed, held up on a blue printed stand. Its grey internal frame carries several circuit boards and a loom of wiring, a servo sits at each leg joint, and a pair of calipers and a screwdriver bit set lie on the mat beside it.',
+					label: 'The same machine with its shell off',
+				},
+			],
+			ratio: '1 / 1',
+			/* A window, not a collage. Side by side each panel lands at about
+			   232px, and the boards in (b) are the point of that panel. */
+			cycle: true,
 		},
 		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/Modded-Nova-SM3' }],
 	},
@@ -439,13 +463,13 @@ export const PROJECTS: Project[] = [
 	{
 		title: 'UBC Rocket: Test Rocket Subteam',
 		summary:
-			"Avionics hardware on UBC Rocket's test rocket subteam, working across recovery, internals and composites. Integrated avionics for separation tests firing black powder charges through web-app-triggered e-matches, with microscope-assisted soldering and continuity testing. Also built a personal certification rocket for a Class H motor.",
+			"Integrated avionics for separation tests firing black powder charges through web-app-triggered e-matches. Also built a personal certification rocket for a Class H motor.",
 		params: [
 			{ key: 'Role', value: 'Avionics hardware · test rocket subteam' },
 			{ key: 'Stack', value: 'CAD · 3D printing · wet layup composites · lathe and mill' },
 			{ key: 'Year', value: '2025–present' },
 		],
-		titleHref: 'https://drive.google.com/drive/folders/1QTmTV7L_z7bfXIQ4lazjrTeh2V993nZ6',
+		titleHref: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work/tree/main',
 		figure: {
 			caption: 'The team at the launch site.',
 			/* 1920x1440, exactly 4:3, so the plate crops nothing.
@@ -474,15 +498,15 @@ export const PROJECTS: Project[] = [
 		},
 		links: [
 			{
-				label: 'Hardware',
-				href: 'https://drive.google.com/drive/folders/1QTmTV7L_z7bfXIQ4lazjrTeh2V993nZ6',
+				label: 'Repository',
+				href: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work/tree/main',
 			},
 		],
 	},
 	{
 		title: 'GravSim: Barnes-Hut N-body simulator',
 		summary:
-			'A 2D N-body gravity simulator in Python and Pygame. Force computation uses the Barnes-Hut approximation over a dynamically built quadtree, taking the algorithm from O(n^2) to O(n log n) by treating a distant cluster as a single mass whenever the node width over distance falls under a chosen threshold. Collisions merge bodies while conserving linear momentum, and the quadtree can be drawn live so the approximation is visible as it runs.',
+			'A 2D N-body gravity simulator. Force computation uses the Barnes-Hut approximation over a dynamically built quadtree, taking the algorithm from O(n^2) to O(n log n).',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
 			{ key: 'Stack', value: 'Python · Pygame · NumPy' },
@@ -527,9 +551,23 @@ export const PROJECTS: Project[] = [
 		],
 		titleHref: 'https://github.com/BentoOre0/Portfolio/tree/main/SVCvsCNNEXTENDED',
 		figure: {
-			caption: 'Accuracy across rotation and noise levels.',
-			spec: '16:9 · vector · same four colours as this page',
-			ratio: '16 / 9',
+			caption: 'A Baybayin character dissolving into noise.',
+			/* The slot specified an accuracy chart, 16:9, and this is not that:
+			   it is an illustration of the problem, not a result. The caption
+			   says only what the picture shows, and must keep doing so. The
+			   row's claim about CNNs and SVCs is carried by the summary and by
+			   the linked paper, which is where it was already carried; this
+			   figure adds a subject, not evidence.
+
+			   Square, so `ratio` follows the artwork rather than cropping a
+			   centred glyph to a letterbox. */
+			plates: [
+				{
+					still: baybayinGlyph,
+					alt: 'A single heavy black Baybayin letterform on off-white, its right-hand side breaking up into a scatter of small squares that thin out toward the edge of the frame.',
+				},
+			],
+			ratio: '1 / 1',
 		},
 		links: [
 			{ label: 'Code', href: 'https://github.com/BentoOre0/Portfolio/tree/main/SVCvsCNNEXTENDED' },

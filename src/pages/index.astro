@@ -30,13 +30,22 @@ const section = (id: (typeof SECTIONS)[number]['id']) => {
 	return { ...SECTIONS[i], n: i + 1 };
 };
 
-/* Figure numbers count only the projects that actually carry a figure, keyed
-   by the project's index. Numbering off the project index instead skips a
-   number the moment a figure-less project sits anywhere but last; it lined
-   up only because the one entry without a figure happened to be at the end. */
+/* A figure carries the number of the row it documents. Fig. 4 sits in P4.
+
+   This used to be its own sequential counter, incremented only on rows that
+   actually had a figure, so that the printed numbers ran 1, 2, 3 with no
+   gaps. That bought contiguity and paid for it in desynchronisation: P3 has
+   no figure, so P4 carried "Fig. 3", P5 carried "Fig. 4", and by P7 the two
+   handles were two apart. The reader has no way to see why, and the drift
+   grows with every figure-less row added above.
+
+   A gap explains itself, a desync does not. Missing a Fig. 3 says "P3 has no
+   picture", which is true and visible one row up. So the two numbering
+   systems are now one: every figure number equals its project number, and
+   panels letter off it, Fig. 4(a), Fig. 4(b). */
 const figureNumber = new Map<number, number>();
 PROJECTS.forEach((p, i) => {
-	if (p.figure) figureNumber.set(i, figureNumber.size + 1);
+	if (p.figure) figureNumber.set(i, i + 1);
 });
 ---
 
@@ -173,7 +182,7 @@ PROJECTS.forEach((p, i) => {
 					{
 						PROJECTS.map((p, i) => (
 							<li class="project">
-								<div class="project-body">
+								<div class:list={['project-body', { 'has-figure': !!p.figure }]}>
 									<span class="designator">P{i + 1}</span>
 									<h3>
 										{p.titleHref ? <a href={p.titleHref}>{p.title}</a> : p.title}
@@ -482,15 +491,24 @@ PROJECTS.forEach((p, i) => {
 		letter-spacing: -0.02em;
 	}
 
+	/* Underlined at rest on every pointer type, at 45% accent, the treatment
+	   `.resume` already uses. This was a 0%-to-100% gradient sweep that only
+	   existed inside `@media (hover: hover)`, so a phone drew every underline
+	   and a laptop drew none: five credential titles and seven project titles
+	   were plain black text with no cue at all. Clicking through to verify is
+	   the conversion this page is for, and on a recruiter's laptop it was the
+	   least visible thing in the row.
+
+	   Hover now confirms rather than discovers, which is the right job for it.
+	   The sweep is gone: it animated 260ms against a doctrine that allows
+	   120ms colour and underline changes, and it was invisible to the half of
+	   readers who most needed the cue. */
 	.feature-text a {
 		color: var(--ink);
-		text-decoration: none;
-		background-image: linear-gradient(var(--accent), var(--accent));
-		background-repeat: no-repeat;
-		background-position: 0 100%;
-		background-size: 0% var(--hairline);
+		text-decoration: underline;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 		transition:
-			background-size 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+			text-decoration-color 160ms ease-out,
 			color 160ms ease-out;
 	}
 
@@ -498,16 +516,7 @@ PROJECTS.forEach((p, i) => {
 		.feature-text a:hover,
 		.feature-text a:focus-visible {
 			color: var(--accent);
-			background-size: 100% var(--hairline);
-		}
-	}
-
-	/* No hover means no way to discover these are links. Two credentials
-	   carry the externally verifiable sources, so on touch the underline
-	   is simply always drawn. */
-	@media (hover: none) {
-		.feature-text a {
-			background-size: 100% var(--hairline);
+			text-decoration-color: var(--accent);
 		}
 	}
 
@@ -516,6 +525,14 @@ PROJECTS.forEach((p, i) => {
 		color: var(--muted);
 	}
 
+	/* Muted. The note was briefly accent and it inverted the page's own
+	   colour rule: seven red notes that are not links, sitting directly under
+	   five credential titles that are. A reader learns "red means clickable"
+	   from the nav and the contact row, and §1 was teaching the opposite.
+
+	   The disclosure arrow keeps the accent, so a foldable credential still
+	   announces itself; that mark IS a control, which is the distinction the
+	   note failed. */
 	.feature-note {
 		font-size: var(--t-xs);
 		color: var(--muted);
@@ -608,8 +625,14 @@ PROJECTS.forEach((p, i) => {
 	   one column, the picture landed at the bottom of the block it was there
 	   to introduce. It now follows the title directly: name, artifact,
 	   details. That is also the order a screen reader announces. */
+	/* 24px, not 48. `.section` has `padding-block: var(--s-6)`, so two
+	   sections sit 96px apart; at --s-6 here two rows inside one list sat
+	   96px apart too, and §3 stopped reading as a list of eight things and
+	   started reading as eight loose sections. A row is a smaller break than
+	   a section, so it gets a smaller gap. Shortening the summaries made the
+	   old value worse: less text, same air. */
 	.project {
-		padding: var(--s-6) var(--s-2);
+		padding: var(--s-4) var(--s-2);
 		margin-inline: calc(-1 * var(--s-2));
 		border-radius: 2px;
 		transition: background-color 120ms ease-out;
@@ -623,7 +646,7 @@ PROJECTS.forEach((p, i) => {
 	}
 
 	.project:first-child {
-		padding-top: var(--s-4);
+		padding-top: var(--s-2);
 	}
 
 	/* A hanging indent: the designator sits in its own gutter and the title,
@@ -640,6 +663,14 @@ PROJECTS.forEach((p, i) => {
 	.project-body > .designator {
 		grid-column: 1;
 		grid-row: 1;
+	}
+
+	/* The lead row's handle, and only the lead row's. All eight in the accent
+	   was too much red once the captions carried it too. One mark is enough to
+	   stop §3 reading flat, and putting it on P1 is the same emphasis the type
+	   scale and the figure grade already give that row. */
+	.project:first-child .project-body > .designator {
+		color: var(--accent);
 	}
 
 	.project-body > :not(.designator) {
@@ -660,6 +691,95 @@ PROJECTS.forEach((p, i) => {
 		grid-column: 2;
 	}
 
+	/* Above 60rem the figure moves to a third column and the row reads
+	   text-left, artifact-right. §3 was eight blocks stacked hard against the
+	   left edge with roughly 370px of the 960px sheet left white down the
+	   whole section; the hero already puts the sketch on the right, so the
+	   projects were the one part of the page not using the width it had.
+
+	   A two-column figure was built once before and reverted, for a real
+	   reason: it was a float, which put the figure *after* the summary,
+	   params and links in source order, so on a phone the picture landed at
+	   the bottom of the block it was there to introduce. Grid placement has
+	   no such cost. The DOM order is untouched, still title, figure,
+	   summary, params, links, which is what a screen reader announces and
+	   what a phone renders; only the painted position moves, and only on a
+	   viewport wide enough to have room for it.
+
+	   The span is 12 rather than `1 / -1` because there is no
+	   `grid-template-rows` here, so `-1` resolves to the first line of an
+	   explicit grid that does not exist and the figure would collapse into
+	   the title's row and stretch it. */
+	@media (min-width: 60rem) {
+		/* The figure track is a fixed 22rem, not `auto`. Sized `auto` it took
+		   whatever the figure's own max-width happened to be, which squeezed
+		   P1's summary to about 35 characters. Fixed, every row that carries a
+		   figure has the same 478px text column. (Measured, not derived: the
+		   sheet caps at 960px but carries 24px of padding each side, so the
+		   tracks divide 912px, not 960.)
+
+		   A row with no figure keeps two columns and takes the width back.
+		   Reserving the track everywhere kept the right edge tidy but left P3
+		   and P8 with a visible empty column and no explanation for it, and it
+		   made SEAOIL's title wrap for nothing. The summary is capped at 60ch
+		   regardless, so a sprawling row does not turn into a 914px line of
+		   body copy; what actually widens is the title and the params table,
+		   which is the part that was cramped.
+
+		   Keyed off a class rather than `:has(> figure)` because the figure
+		   carries Figure.astro's scope id, not this page's, so Astro's
+		   scoping would have to reach inside the `:has()` to match it. The
+		   data already knows; it just has to say so. */
+		.project-body.has-figure {
+			grid-template-columns: auto minmax(0, 1fr) 22rem;
+		}
+
+		.project-body {
+			column-gap: var(--s-5);
+		}
+
+		.project-body > :global(figure) {
+			grid-column: 3;
+			grid-row: 1 / span 12;
+			align-self: start;
+			margin-top: 0;
+			max-width: 100%;
+		}
+
+		/* The descent still applies, now inside a fixed track rather than by
+		   setting the track. */
+		.project:not(:first-child) .project-body > :global(figure:not(.wide)) {
+			max-width: 18rem;
+		}
+
+		/* A wide figure is wide to keep its own type readable, so it takes the
+		   whole row back rather than living in a 22rem column. */
+		.project-body > :global(figure.wide) {
+			grid-column: 2 / -1;
+			grid-row: auto;
+		}
+	}
+
+	/* Figures grade like the type does. Every figure was 30rem, so P1's
+	   square and P2's square were identical and P2 shouted exactly as loudly
+	   as the lead row, which is the one thing the descent exists to prevent.
+	   The lead keeps the full 30rem; everything under it steps back to 24rem.
+
+	   Not applied below 52rem: the figure is already capped at 20rem there
+	   and you never see two of them at once on a phone, so the clash does not
+	   exist and shrinking further would only cost legibility. `.wide` is
+	   excluded because a wide figure is wide to keep its own type readable,
+	   which has nothing to do with rank. */
+	.project:not(:first-child) .project-body > :global(figure:not(.wide)) {
+		max-width: 24rem;
+	}
+
+	@media (max-width: 52rem) {
+		.project:not(:first-child) .project-body > :global(figure:not(.wide)) {
+			max-width: 20rem;
+		}
+	}
+
 	/* The params table is inset 8px by the shared .spec rule, which would
 	   put it one step off the summary above it. */
 	.params th:first-child {
@@ -672,15 +792,13 @@ PROJECTS.forEach((p, i) => {
 		font-weight: 500;
 	}
 
+	/* Same treatment as the credential links, and for the same reason. */
 	.project h3 a {
 		color: var(--ink);
-		text-decoration: none;
-		background-image: linear-gradient(var(--accent), var(--accent));
-		background-repeat: no-repeat;
-		background-position: 0 100%;
-		background-size: 0% var(--hairline);
+		text-decoration: underline;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 		transition:
-			background-size 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+			text-decoration-color 160ms ease-out,
 			color 160ms ease-out;
 	}
 
@@ -688,17 +806,7 @@ PROJECTS.forEach((p, i) => {
 		.project h3 a:hover,
 		.project h3 a:focus-visible {
 			color: var(--accent);
-			background-size: 100% var(--hairline);
-		}
-	}
-
-	/* A project title is a link only when it has a `titleHref`, so some are and
-	   some are not. Without hover a phone reader cannot tell which, so the
-	   underline is always drawn. (Naming the specific rows here went stale the
-	   first time the list was reordered.) */
-	@media (hover: none) {
-		.project h3 a {
-			background-size: 100% var(--hairline);
+			text-decoration-color: var(--accent);
 		}
 	}
 
@@ -742,15 +850,25 @@ PROJECTS.forEach((p, i) => {
 	   shrinking. §3 is already 64% of the document at 390px, so the tail has
 	   to cost less per row than the head does. */
 	.project:nth-child(n + 7) {
-		padding-block: var(--s-4);
+		padding-block: var(--s-3);
 	}
 
 	.project:nth-child(n + 7) .summary {
 		margin-bottom: var(--s-2);
 	}
 
+	/* 38rem, up from 24. The key column is `width: 1%` and `nowrap`, so every
+	   extra rem goes to the value, and at 24rem values as short as "Sole
+	   developer · direction and review" were wrapping to two lines for the
+	   sake of a couple of characters.
+
+	   This is free on a phone. 24rem is 384px and the content column at 390px
+	   is already narrower than that, so the cap was inoperative there; below
+	   30rem the row stacks key over value regardless. The change is desktop
+	   only, and it lands the values at roughly the summary's own 60ch measure
+	   rather than at an unrelated one. */
 	.params {
-		max-width: 24rem;
+		max-width: 38rem;
 		margin-bottom: var(--s-3);
 	}
 

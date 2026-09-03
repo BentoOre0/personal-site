@@ -196,7 +196,13 @@ a {
 }
 
 /* The rule runs out of the heading to the right edge. A labelled line
-   is a landmark; floating bold text is not. */
+   is a landmark; floating bold text is not.
+
+   It stays `--rule`. The accent was tried here and taken back out: it clears
+   3:1 so it was legal, but a red line the full width of the sheet is the
+   loudest mark on the page by area, and it was pulling rank over the
+   headings it was supposed to be carrying. One uniform hairline divides
+   everything on this site, and it is grey. */
 .section-head::after {
 	content: '';
 	flex: 1 1 auto;
