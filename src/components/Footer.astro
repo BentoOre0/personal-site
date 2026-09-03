@@ -21,6 +21,11 @@ import { IDENTITY, REVISION } from '../data/profile';
 				</tr>
 			</tbody>
 		</table>
+		<p class="stamp-line">
+			Rev {REVISION.rev} · {REVISION.status} · <time datetime={REVISION.updated}
+				>{REVISION.updated}</time
+			>
+		</p>
 	</div>
 </footer>
 
@@ -42,5 +47,38 @@ import { IDENTITY, REVISION } from '../data/profile';
 	caption {
 		text-align: left;
 		padding-bottom: var(--s-2);
+	}
+
+	.stamp-line {
+		display: none;
+	}
+
+	/* On a phone the three-row table was 325px of metadata, half a viewport,
+	   printing the same Rev and date the hero already carries a few thousand
+	   pixels above. `max-width: 26rem` is inoperative at 342px and there were
+	   no media queries at all, so the last thing a reader saw after eight
+	   viewports of §3 was a version number spelled out over four labelled
+	   rows.
+
+	   Below 40rem it collapses to the one line the table was spelling out.
+	   The table is `display: none`, so it leaves the accessibility tree
+	   rather than being read twice. */
+	@media (max-width: 40rem) {
+		.spec {
+			display: none;
+		}
+
+		.stamp-line {
+			display: block;
+			margin: 0;
+			font-size: var(--t-xs);
+			font-family: var(--font-geist-mono);
+			font-variant-numeric: tabular-nums;
+			color: var(--muted);
+		}
+
+		.block {
+			padding-block: var(--s-4) max(var(--s-5), env(safe-area-inset-bottom));
+		}
 	}
 </style>

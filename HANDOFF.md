@@ -71,10 +71,10 @@ see Decisions.**
    link on the site and plausibly the highest-intent recruiter click.
    Owner intended a Google Drive share link; if the PDF goes in
    `public/` instead, note the repo is public and history is permanent.
-2. **Four figures.** P1 architecture diagram, P2 accuracy chart, P3
-   avionics photo, P4 segmentation output. Every empty slot prints the
-   exact shot it needs, so they can be produced to spec. Owner's hardware
-   photos exist but are unedited; a Drive folder is linked from P3.
+2. **Two figures.** P6 Baybayin and P7 colour analysis. Every empty slot
+   prints the exact shot it needs, so they can be produced to spec. Owner's
+   hardware photos exist but are unedited; a Drive folder is linked from the
+   UBC Rocket row.
 3. **`og:image`** is still `blog-placeholder-1.jpg`, so sharing any link
    shows Astro stock art.
 4. `REVISION.status` still reads `PRELIMINARY`.
@@ -352,7 +352,61 @@ the page, so most readers never fetch it. `sharp` did the conversion; there
 is no new dependency and no ffmpeg on this box. The recipe is in
 `docs/adding-a-project.md`.
 
-**Still unfilled:** four of the eight projects have an empty figure.
+**Still unfilled:** two of the eight projects have an empty figure. Two more
+carry `figure: null` on purpose.
+
+## What shipped on 3 Sep
+
+**Fig. 2, P2 Clifford, is a two-panel window**, `cycle: true`, both panels the
+owner's own material:
+
+- **(a) three seconds of the demo video**, the quadruped stepping towards the
+  camera, 31 frames at 10fps in a 640px square.
+- **(b) the bench photograph**, the same machine with its top shell off, its
+  boards, loom and leg servos exposed.
+
+The slot had asked for a still side view. A gait is the thing this build either
+does or does not do, so it is shown moving; but this is a firmware and hardware
+row and the walk shows none of the hardware, which is what (b) is for.
+
+The video source was `~/Downloads/Clifford demo.MOV`, 14.9s of handheld iPhone
+HEVC at 1920x1440. **Only the first three seconds are usable.** The owner asked
+for 2s to 13s; that range is not one shot. It is roughly four seconds of usable
+footage spread across eleven: 2.0-3.1s is the head-on walk, 6.4-7.7s is a high
+three-quarter view, 11.8-13.3s is the open chassis, and the rest is either an
+out-of-focus close-up of red plastic or a hand reaching in. Encoded whole it
+came to 1.67MB, three times what shipped and more than double GravSim, on a row
+near the top of §3. He was shown the breakdown and the numbers and chose the
+photograph instead, which covers the chassis far better than 12.0-13.3s does.
+
+The clip is portrait, not landscape, and is cropped square so the whole animal
+stays in frame as the camera approaches. The photograph is `cliffordphoto.jpg`,
+1500x2000, cropped square at y=400 of 2000, which was the offset that kept the
+whole machine and the calipers without leaving a dead band of desk.
+
+**There is no ffmpeg on this box.** GStreamer is installed and decodes the MOV
+fine, and the full recipe, rotation matrix included, is now in
+`docs/adding-a-project.md` under "From a phone video". Three things cost time
+and are written down there:
+
+- **A phone clip carries its rotation in the container, not in the frames.**
+  GStreamer hands you storage orientation, here landscape, and the `tkhd`
+  matrix says to turn it 90 degrees clockwise. `gst-discoverer-1.0` does not
+  report this.
+- **`sharp(files, { join: … }).resize()` silently flattens the animation** to
+  one frame, the same trap as an imported GIF, and the only symptom is a
+  suspiciously small file. Resizing a decoded `{ animated: true }` input is
+  safe; the joined-frames path is not. Size the PNG frames instead.
+- **Video compresses far worse than a rendered simulation.** Handheld footage
+  changes every pixel of every frame. 525KB buys three seconds here against
+  GravSim's 478KB for four.
+
+Both paths were verified in the browser, not assumed. Two captures at
+`--virtual-time-budget` 12000 and 14500 differ across the whole figure, which
+is what proves the animation actually advances; under
+`--force-prefers-reduced-motion` the same two captures are pixel-identical,
+which is what proves the still is being served instead. That is the
+QuoteBar technique from 2 Sep, and it works here for the same reason.
 
 ## What shipped on 1 Sep
 

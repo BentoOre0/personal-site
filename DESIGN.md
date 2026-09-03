@@ -48,6 +48,18 @@ warm ground anywhere on the site. A figure is allowed its own colour
 because it is evidence rather than chrome; the four-colour rule governs
 the page around it, not what a photograph happens to contain.
 
+**A figure carries the number of the row it documents.** Fig. 4 sits in P4.
+The count used to be its own sequential counter that only incremented on
+rows which actually had a figure, so the printed numbers never skipped;
+that bought contiguity and paid in desynchronisation. P3 has no figure, so
+P4 read "Fig. 3", P5 read "Fig. 4", and by P7 the two handles were two
+apart with nothing on the page to explain why. The drift grows with every
+figure-less row added above.
+
+A gap explains itself and a desync does not. No Fig. 3 says "P3 has no
+picture", which is true and visible one row up. Two numbering systems
+became one, and panels letter off it: Fig. 4(a), Fig. 4(b).
+
 A figure can hold more than one panel. Two or more sit side by side where
 there is room and stack where there is not, sharing the figure's `ratio`
 so a collage of mismatched crops is not possible by accident. Panels are
@@ -62,6 +74,36 @@ diagram carries type of its own, and type inside a picture does not
 reflow: the SEAOIL state machine's fourteen labelled boxes land at about
 five pixels each at 30rem, at which point the figure is decoration. A
 photograph never needs this, having no small type to lose.
+
+### A figure buys words back
+
+**A row that shows something says less.** The picture is the evidence, so
+the prose stops at what the picture cannot say: what the thing is, and
+which part of it is his. Everything past that is depth, and depth lives in
+the repository the title already links to. The site shows; GitHub tells.
+
+Concretely, a row with `plates` gets **two sentences**. A row whose figure
+is still a `spec`, or is `null`, carries the whole claim in prose and may
+run longer, because nothing else in the row is carrying it.
+
+The `params` table is not prose and does not count against the two. It
+already names the stack, so a summary that also names the stack is saying
+it twice. Clifford's summary ran six sentences listing the Teensy, the
+Nano, the config header and the bit-banged PS2 protocol while its own
+Stack row printed all four a few lines below; it is two sentences now.
+GravSim opened "in Python and Pygame" against a Stack row reading
+"Python · Pygame · NumPy", and closed by describing the live quadtree that
+Fig. 5(a) is *literally animating* beside it.
+
+**One exception, at the owner's request: SEAOIL.** It needs none under the
+rule as written, having no figure at all, but it is worth naming: the
+deployed system is internal, so there is no artifact to photograph and
+nothing public to click through to. Prose is the only evidence that row
+has, and it keeps its three sentences.
+
+Applied across §3 this cut the eight summaries from 2,646 characters to
+1,639, a 38% cut, with no sentence rewritten. Every remaining word is the
+owner's own; the edit was deletion, never paraphrase.
 
 ## Palette
 
@@ -81,13 +123,61 @@ clears AA for text and nothing more: it must never carry a hairline or
 a control boundary on its own, which needs 3:1 and the 35%-tinted chip
 border does not reach.
 
-It is **not** links-only, despite what earlier drafts of this file said.
-It also paints the rotating term, the caret, the contact glyphs, the
-revision stamp, and every tag chip. What keeps that from becoming
-confetti is rank, not restraint: the homepage's accent spans 28px and
-14px, so the small marks sit under a large one. Any surface that uses
-the accent only at 14px reads as speckle, the blog index currently
-does, with eleven resting accent marks against the homepage's eight.
+**The base rule is `a { color: var(--accent) }` in `global.css`.** Red is
+what you can click, and almost every red mark on the site is red by
+inheriting that. It is *links-first*, not links-only: four things carry it
+deliberately without being links, and each one is a control or a stamp,
+never running prose.
+
+- the rotating term and its caret
+- the contact glyphs and the revision stamp
+- the disclosure arrow on a foldable credential, `\25B8` / `\25BE`
+- `P1`'s designator, and only P1's
+
+Counted from the built CSS, that is **28 resting marks** on the homepage.
+
+**Three things were tried in the accent on 3 Sep and taken back out**, and
+the reasons are worth keeping because each is a different failure:
+
+- **Figure captions and panel labels.** Six captions and three labels put a
+  red block under every figure in §3, and a caption sits directly above the
+  summary, so the two competed. Too much of it.
+- **All eight project designators.** One mark is enough to stop §3 reading
+  flat, and on P1 it agrees with the emphasis the type scale and the figure
+  grade already give that row. Eight was noise, one is a landmark.
+- **The credential notes, and this is the instructive one.** It inverted
+  the site's own colour rule. "Top 20 nationally for three consecutive
+  years" is not a label or a handle, it is the substantive supporting fact,
+  and it sat in the same red as every link while the credential title above
+  it, which *is* a link, sat in black. Seven red non-links over five black
+  links. A reader who learned "red means clickable" from the nav and the
+  contact row was being taught the opposite by §1.
+- **The section-head rules.** Legal (the accent is 4.65:1, past the 3:1 a
+  non-text boundary needs) and still wrong: a hairline running the full
+  width of the sheet is the largest mark on the page by area, and it pulled
+  rank over the headings it was carrying.
+
+The test that survives all four: **the accent marks what you can click, plus
+a small closed set of stamps and controls.** Anything else that wants to be
+red is prose, and prose does not get it.
+
+### Links are underlined at rest
+
+On every pointer type, at `color-mix(in srgb, var(--accent) 45%,
+transparent)`, going to full accent on hover and focus.
+
+This replaced a 0%-to-100% gradient sweep that lived inside
+`@media (hover: hover)`, so a phone drew every underline and a laptop drew
+none. Five credential titles and seven project titles were plain black text
+with no cue at all, and clicking through to verify a claim is the
+conversion this site exists for. Hover confirms now instead of discovering,
+which is the right job for it. The sweep also ran 260ms against a doctrine
+that allows 120ms colour and underline changes, and was invisible to
+exactly the readers who most needed the cue.
+
+It has a second effect worth naming: a credential without an `href` now
+looks different from one with it. Teaching Assistant and the IB Diploma
+carry no underline, and that is information rather than an oversight.
 
 Light only, committed. The use scene is a recruiter skimming on a laptop
 in daylight, and the world is a printed document. No dark theme; if that
@@ -143,6 +233,73 @@ last at 16px. Impact order is visible in the typography itself, so the
 list does not shout uniformly. Ordering is by impact, per CLAUDE.md,
 never grouped by discipline, never by date.
 
+**Figures grade with the type.** Every figure was 30rem, so P1's square and
+P2's square were identical and the second row shouted exactly as loudly as
+the lead, which is the one thing the descent exists to prevent. The lead
+figure keeps 30rem; every figure below it steps back to 24rem. Above 60rem
+the figure moves into a fixed track and the pair becomes 22rem and 18rem,
+see "Text left, artifact right". Not applied
+below 52rem: the figure is already capped at 20rem there, and on a phone
+you never see two of them at once, so the clash does not exist and
+shrinking further would only cost legibility. `wide` is excluded, since a
+wide figure is wide to keep its own type readable, which has nothing to do
+with rank.
+
+### Text left, artifact right
+
+Above 60rem a project row is three columns: the designator in its gutter,
+the text, and the figure on the right. Below that it collapses to the
+single stacked column, unchanged.
+
+§3 was eight blocks hard against the left edge with about 370px of the
+960px sheet left white down the whole section, and the hero already puts
+the sketch on the right, so the projects were the one part of the page not
+using the width it had.
+
+**This was built once before as a float and reverted, for a real reason.**
+A float put the figure after the summary, params and links in source
+order, so on a phone the picture landed at the bottom of the block it was
+there to introduce. Grid placement has none of that cost: the DOM order is
+untouched, still title, figure, summary, params, links, which is what a
+screen reader announces and what a phone renders. Only the painted
+position moves, and only where there is room for it.
+
+Two details that are load-bearing:
+
+- **The figure track is a fixed 22rem on every row, including rows with no
+  figure.** Sized `auto` it took the figure's own max-width and squeezed
+  P1's summary to about 35 characters; omitted on figure-less rows it let
+  P3 and P8 run the full 914px while their neighbours sat at 300, and §3
+  came out ragged down the right. Fixed and always present, every row's
+  text column is 530px, near the 60ch the summary is capped at anyway.
+- **The span is `1 / span 12`, not `1 / -1`.** There is no
+  `grid-template-rows` here, so `-1` resolves against an explicit grid that
+  does not exist, the figure collapses into the title's row and stretches
+  it.
+
+`.params` runs to 38rem rather than 24rem in the same pass. The key column
+is `width: 1%` and `nowrap`, so every extra rem goes to the value, and at
+24rem a value as short as "Sole developer · direction and review" wrapped
+to two lines for the sake of a few characters. It costs nothing on a
+phone: 24rem is 384px and the content column at 390px is already narrower,
+so the cap was inoperative there, and below 30rem the row stacks key over
+value regardless.
+
+### A row is a smaller break than a section
+
+`.section` carries `padding-block: var(--s-6)`, so two sections sit 96px
+apart. `.project` carried `--s-6` as well, so two rows *inside one list*
+sat 96px apart too, and §3 stopped reading as a list of eight things and
+started reading as eight loose sections. The row is `--s-4` now, 48px
+between rows against 96px between sections, and the hierarchy is the right
+way up again.
+
+Shortening the summaries is what made the old value indefensible rather
+than merely generous: the same air around 38% less text reads as sparse,
+not as calm. The tail rule at `:nth-child(n + 7)` moved from `--s-4` to
+`--s-3` for the same reason, since `--s-4` had become the base and the rule
+had quietly stopped doing anything.
+
 ### The typed tagline
 
 The tagline is two rows: a fixed stem ("Engineering physics student
@@ -176,7 +333,7 @@ flush left, invisible at desktop width where the title fits one line,
 and obvious on a phone where it wraps to three. The `.spec` inset is
 zeroed inside a project for the same reason.
 
-Below 40rem the gutter is dropped and the designator takes its own line:
+Below 52rem the gutter is dropped and the designator takes its own line:
 full measure matters more than the hanging indent at 342px, and
 everything still shares one edge.
 
@@ -356,6 +513,23 @@ The border sits at 65% because a control boundary needs 3:1; the
 earlier 35% measured 1.80:1 and drew nothing. Hover darkens the label
 rather than holding the accent, which measured 4.16:1 against its own
 wash and failed AA.
+
+### The foot of the page, on a phone
+
+Below 40rem the revision block collapses from a three-row `.spec` table to
+one line: `Rev 0.2 · PRELIMINARY · 2026-09-01`. The table is
+`display: none`, so it leaves the accessibility tree rather than being read
+twice.
+
+It was 325px of metadata, half a phone viewport, spelling over four
+labelled rows the same Rev and date the hero already carries. `max-width:
+26rem` is inoperative at 342px and the component had no media queries at
+all, so after eight viewports of §3 the last thing a reader saw was a
+version number, at length.
+
+The end of the page is still metadata rather than an invitation. Collapsing
+it is the cheap half; the other half is a closing contact line, and that is
+not built.
 
 ## Placeholder discipline
 
