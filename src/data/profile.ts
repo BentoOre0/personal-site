@@ -15,7 +15,8 @@ import type { ImageMetadata } from 'astro';
 import anthRopic from '../assets/anth-ropic.png';
 import galaxyStill from '../assets/galaxy-formation-still.png';
 import quadtreeStill from '../assets/quadtree-subdivision-still.png';
-import seaoilArchitecture from '../assets/seaoil-architecture.png';
+import seaoilDispatchIcon from '../assets/seaoil-dispatch-icon.png';
+import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
 
 export const REVISION = {
 	rev: '0.2',
@@ -57,7 +58,8 @@ export const IDENTITY = {
 		},
 	] as { label: string; href: string; icon?: string; text?: string }[],
 	/* The highest-intent click on the page, so it gets a word rather than
-	   a glyph. PLACEHOLDER: paste the Google Drive share link here. */
+	   a glyph. Filled: a Google Drive share link. Replace the href when the
+	   document is re-uploaded; Drive mints a new file id each time. */
 	resume: { label: 'Résumé', href: 'https://drive.google.com/file/d/1qZHO1-FigBvVqjX_2j_Ja9cjZkH7-hRZ/view?usp=sharing' },
 };
 
@@ -143,6 +145,31 @@ export type Credential = {
 };
 export const CREDENTIALS: Credential[] = [
 	{
+		text: 'BASc Engineering Physics, University of British Columbia',
+		note: '2025–present · 92.3%',
+		/* Most readers do not know what engineering physics is. This is the
+		   program's own site, which says it plainly. */
+		href: 'https://www.engphys.ubc.ca/',
+		/* The faculty sentence is official and names the actual content of
+		   the degree. The second one does the work no brochure can, and
+		   is somebody else's line rather than a boast, which is the only
+		   reason it can be on the page at all. It is attributed to a person
+		   with standing and a date, so a reader can weigh it as what it is:
+		   an alumnus's gloss, not a course description. */
+		sources: [
+			{
+				text: 'EngPhys students build a solid foundation in applied physics and a blend of electrical and mechanical engineering, while gaining extensive engineering design experience.',
+				source: 'UBC Applied Science',
+				href: 'https://engineering.ubc.ca/programs/undergraduate/engineering-physics',
+			},
+			{
+				text: 'Basically a triple major of engineering, physics and cs',
+				source: 'My uncle, UBC Engineering Physics 1999',
+			},
+		],
+		confirmed: true,
+	},
+	{
 		text: 'National Olympiad in Informatics: 4th in the Philippines (2024)',
 		note: 'Top 20 nationally for three consecutive years, 2023–2025',
 		href: 'https://noi.ph/2024-national-eliminations/',
@@ -198,31 +225,6 @@ export const CREDENTIALS: Credential[] = [
 				text: 'At most fifteen (15) active trainees, including shortlisted finalists and observers, in the pre-selection training sessions will be invited to join the APIO …',
 				source: 'NOI.PH contest rules, section V',
 				href: 'https://noi.ph/rules/',
-			},
-		],
-		confirmed: true,
-	},
-	{
-		text: 'BASc Engineering Physics, University of British Columbia',
-		note: '2025–present · 92.3%',
-		/* Most readers do not know what engineering physics is. This is the
-		   program's own site, which says it plainly. */
-		href: 'https://www.engphys.ubc.ca/',
-		/* The faculty sentence is official and names the actual content of
-		   the degree. The second one does the work no brochure can, and
-		   is somebody else's line rather than a boast, which is the only
-		   reason it can be on the page at all. It is attributed to a person
-		   with standing and a date, so a reader can weigh it as what it is:
-		   an alumnus's gloss, not a course description. */
-		sources: [
-			{
-				text: 'EngPhys students build a solid foundation in applied physics and a blend of electrical and mechanical engineering, while gaining extensive engineering design experience.',
-				source: 'UBC Applied Science',
-				href: 'https://engineering.ubc.ca/programs/undergraduate/engineering-physics',
-			},
-			{
-				text: 'Basically a triple major on math, engineering and physics',
-				source: 'My uncle, UBC Engineering Physics 1999',
 			},
 		],
 		confirmed: true,
@@ -388,7 +390,7 @@ export const PROJECTS: Project[] = [
 		],
 		titleHref: 'https://github.com/BentoOre0/personal-site',
 		figure: {
-			caption: 'The two authors of this page.',
+			caption: 'The two authors of this webpage (GPT was used for only making this photo.).',
 			/* The slot used to specify a 1440px screenshot of this homepage.
 			   A picture of the page you are already reading tells the reader
 			   nothing; this row is about the collaboration, so the figure is
@@ -402,31 +404,6 @@ export const PROJECTS: Project[] = [
 			ratio: '1 / 1',
 		},
 		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/personal-site' }],
-	},
-	{
-		title: 'Dispatch and fulfilment control system',
-		summary:
-			"A dispatching and fulfilment control system for SEAOIL and SEAGAS delivery operations, built and shipped as sole developer 60 days ahead of schedule. Automated rider messaging and order confirmation through the Viber API, deployed on AWS serverless infrastructure, with a Google Apps Script MVP so ground staff could use it before the full system landed.",
-		params: [
-			{ key: 'Role', value: 'Sole developer · AI & Automation Engineering intern' },
-			{ key: 'Stack', value: 'Node.js · NestJS · AWS serverless · Viber API' },
-			{ key: 'Year', value: '2025' },
-		],
-		figure: {
-			caption: 'Rider and order state machines.',
-			/* 1440x1040, so 18:13 exactly. The slot used to ask for 16:9 in
-			   this page's four colours; the real diagram is neither, and a
-			   real diagram beats a conforming placeholder. */
-			plates: [
-				{
-					still: seaoilArchitecture,
-					alt: 'A state diagram in two columns. Rider states run from Unavailable to Available, Awaiting reply, then either In Transit on confirmation or Inactive on autopass. Order states run from Unassigned to Preparing Order, then either Delivering and Resolved, or Reassign on a pass or ten minute timeout and then Escalated. A legend maps blue to normal flow, amber to timeout and retry, and dark red to escalation with the team lead alerted.',
-				},
-			],
-			ratio: '18 / 13',
-			wide: true,
-		},
-		links: [],
 	},
 	{
 		title: 'Clifford Spot Micro: Robot Dog',
@@ -446,7 +423,56 @@ export const PROJECTS: Project[] = [
 		},
 		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/Modded-Nova-SM3' }],
 	},
-	,
+	{
+		title: 'Dispatch and fulfilment control system',
+		summary:
+			"A dispatching and fulfilment control system for SEAOIL and SEAGAS delivery operations, built and shipped as sole developer 60 days ahead of schedule. Automated rider messaging and order confirmation through the Viber API, deployed on AWS serverless infrastructure, with a Google Apps Script MVP so ground staff could use it before the full system landed.",
+		params: [
+			{ key: 'Role', value: 'Sole developer · AI & Automation Engineering intern' },
+			{ key: 'Stack', value: 'Node.js · NestJS · AWS serverless · Viber API' },
+			{ key: 'Year', value: '2025' },
+		],
+		titleHref: 'https://github.com/BentoOre0/JAHY-Seaoil-Work',
+		figure: {
+			caption: 'Cylinder delivery, the operation this system dispatches.',
+			/* 1952x1464, exactly 4:3, matching the other project slots on
+			   the page so the column keeps one rhythm. An icon, not a
+			   photograph and not a diagram, so it is decorative: it says
+			   what the system is for, it does not show how the system works.
+
+			   The source icon is 500x500 with a transparent ground, so it is
+			   composited onto #fefefe here rather than left to show the
+			   plate's own wash through, and scaled 2.2x to fill the same
+			   1081px the previous icon did. That upscale is why the canvas
+			   is bigger than the source: flat art survives it, but a larger
+			   export or an SVG would be sharper on a retina screen.
+
+			   The icon this replaced was 1163x1353 portrait, which at the
+			   30rem figure came out 480x558, taller than anything near it. The
+			   plate is `object-fit: cover`, so widening the ratio alone
+			   would have cropped the cylinder's top and bottom rather than
+			   shrinking it. The icon is therefore re-canvassed: the artwork
+			   is centred on a 4:3 ground in its own #fefefe, and the ratio
+			   here matches the file exactly, so CSS crops nothing. The
+			   plate is now 480x360 with a 151x266 cylinder inside it.
+
+			   This replaced the rider and order state machine export, which
+			   is deleted, not merely unreferenced: recovering it means going
+			   back through git history. That diagram needed `wide: true`,
+			   because fourteen labelled boxes at the usual 30rem figure
+			   width land at about five pixels of type each. An icon carries
+			   no type, so it takes the normal width like every photograph
+			   on the page. */
+			plates: [
+				{
+					still: seaoilDispatchIcon,
+					alt: 'A flat illustration of a blue gas cylinder with a red valve handle. Across its face, a white binary tree of seven round nodes: one at the top, branching into two, and each of those branching into two more.',
+				},
+			],
+			ratio: '4 / 3',
+		},
+		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/JAHY-Seaoil-Work' }],
+	},
 	{
 		title: 'UBC Rocket: Test Rocket Subteam',
 		summary:
@@ -458,8 +484,29 @@ export const PROJECTS: Project[] = [
 		],
 		titleHref: 'https://drive.google.com/drive/folders/1QTmTV7L_z7bfXIQ4lazjrTeh2V993nZ6',
 		figure: {
-			caption: 'Avionics bay, assembled.',
-			spec: '4:3 · overhead · raking light on a plain ground',
+			caption: 'The team at the launch site.',
+			/* 1920x1440, exactly 4:3, so the plate crops nothing.
+
+			   The source is 4284x5712 portrait, which at the 30rem figure
+			   would render 480x640, taller than anything else on the page.
+			   A portrait photograph cannot be shortened by declaring a
+			   landscape ratio: the plate is `object-fit: cover`, so the
+			   slot would take a centre band and cut the subjects off at the
+			   shins. It is therefore cropped here instead, to the full
+			   source width and the tallest 4:3 band that band allows, placed
+			   to keep all three of them from headroom to feet.
+
+			   This slot previously asked for a shot that was never taken,
+			   '4:3 · overhead · raking light on a plain ground', of the
+			   assembled avionics bay. That photograph would still say more
+			   about the actual work than a team portrait does, so it is
+			   worth taking; this figure is not a reason to close that out. */
+			plates: [
+				{
+					still: ubcRocketTeam,
+					alt: 'Three team members standing shoulder to shoulder in a flat grass field under a broad, overcast sky, together holding a blue rocket horizontally at waist height. White block lettering runs the length of its body.',
+				},
+			],
 			ratio: '4 / 3',
 		},
 		links: [
@@ -481,8 +528,8 @@ export const PROJECTS: Project[] = [
 		titleHref: 'https://github.com/BentoOre0/GravSim',
 		figure: {
 			caption: 'The simulation running.',
-			/* Both renders are 8:5 at source, 800x500 and 720x450, so the
-			   collage needs no cropping. Produced by the project's own
+			/* Both renders are 640x400 at source, so 8:5 exactly, and the
+			   pair needs no cropping. Produced by the project's own
 			   simulation code; see the media folder's README. */
 			plates: [
 				{
@@ -506,7 +553,6 @@ export const PROJECTS: Project[] = [
 		},
 		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/GravSim' }],
 	},
-	,
 	{
 		title: 'Baybayin script recognition: CNN vs. SVC',
 		summary:
@@ -530,7 +576,6 @@ export const PROJECTS: Project[] = [
 			},
 		],
 	},
-	,
 	{
 		title: 'Automated colour analysis for percentage coverage',
 		summary:
@@ -553,7 +598,6 @@ export const PROJECTS: Project[] = [
 			},
 		],
 	},
-	,
 	{
 		title: 'BSM Programming Varsity',
 		summary:

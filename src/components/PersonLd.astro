@@ -40,6 +40,13 @@ const person = {
 		url: SEO.person.affiliation.url,
 	},
 };
+
+/* `set:html` writes the JSON into the document unescaped, so a `<` reaching
+   it verbatim would end the script block early and spill the rest of the
+   object into the page as markup. `\u003c` is the same character to a JSON
+   parser and inert to an HTML one, which is the standard way to inline
+   JSON-LD safely. */
+const json = JSON.stringify(person).replace(/</g, '\\u003c');
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(person)} />
+<script type="application/ld+json" set:html={json} />

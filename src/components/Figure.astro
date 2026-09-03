@@ -53,12 +53,23 @@ const letter = (i: number) => String.fromCharCode(97 + i);
 							{plate.motion && (
 								<source media="(prefers-reduced-motion: no-preference)" srcset={plate.motion} />
 							)}
+							{/* `sizes` has to describe the slot the CSS actually gives the
+								plate, not the column it sits in. The caps below are the
+								`max-width` rules further down this file: 30rem (480px)
+								normally and `--wide` (960px) for a diagram, dropping to
+								20rem under 52rem where the figure stops filling the
+								column. Claiming a flat 92vw made a tablet fetch the
+								1280w rendition for a 320px slot. */}
 							<Image
 								class="plate-image"
 								src={plate.still}
 								alt={plate.alt}
 								widths={[400, 640, 960, 1280]}
-								sizes={figure.wide ? '(max-width: 60rem) 92vw, 860px' : '(max-width: 52rem) 92vw, 480px'}
+								sizes={
+									figure.wide
+										? '(max-width: 52rem) 92vw, min(92vw, 960px)'
+										: '(max-width: 52rem) min(92vw, 20rem), 480px'
+								}
 								style={`aspect-ratio: ${figure.ratio};`}
 							/>
 						</picture>
@@ -181,7 +192,12 @@ const letter = (i: number) => String.fromCharCode(97 + i);
 <script>
 	/* Module scope, not per-listener: with the ClientRouter in play,
 	   astro:page-load fires again on every navigation, and without this the
-	   old page's timers keep running against a detached DOM. */
+	   old page's timers keep running against a detached DOM.
+
+	   One slot per cycling figure, overwritten each step, rather than a list
+	   appended to: a figure only ever has one timer pending, so an array
+	   that is only emptied on the next navigation just accumulates dead ids
+	   for as long as the page is left open. */
 	let timers: ReturnType<typeof setTimeout>[] = [];
 
 	const HOLD_MS = 8000;
@@ -196,16 +212,17 @@ const letter = (i: number) => String.fromCharCode(97 + i);
 			const panels = Array.from(stack.querySelectorAll('.panel'));
 			if (panels.length < 2) return;
 
+			const slot = timers.length;
 			let i = 0;
 			const step = () => {
 				if (!stack.isConnected) return;
 				panels[i].classList.remove('is-on');
 				i = (i + 1) % panels.length;
 				panels[i].classList.add('is-on');
-				timers.push(setTimeout(step, HOLD_MS));
+				timers[slot] = setTimeout(step, HOLD_MS);
 			};
 
-			timers.push(setTimeout(step, HOLD_MS));
+			timers[slot] = setTimeout(step, HOLD_MS);
 		});
 	});
 </script>
