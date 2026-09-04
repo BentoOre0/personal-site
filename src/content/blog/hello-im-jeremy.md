@@ -24,7 +24,7 @@ I learn best by immersing myself in a community where I can ask questions. I gen
 
 ## What are you actually good at?
 
-I know I am definitely not a gold medal Olympiad medalist who's doing quantitative trading in Jane Street. I think my strength is probably more in execution and forcing myself to learn things that seem completely unrelated to each other.
+I think my strength is probably more in execution and forcing myself to learn things that seem completely unrelated to each other. I am not an olympiad gold medal purist.
 
 ## How do you get into something completely new?
 
@@ -32,15 +32,13 @@ I think the best way to learn something that feels vastly different from what yo
 
 ## What are you looking for next?
 
-Right now, I am probably looking for a way to learn how to scale software and engineering.
+Right now, I am probably looking for ways to learn how to build things at a larger scale.
 
-A lot of my software engineering work has been on a relatively small scale, with only a few users. Because of that, I could get pretty far by vibecoding with rough algorithmic principles without really needing to learn the deeper software engineering practices that become important at scale.
+A lot of my software engineering work so far has been on a relatively small scale, with only a few users. Because of that, I could get pretty far by vibecoding and relying on rough algorithmic principles without really needing to learn the deeper software engineering practices that become important when software has to support hundreds or thousands of users.
 
-I have a similar gap on the engineering side. A lot of the things I have built have been for relatively small teams or projects. How do I learn to set up an automated build process for a hardware product? How do I design something that can actually be manufactured repeatedly?
+I think I have a similar gap on the engineering side. A lot of the things I have built have been for relatively small teams or projects meant for only a few people. I know how to make something work, but I have much less experience with what happens when you need to make that same thing reliable, repeatable, and scalable. How do I set up an automated build process for a hardware product? How do I design something that can actually be manufactured repeatedly?
 
-These are the kind of knowledge gap I want to explore next.
-
-I also want to do more engineering work where I am building something for a client and have to interact with non-technical people. I want to learn how to figure out what someone actually needs through all the noise, then turn that into something useful.
+I also want to interact with non-technical people. I want to learn how to figure out what someone actually needs through all the noise, then turn that into something useful owning it end to end.
 
 ## Where is this going?
 
