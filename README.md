@@ -77,13 +77,24 @@ each one is actually for was most of the learning.
   is recorded in `DESIGN.md` with the reasoning.
 - **`impeccable`** is a large local skill for design critique, typography and
   layout passes, and accessibility and responsive audits.
-- **`grill-me`** was installed from a public repo, `mattpocock/skills`, and is
-  tracked in `skills-lock.json` with a content hash. Worth naming honestly:
-  it is broken. Its `SKILL.md` forwards to a `grilling` skill that is not
-  installed, so the interrogation happened in conversation instead. **A skill
-  that installs cleanly is not a skill that works.**
-- **`code-review`** is built in, not something I installed. Run before
-  shipping a branch.
+- **`handoff`** writes a summary of a session to a file outside the repo, so
+  the next agent starts from state rather than from scratch. Installed from
+  `mattpocock/skills`. It complements `HANDOFF.md` rather than replacing it:
+  that file is the durable record and is committed, this is per-session and
+  is not.
+- **`grill-me`** came from the same pack and is tracked in
+  `skills-lock.json` with a content hash. It was broken for three days: its
+  `SKILL.md` forwards to a `grilling` skill that had not been installed, so
+  the interrogation happened in conversation instead. **A skill that
+  installs cleanly is not a skill that works**, which is the lesson worth
+  keeping. `grilling` arrived with the `handoff` install and it should work
+  now.
+- **`code-review`** is built in. Run before shipping a branch. Note that the
+  `mattpocock` pack also ships one under the same name, so check which one
+  answers before relying on it.
+- **Installing one skill can install thirty-seven.** `--skill=handoff` was
+  ignored by the installer and the whole pack landed in `.claude/skills/`,
+  none of it gitignored. Check `git status` after adding a skill.
 
 **A plugin** is a bundle from a marketplace rather than a file in the repo.
 Exactly one is enabled: **`frontend-design`** from the official Claude plugin
