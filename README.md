@@ -1,5 +1,7 @@
 # personal-site
 
+<img src="docs/media/anth-ropic.png" alt="A kraft-paper gig poster, An evening with Anth, Ropic, showing a line-drawn face in round glasses beside a pixel-art figure, billed as Jeremy and Clawd" width="420">
+
 Hey! This is my personal website.
 
 I built it partly because I needed a portfolio and partly because I wanted to
