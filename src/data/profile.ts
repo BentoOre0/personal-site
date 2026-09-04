@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '3.0',
+	rev: '3.1',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -552,8 +552,17 @@ export const PROJECTS: Project[] = [
 	},
 	{
 		title: 'UBC Rocket: Test Rocket Subteam',
+		/* The summary opened "Integrated avionics for separation tests",
+		   which named one subsystem and left the reader to assume that was
+		   the whole of it. The owner's correction: he helped build the
+		   rocket, with a team of three and a team lead. The rocket comes
+		   first now and the avionics is what he did on it, which is the
+		   order the row should have had.
+
+		   "Helped" is his word and stays. So is the team size; do not round
+		   it up or drop the lead. */
 		summary:
-			"Integrated avionics for separation tests firing black powder charges through web-app-triggered e-matches. Also built a personal certification rocket for a Class H motor.",
+			"Helped build the rocket with a team of three and a team lead, and integrated its avionics for separation tests firing black powder charges through web-app-triggered e-matches. Also built a personal certification rocket for a Class H motor.",
 		params: [
 			{ key: 'Role', value: 'Avionics hardware · test rocket subteam' },
 			/* `Build`, not `Stack`, on this row alone. Every other project
