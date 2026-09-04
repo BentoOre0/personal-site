@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '3.4',
+	rev: '3.5',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -750,10 +750,16 @@ export const PROJECTS: Project[] = [
 			'A computer vision pipeline that measures what percentage of a sample has browned, by K-means clustering pixels pulled toward three reference colours. Cited by the judging panel as the key contribution in a first-place school science competition entry.',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
-			/* Tools only. "Computer vision" and "K-means clustering" were both
-			   here; the first is the discipline and the second is the method,
-			   and the summary is where the row says what it does and how. */
-			{ key: 'Stack', value: 'Python · image segmentation' },
+			/* Tools only, and the actual ones. "Computer vision" and "K-means
+			   clustering" were here once; the first is the discipline and
+			   the second is the method, and both belong in the summary. But
+			   taking them out left "Python · image segmentation", which is a
+			   discipline and a language and no tools at all.
+
+			   These are read off the repository: `requirements.txt` lists
+			   opencv-python, numpy and scikit-learn, and the source imports
+			   cv2, numpy and sklearn.cluster.KMeans. */
+			{ key: 'Stack', value: 'Python · OpenCV · scikit-learn · NumPy' },
 			{ key: 'Year', value: '2024' },
 		],
 		titleHref: 'https://github.com/BentoOre0/ColorSegmentationAlgoPercentageCoverage',

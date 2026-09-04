@@ -36,7 +36,7 @@ it moves with the site:
 
 ```ts
 export const REVISION = {
-	rev: '3.4',
+	rev: '3.5',
 	status: 'DEPLOYED',
 	updated: '2026-09-04',
 };
