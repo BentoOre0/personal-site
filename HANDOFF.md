@@ -283,12 +283,21 @@ and it was measured at 320 / 340 / 390 before shipping, per the rule below.
 `rotating[0]` is server-rendered, so `websites.` is now what a scraper and a
 link preview see.
 
-**Three review findings were fixed rather than filed.** The resting
-underline had three sources disagreeing with the documentation; the box's
-`:active` wash fired on the tag chips, which do not go where the box goes;
-and the homepage restated that same underline colour in four more places.
-All three are written up in `DESIGN.md`. The underline value is now written
-once, in the base `a` rule, and every link that wants it inherits it.
+**Two review findings were fixed rather than filed.** The base `a` rule sat
+at 40% while the documentation said 45%, and the box's `:active` wash fired
+on the tag chips, which do not go where the box goes. Both are written up in
+`DESIGN.md`.
+
+**A third was attempted and reverted, and this is the one to read.** The
+review also flagged that `index.astro` restates the 45% underline colour in
+four places. It was collapsed, shipped, and taken back off production within
+the hour: `text-decoration: underline` is a shorthand that resets
+`text-decoration-color` to `currentColor`, and Astro's scoped selectors
+outrank the bare `a` rule, so removing the longhand turned every credential
+and project underline ink instead of making it inherit red. **A rule that
+sets `text-decoration` must also set `text-decoration-color`.** The
+declarations are back with a comment above them saying why, and the reasons
+are in `DESIGN.md`. Do not tidy them away again.
 
 **One thing deliberately not done:** he asked for the label as
 `select tags:`, with a colon. No `.legend` anywhere on the site carries one,

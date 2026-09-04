@@ -183,21 +183,32 @@ number, and the documentation agreed with none of the code. The base rule
 now reads 45% and both of those overrides are deleted. A component that
 wants the standard underline should inherit it and write nothing.
 
-**`index.astro` restated the same 45% in four more places and no longer
-does.** `.resume` was a pure duplicate of the base rule, colour and hover
-both, and is gone entirely. `.contacts a.as-text`, `.feature-text a` and
-`.project h3 a` are real variants and keep what makes them one: their own
-underline offset, ink text, a 160ms transition. What they lost is the
-resting colour and the underline half of their hover, which the base rule
-was already giving them.
+**`index.astro` restates the same 45% in four more places and has to.** This
+was collapsed on 4 Sep as dead duplication, shipped, and reverted off
+production within the hour, so the reason is worth writing down.
 
-Two `:focus-visible` blocks still name the accent, and correctly: the base
-rule covers `:hover` only, so those are the rule rather than a copy of it.
+`text-decoration: underline` is a **shorthand**. It resets
+`text-decoration-color` to `currentColor`. Three of those four rules set it,
+and Astro scopes their selectors with a `[data-astro-cid-*]` attribute, so
+they comfortably outrank the bare `a` rule in `global.css` and the reset
+wins. Deleting the longhand did not make them inherit the red; it turned
+every credential and project underline ink, under ink text, on the rows
+whose whole job is to look clickable. The owner spotted it on production
+immediately.
 
-**The value now appears once as a resting colour.** If a link needs the
-standard underline, inherit it. The one deliberate departure is the blog
-post title, which takes the accent at full strength because its text is ink
-and the line is doing all the marking.
+`.resume` is the one that sets no shorthand and would have survived. It
+keeps the declaration anyway, so all four read alike and none of them looks
+like the odd one out worth deleting next time.
+
+**So the rule is: a link that sets `text-decoration` must also set
+`text-decoration-color`.** Only a link that sets neither can inherit the
+base rule, which is what the blog's back links do. The one deliberate
+departure is the blog post title, which takes the accent at full strength
+because its text is ink and the line is doing all the marking.
+
+**Unlinked entries stay underline-free**, and that is the point of the whole
+treatment. Teaching Assistant and the IB Diploma carry no `href`, so they
+are not anchors, so none of these rules touch them.
 
 This replaced a 0%-to-100% gradient sweep that lived inside
 `@media (hover: hover)`, so a phone drew every underline and a laptop drew
