@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '3.2',
+	rev: '3.3',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -486,7 +486,7 @@ export const PROJECTS: Project[] = [
 		   role is the credit this length allows; the README carries the
 		   full division of work. */
 		summary:
-			'A quadruped forked from Chris Locke\'s open-source Nova SM3. The servos it is designed around were not sourceable in the Philippines, so every leg part was redrawn from scratch around the ones that were.',
+			'A quadruped forked from Chris Locke\'s open-source Nova SM3: the legs redrawn from scratch because the servos it is designed around were not sourceable in the Philippines, the power distribution reworked, and 6,390 lines of firmware reorganised.',
 		params: [
 			/* "Open-source fork", not "fork of an open-source design": same two
 			   facts in half the words, and it puts "open source" where a
@@ -569,7 +569,7 @@ export const PROJECTS: Project[] = [
 		   facts he asked for are still here, and so is the certification
 		   rocket. 168 characters, against a median of 223. */
 		summary:
-			'Helped build the rocket with a team of three and a lead from zero knowledge, and integrated its avionics for separation tests. Also built a personal certification rocket for a Class H motor.',
+			'Joined with no rocketry background and helped build the rocket with a team of three and a lead, integrating its avionics for separation tests. Also built a personal certification rocket for a Class H motor.',
 		params: [
 			{ key: 'Role', value: 'Avionics hardware · test rocket subteam' },
 			/* `Build`, not `Stack`, on this row alone. Every other project
@@ -603,7 +603,7 @@ export const PROJECTS: Project[] = [
 			},
 			{ key: 'Year', value: '2025–present' },
 		],
-		titleHref: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work/tree/main',
+		titleHref: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work',
 		figure: {
 			caption: 'The team at the launch site.',
 			/* 1920x1440, exactly 4:3, so the plate crops nothing.
@@ -633,22 +633,21 @@ export const PROJECTS: Project[] = [
 		links: [
 			{
 				label: 'Repository',
-				href: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work/tree/main',
+				href: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work',
 			},
 		],
 	},
 	{
 		title: 'GravSim: Barnes-Hut N-body simulator',
 		summary:
-			'A 2D N-body gravity simulator. Force computation uses the Barnes-Hut approximation over a dynamically built quadtree, taking the algorithm from O(n^2) to O(n log n).',
+			'A physics simulation of N-body gravity in 2D. Force computation uses the Barnes-Hut approximation over a dynamically built quadtree, taking the algorithm from O(n^2) to O(n log n).',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
-			/* "Physics" is spelled out rather than left implicit in "N-body"
-			   and "gravity". It is the discipline word a reader scans for,
-			   the same reason P6 and P7 say "computer vision", and it is the
-			   one term on this row that ties the project to the degree
-			   leading §1. */
-			{ key: 'Stack', value: 'Python · physics simulation · Pygame · NumPy' },
+			/* The stack is tools, not disciplines. "Physics simulation" sat
+			   here for a while and it is not a tool: it says what the thing
+			   is, so it belongs in the sentence that says what the thing is.
+			   Same correction as "computer vision" on P6 and P7. */
+			{ key: 'Stack', value: 'Python · Pygame · NumPy' },
 			{ key: 'Year', value: '2024' },
 		],
 		titleHref: 'https://github.com/BentoOre0/GravSim',
@@ -682,7 +681,7 @@ export const PROJECTS: Project[] = [
 	{
 		title: 'Baybayin script recognition: CNN vs. SVC',
 		summary:
-			"Research comparing convolutional neural networks against support vector classifiers at recognising Baybayin script under rotation and noise. CNNs proved more resilient to distortion; SVCs were more accurate on clean data, where the script's diacritics carry the distinction.",
+			"A computer vision study comparing convolutional neural networks against support vector classifiers at recognising Baybayin script under rotation and noise. CNNs proved more resilient to distortion; SVCs were more accurate on clean data, where the script's diacritics carry the distinction.",
 		params: [
 			{ key: 'Role', value: 'Sole author · IB Extended Essay' },
 			/* The libraries, not the two model families: "CNN vs. SVC" is
@@ -693,11 +692,11 @@ export const PROJECTS: Project[] = [
 			{
 				key: 'Stack',
 				value:
-					'Python · computer vision · TensorFlow/Keras · scikit-learn · NumPy · Pandas · Pillow · Matplotlib',
+					'Python · TensorFlow/Keras · scikit-learn · NumPy · Pandas · Pillow · Matplotlib',
 			},
 			{ key: 'Year', value: '2024–2025' },
 		],
-		titleHref: 'https://github.com/BentoOre0/Portfolio/tree/main/SVCvsCNNEXTENDED',
+		titleHref: 'https://github.com/BentoOre0/SVCvsCNNsExtendedEssay',
 		figure: {
 			caption: 'The Baybayin "Ba", broken into pixels for computer vision.',
 			/* The slot specified an accuracy chart, 16:9, and this is not that:
@@ -721,7 +720,7 @@ export const PROJECTS: Project[] = [
 			ratio: '1 / 1',
 		},
 		links: [
-			{ label: 'Code', href: 'https://github.com/BentoOre0/Portfolio/tree/main/SVCvsCNNEXTENDED' },
+			{ label: 'Code', href: 'https://github.com/BentoOre0/SVCvsCNNsExtendedEssay' },
 			{
 				label: 'Paper',
 				href: 'https://drive.google.com/file/d/1Tz5_n4KKLvXJk2pD9c-VNwKGnvGy7cFN/view',
@@ -748,10 +747,13 @@ export const PROJECTS: Project[] = [
 		   use the same third colour, so "three reference colours" is what
 		   can be said without guessing at which is right. */
 		summary:
-			'Measures what percentage of a sample has browned, by K-means clustering pixels pulled toward three reference colours. Cited by the judging panel as the key contribution in a first-place school science competition entry.',
+			'A computer vision pipeline that measures what percentage of a sample has browned, by K-means clustering pixels pulled toward three reference colours. Cited by the judging panel as the key contribution in a first-place school science competition entry.',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
-			{ key: 'Stack', value: 'Python · computer vision · image segmentation · K-means clustering' },
+			/* Tools only. "Computer vision" and "K-means clustering" were both
+			   here; the first is the discipline and the second is the method,
+			   and the summary is where the row says what it does and how. */
+			{ key: 'Stack', value: 'Python · image segmentation' },
 			{ key: 'Year', value: '2024' },
 		],
 		titleHref: 'https://github.com/BentoOre0/ColorSegmentationAlgoPercentageCoverage',
