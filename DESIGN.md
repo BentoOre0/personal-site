@@ -188,6 +188,16 @@ It has a second effect worth naming: a credential without an `href` now
 looks different from one with it. Teaching Assistant and the IB Diploma
 carry no underline, and that is information rather than an oversight.
 
+**The blog missed this pass and was corrected on 4 Sep.** Post titles in
+the list were ink with the underline suppressed, and the tag archive's back
+link was muted with the underline suppressed while the identical link on a
+post carried it. The only cue that a list row could be tapped was a row wash
+inside `@media (hover: hover)`, so on a phone, on the page whose entire job
+is getting a reader into a post, nothing was marked at all. Both now take
+the standard treatment. The row also washes on `:active`, outside the hover
+query for the reason the wordmark is: a tap has to acknowledge itself, and
+it is what teaches that the whole row, not just the title, is the target.
+
 Light only, committed. The use scene is a recruiter skimming on a laptop
 in daylight, and the world is a printed document. No dark theme; if that
 is ever wanted it is a deliberate reversal, not an addition.

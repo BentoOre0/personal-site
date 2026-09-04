@@ -62,15 +62,18 @@ const count = posts.length;
 		margin: 0 0 var(--s-3) 0;
 	}
 
+	/* The same back link as the one on a post, and it is styled the same
+	   way: accent, underlined at rest. It was muted with the underline
+	   suppressed, so the identical control read as a link on one page and
+	   as grey prose on the other, and on a phone the second version had no
+	   cue at all. */
 	.head .legend a {
-		color: var(--muted);
-		text-decoration: none;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 	}
 
 	@media (hover: hover) {
 		.head .legend a:hover {
-			color: var(--ink);
-	
+			text-decoration-color: var(--accent);
 		}
 	}
 

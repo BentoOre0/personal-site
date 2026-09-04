@@ -60,19 +60,35 @@ const { posts } = Astro.props;
 		}
 	}
 
+	/* Outside the hover query on purpose, the same reasoning as the wordmark
+	   in the header: a tap must acknowledge itself, and a touch device has
+	   no hover to fall back on. The row is the target, so the row is what
+	   lights up, which is also how a reader learns that the whole row and
+	   not just the title takes the tap. */
+	.index li:has(a:active) {
+		background: var(--wash);
+	}
+
 	.index h2 {
 		font-size: var(--t-md);
 		margin: 0;
 	}
 
+	/* The title is the link, and it is marked like every other link on the
+	   site: accent, underlined at rest. It used to be plain ink with the
+	   underline suppressed, and the only cue that a row could be tapped was
+	   the wash inside `@media (hover: hover)`. A phone draws no wash, so on
+	   the page whose entire job is getting you into a post, nothing on the
+	   list said it was clickable. The resting underline is the site's own
+	   answer to exactly this, already applied to the credential and project
+	   titles on the homepage and to the back link on a post. */
 	.index h2 a {
-		color: var(--ink);
-		text-decoration: none;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 	}
 
 	@media (hover: hover) {
 		.index h2 a:hover {
-			color: var(--accent);
+			text-decoration-color: var(--accent);
 		}
 	}
 
