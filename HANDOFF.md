@@ -347,6 +347,31 @@ for.
   the cluster nearest white as dish and background, report the ratio of the
   two left. Its stack gained computer vision and K-means clustering.
 
+**The blog has a real post.** `hello-im-jeremy.md`, at `/blog/hello-im-jeremy/`.
+**The words are the owner's own, pasted in full and unedited**, minus the `#
+Hello, I'm Jeremy` heading, which the layout already renders from the title.
+
+Two things in it are not his and are his to change:
+
+- **The `description`**, "Who I am, how I learn, and the gaps I am trying to
+  close next." It is a one-sentence condensation of his own text, but he did
+  not write that sentence. It shows on `/blog`, in search results and in the
+  feed.
+- **No `tags`.** Tags are free text and inventing categories for someone's
+  own writing is the same rule as inventing anything else. With none, the
+  filter bar does not render and no tag archives are built, which is correct
+  rather than broken.
+
+**The banner is `src/assets/hello-banner.png`**, made from his
+`stuff for my blog.png`: the yellow sparkles recoloured to the site accent
+`#e51b23`, the white margin trimmed, and the result padded to 2:1 on white,
+which is the ratio `BlogPost.astro` builds a hero at. The recolour works off
+the blue channel to get the stroke's coverage, so the antialiasing survives
+and the black line art is untouched.
+
+The build is back to four pages and the feed has one item. The demo posts
+stay `draft: true`.
+
 **A seventh rotator term, "physical and digital ideas.", placed after
 "websites."** Asked for. It is the longest term the tagline has carried and
 it broke the height reserve on narrow phones, which is the bug that was
