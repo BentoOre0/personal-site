@@ -295,6 +295,61 @@ accented underline in the same row reads as a link that does not click. Nothing
 else in the params table is bold or underlined, so ink already separates it.
 At most one per row; the mark stops meaning anything if every row has one.
 
+**P4's stack row is now `Build`, and carries the real list.** It said "CAD ·
+3D printing · wet layup composites · lathe and mill", which understated it.
+It now names SOLIDWORKS, Bambu Lab FDM in PA6-GF and PA6-CF, wet layup carbon
+fibre and fibreglass, lathe, mill and drill press at the PHAS machine shop,
+and basic CNC training. All the owner's own words; "basic" is his and stays.
+
+**PHAS is associated with UBC Rocket, not a separate affiliation.** The shop
+is named because it is where the lathe, mill and drill press work happened,
+and the whole row is UBC Rocket regardless. The CNC training is the team's own
+and needs no attribution for the same reason. A first pass read "basic CNC
+training at the PHAS machine shop", which put the training in the wrong place.
+
+**The key changed on that row alone.** Every other project keeps `Stack`.
+"Stack" is a software word and was doing a poor job of covering a lathe. The
+params table is per-project by design, `Status` appears on two rows of eight,
+so a key that fits the row is the pattern rather than a break from it. The
+cost is that a reader scanning down the `Stack` column skips this row; flip it
+back if that matters more. The separation-test electronics are not repeated in
+`Build`: they are the Role and the summary's first sentence.
+
+**Fig. 6's caption said something the picture does not show.** It read "A
+Baybayin character dissolving into noise". The artwork is a glyph breaking
+into a grid of squares, which is pixelation, not noise. It now reads 'The
+Baybayin "Ba", broken into pixels for computer vision', naming the character
+on the owner's say-so and the step the picture illustrates. The alt text was
+updated with it, since it also said "scatter of small squares" without naming
+the character.
+
+**Fig. 2's caption described its two panels and got them wrong.** It read
+"Clifford assembled, and on the bench with its shell off". At the owner's
+direction it is now just "Clifford, the red robot dog." The panel labels
+already carry the per-panel detail, so a caption repeating them was both
+redundant and a second place for the description to drift out of true. Worth
+generalising: **a caption names the subject, the panel labels say what each
+panel shows.**
+
+**P6 and P7 both say "computer vision" now**, asked for directly. The term
+appeared nowhere on the site, and it is the discipline word a reader scans
+for.
+
+- P6's stack was "Python · CNN · SVC", which repeated the title. It is now
+  the actual libraries, the owner's own list: Python, computer vision,
+  TensorFlow/Keras, scikit-learn, NumPy, Pandas, Pillow, Matplotlib.
+- P7's summary said "an image-segmentation algorithm measuring percentage
+  colour coverage", which is the category rather than the method. It now
+  names the steps, from the owner's own account of the pipeline: blur, pull
+  each pixel toward the nearest reference colour, K-means into three, drop
+  the cluster nearest white as dish and background, report the ratio of the
+  two left. Its stack gained computer vision and K-means clustering.
+
+**The reference colours are deliberately not named in P7.** The owner's
+account of the pull step and the labels on the figure do not agree on the
+third colour, so "three reference colours" is what can be said without
+guessing. Ask him before naming them.
+
 **The TREK scholarship note says it is money.** "Awarded 2026 · top 5% of
 each undergraduate year and faculty" read as a title conferred rather than a
 paid award, which the owner flagged. It is now "Cash award, 2026 · top 5% of

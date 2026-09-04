@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '0.9',
+	rev: '1.0',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -449,7 +449,7 @@ export const PROJECTS: Project[] = [
 		],
 		titleHref: 'https://github.com/BentoOre0/Modded-Nova-SM3',
 		figure: {
-			caption: 'Clifford assembled, and on the bench with its shell off.',
+			caption: 'Clifford, the red robot dog.',
 			/* The slot asked for a still side view. One angle cannot carry a
 			   machine this cluttered, so panel (a) is the owner's own
 			   walkaround, cropped square from a portrait phone clip: the
@@ -457,7 +457,14 @@ export const PROJECTS: Project[] = [
 			   It runs forward then back, which costs about 300KB over a
 			   one-way cut but spares the reader a jump from the closest
 			   frame to the widest every few seconds. Panel (b) is the row's
-			   other half: the shell comes off and the boards show. */
+			   other half: the shell comes off and the boards show.
+
+			   The caption names the subject and stops there, at the owner's
+			   direction. It read "Clifford assembled, and on the bench with
+			   its shell off", which described the two panels and got them
+			   wrong. The per-panel detail is the panel labels' job and they
+			   already do it, so a caption repeating them is both redundant
+			   and a second place for the description to drift out of true. */
 			plates: [
 				{
 					still: cliffordWalkStill,
@@ -498,7 +505,35 @@ export const PROJECTS: Project[] = [
 			"Integrated avionics for separation tests firing black powder charges through web-app-triggered e-matches. Also built a personal certification rocket for a Class H motor.",
 		params: [
 			{ key: 'Role', value: 'Avionics hardware · test rocket subteam' },
-			{ key: 'Stack', value: 'CAD · 3D printing · wet layup composites · lathe and mill' },
+			/* `Build`, not `Stack`, on this row alone. Every other project
+			   uses `Stack` and should keep it, but this row is CAD, filament,
+			   composites and machine tools, and "stack" is a software word
+			   doing a poor job of covering a lathe. The params table is
+			   per-project by design, `Status` appears on two rows of eight,
+			   so a key that fits the row is the pattern rather than a break
+			   from it. Flip it back to `Stack` if the scannable column
+			   matters more than the precise word.
+
+			   Grouped by layer like Clifford's stack line, not listed flat,
+			   so design, printing, composites and machining each read as one
+			   slot. "Basic" is the owner's own word for the CNC training and
+			   stays.
+
+			   The PHAS machine shop is named because it is where the lathe,
+			   mill and drill press work happened, not because it is a
+			   separate affiliation: it is associated with UBC Rocket, and
+			   this whole row is UBC Rocket. The CNC training is the team's
+			   own and needs no attribution for the same reason. An earlier
+			   version read "basic CNC training at the PHAS machine shop",
+			   which put the training in the wrong place.
+
+			   The separation-test electronics are deliberately not repeated
+			   here: they are the Role and the summary's first sentence. */
+			{
+				key: 'Build',
+				value:
+					'SOLIDWORKS · Bambu Lab FDM in PA6-GF and PA6-CF · wet layup carbon fibre and fibreglass · lathe, mill and drill press at the PHAS machine shop · basic CNC training',
+			},
 			{ key: 'Year', value: '2025–present' },
 		],
 		titleHref: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work/tree/main',
@@ -578,17 +613,29 @@ export const PROJECTS: Project[] = [
 			"Research comparing convolutional neural networks against support vector classifiers at recognising Baybayin script under rotation and noise. CNNs proved more resilient to distortion; SVCs were more accurate on clean data, where the script's diacritics carry the distinction.",
 		params: [
 			{ key: 'Role', value: 'Sole author · IB Extended Essay' },
-			{ key: 'Stack', value: 'Python · CNN · SVC' },
+			/* The libraries, not the two model families: "CNN vs. SVC" is
+			   already the title and the summary compares them, so repeating
+			   them here spent a row saying nothing new. "Computer vision" is
+			   the discipline term a reader scans for and the page never said
+			   it anywhere. */
+			{
+				key: 'Stack',
+				value:
+					'Python · computer vision · TensorFlow/Keras · scikit-learn · NumPy · Pandas · Pillow · Matplotlib',
+			},
 			{ key: 'Year', value: '2024–2025' },
 		],
 		titleHref: 'https://github.com/BentoOre0/Portfolio/tree/main/SVCvsCNNEXTENDED',
 		figure: {
-			caption: 'A Baybayin character dissolving into noise.',
+			caption: 'The Baybayin "Ba", broken into pixels for computer vision.',
 			/* The slot specified an accuracy chart, 16:9, and this is not that:
 			   it is an illustration of the problem, not a result. The caption
-			   says only what the picture shows, and must keep doing so. The
-			   row's claim about CNNs and SVCs is carried by the summary and by
-			   the linked paper, which is where it was already carried; this
+			   names the character and what is being done to it, at the owner's
+			   direction; it said "dissolving into noise", which the picture
+			   does not show. What it shows is a glyph breaking into a grid of
+			   squares, which is pixelation, and pixelation is the step before
+			   a model sees anything. The row's claim about CNNs and SVCs is
+			   still carried by the summary and by the linked paper; this
 			   figure adds a subject, not evidence.
 
 			   Square, so `ratio` follows the artwork rather than cropping a
@@ -596,7 +643,7 @@ export const PROJECTS: Project[] = [
 			plates: [
 				{
 					still: baybayinGlyph,
-					alt: 'A single heavy black Baybayin letterform on off-white, its right-hand side breaking up into a scatter of small squares that thin out toward the edge of the frame.',
+					alt: 'The Baybayin character "Ba", a single heavy black letterform on off-white, its right-hand side breaking up into a grid of small squares that scatters and thins toward the edge of the frame.',
 				},
 			],
 			ratio: '1 / 1',
@@ -611,11 +658,22 @@ export const PROJECTS: Project[] = [
 	},
 	{
 		title: 'Automated colour analysis for percentage coverage',
+		/* The old summary said "an image-segmentation algorithm measuring
+		   percentage colour coverage", which is the category, not the method.
+		   It now names the steps that do the work, from the owner's own
+		   description of the pipeline: blur, pull each pixel toward the
+		   nearest reference colour, K-means into three, drop the background
+		   cluster, report the ratio of the two that remain.
+
+		   The reference colours are not named here. The owner's account of
+		   the pull step and the labels on the figure do not use the same
+		   third colour, so "three reference colours" is the accurate thing to
+		   say and naming them would be guessing at which is right. */
 		summary:
-			'An image-segmentation algorithm measuring percentage colour coverage, cited by the judging panel as the key contribution in a first-place school science competition entry.',
+			'A computer-vision pipeline that reports what percentage of a sample has browned: it blurs the photograph, pulls each pixel toward the nearest of three reference colours, K-means clusters into three, discards the cluster nearest white as dish and background, and reports browned as a share of the two that remain. Cited by the judging panel as the key contribution in a first-place school science competition entry.',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
-			{ key: 'Stack', value: 'Python · image segmentation' },
+			{ key: 'Stack', value: 'Python · computer vision · image segmentation · K-means clustering' },
 			{ key: 'Year', value: '2024' },
 		],
 		titleHref: 'https://github.com/BentoOre0/ColorSegmentationAlgoPercentageCoverage',
