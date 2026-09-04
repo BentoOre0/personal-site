@@ -315,6 +315,25 @@ PROJECTS.forEach((p, i) => {
 		min-height: 3.75em;
 	}
 
+	/* The reserve above is three lines, which is what every term needs while
+	   `max-width: 22ch` is the thing deciding the wrap. Below about 358px the
+	   viewport binds first, the measure narrows, and the longest term,
+	   "physical and digital ideas.", takes a fourth line where the other six
+	   still take three. That is the height change the reserve exists to
+	   prevent, so the reserve grows to four lines exactly where it has to.
+
+	   Measured on the real page, not computed: 320 and 340 wrap to four
+	   lines, 360, 375 and 384 wrap identically to each other and to 390,
+	   which is 22ch binding rather than the viewport. Add a longer term and
+	   this has to be measured again; the way to do it is to set `rotating`
+	   to that one term, since the script leaves the text static below two
+	   terms and a screenshot can then show it. */
+	@media (max-width: 22.4rem) {
+		.tagline {
+			min-height: 5em;
+		}
+	}
+
 	/* The typed term is the tail of the sentence, so characters are only
 	   ever added or removed after every other word. Nothing reflows. */
 	.rotator {

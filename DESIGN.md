@@ -337,12 +337,24 @@ building") above a typed line that cycles through the terms in
 The caret is solid while characters move and blinks only at rest.
 
 Splitting stem from typed line does **not** prevent reflow; they share
-one line box and wrap together. Measured with Geist, every term fills
-three lines from 1440px down to 320px, but the half-typed states are
-shorter, so the block grew and shrank a line every couple of seconds
-and moved the whole page with it. `.tagline` now reserves `min-height:
-3.75em`. Because the settled state is three lines at every width, the
-reserve costs nothing. `prefers-reduced-motion` disables the
+one line box and wrap together. The half-typed states are shorter than
+the settled one, so the block grew and shrank a line every couple of
+seconds and moved the whole page with it. `.tagline` reserves
+`min-height: 3.75em`, three lines, which is the settled height of every
+term while `max-width: 22ch` is what decides the wrap.
+
+**Below about 358px the viewport binds before 22ch does**, the measure
+narrows, and the longest term, "physical and digital ideas.", takes a
+fourth line where the other six still take three. A second reserve,
+`min-height: 5em` under `@media (max-width: 22.4rem)`, covers exactly
+that range. Above it nothing changes and the reserve still costs nothing.
+
+**A new term has to be measured, not reasoned about.** Arithmetic on
+character counts gets this wrong, because the font fits more than 22
+characters into 22ch. Set `rotating` to the one term you are testing: the
+script returns early below two terms, so the page renders it statically
+and a screenshot can show it. That is the way around the rule that the
+typed tagline is frozen in every capture. `prefers-reduced-motion` disables the
 cycle and the blink, leaving the first term static; with JavaScript off
 the first term is server-rendered, so the line is never empty.
 

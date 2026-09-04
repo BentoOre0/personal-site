@@ -347,6 +347,39 @@ for.
   the cluster nearest white as dish and background, report the ratio of the
   two left. Its stack gained computer vision and K-means clustering.
 
+**A seventh rotator term, "physical and digital ideas.", placed after
+"websites."** Asked for. It is the longest term the tagline has carried and
+it broke the height reserve on narrow phones, which is the bug that was
+fixed on 1 Sep and is easy to reintroduce.
+
+`.tagline` reserves `min-height: 3.75em`, exactly three lines, so the block
+cannot change height as the rotator types. That holds while `max-width: 22ch`
+is what decides the wrap. Below about 358px the viewport binds first, the
+measure narrows, and this term takes a **fourth** line where the other six
+still take three. On a 320px phone the hero grew about 35px every time the
+rotator reached it.
+
+Fixed with `@media (max-width: 22.4rem) { .tagline { min-height: 5em } }`,
+four lines reserved exactly where four are needed. Above that width nothing
+changes.
+
+**Measured on the real page, not computed.** My arithmetic said the term
+would break at every width and it was wrong; the font fits more than 22
+characters into 22ch. 320 and 340 wrap to four lines; 360, 375 and 384 wrap
+identically to each other and to 390, which is 22ch binding rather than the
+viewport.
+
+**The trick worth reusing:** the rotator script returns early at
+`terms.length < 2`, so setting `rotating` to a single term makes the real
+page render that term statically, and a screenshot can then show it. That
+is the way around "the typed tagline is frozen in every capture". Proof the
+reserve holds is two renders at 320px, one long term and one short, diffed:
+they differ only in rows 429 to 485, the tagline's own text, and are
+pixel-identical below it.
+
+**Add another term and this has to be measured again.** Anything much past
+21 characters will need the same check.
+
 **Both long summaries were cut, and the rule behind it is worth keeping.**
 The owner's words: "i want people to open the repo". P2 ran 441 characters
 and P7 ran 414, against a median of 214. Both were correct and both were
