@@ -119,7 +119,7 @@ a {
 	color: var(--accent);
 	text-decoration-thickness: 1px;
 	text-underline-offset: 0.18em;
-	text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+	text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 	transition: text-decoration-color 120ms ease-out;
 }
 
@@ -440,7 +440,7 @@ a.designator {
 	}
 
 	/* Wrapped rows need to clear each other's extended hit areas. */
-	.filter {
+	.chips {
 		gap: var(--s-3);
 	}
 }

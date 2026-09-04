@@ -175,6 +175,22 @@ red is prose, and prose does not get it.
 On every pointer type, at `color-mix(in srgb, var(--accent) 45%,
 transparent)`, going to full accent on hover and focus.
 
+**The base rule is the documented value as of 4 Sep.** It was not: `a` in
+`global.css` sat at 40% while this page said 45%, and two components, the
+back link on a post and the one on a tag archive, restated 45% locally along
+with a hover rule the base rule already gave them. Three sources for one
+number, and the documentation agreed with none of the code. The base rule
+now reads 45% and both of those overrides are deleted. A component that
+wants the standard underline should inherit it and write nothing.
+
+**`index.astro` still restates the same 45% in four places** and is the
+remaining drift: `.resume` is a pure duplicate of the base rule and can go;
+`.contacts a.as-text`, `.feature-text a` and the project-link rule are real
+variants (their own offset, ink text, a 160ms transition) that restate the
+underline colour they could inherit. Left alone on 4 Sep because the session
+was scoped to the blog. Whoever next touches the homepage should collapse
+them.
+
 This replaced a 0%-to-100% gradient sweep that lived inside
 `@media (hover: hover)`, so a phone drew every underline and a laptop drew
 none. Five credential titles and seven project titles were plain black text
@@ -193,10 +209,64 @@ the list were ink with the underline suppressed, and the tag archive's back
 link was muted with the underline suppressed while the identical link on a
 post carried it. The only cue that a list row could be tapped was a row wash
 inside `@media (hover: hover)`, so on a phone, on the page whose entire job
-is getting a reader into a post, nothing was marked at all. Both now take
-the standard treatment. The row also washes on `:active`, outside the hover
-query for the reason the wordmark is: a tap has to acknowledge itself, and
-it is what teaches that the whole row, not just the title, is the target.
+is getting a reader into a post, nothing was marked at all. The back link
+now inherits the standard treatment. The box also washes on `:active`,
+outside the hover query for the reason the wordmark is: a tap has to
+acknowledge itself, and it is what teaches that the whole box, not just the
+title, is the target.
+
+**That wash names its two anchors rather than matching `:has(a:active)`.**
+The tags inside the box are links as well and they go to a tag archive, not
+to the post, so the bare descendant selector lit the whole box on the one
+tap that was not going where the box goes. Only the title and the `Read`
+handle arm it.
+
+**The post title is the one link on the site that is ink over a
+full-strength accent underline**, rather than accent text over a 45% one.
+It is 20px and bold, the heaviest thing in its box, and in the accent it
+drew a solid red bar across the top of every entry. Splitting it keeps the
+underline doing the marking and lets colour be what hover adds. It is a
+concession to weight, not a new rule: at 16px the standard treatment holds
+everywhere else.
+
+### The blog list is a set of boxes
+
+Each entry sits in a `1px` solid `--rule-strong` outline. A rule separates;
+this encloses, and what it encloses is the tap target, which is the whole
+box rather than the title. The owner asked for it in as many words, to make
+the entries read as separate things rather than one column of text with gaps
+in it.
+
+It was `--ink` for about ten minutes and that was too hard: a black box is a
+heavier mark than the title inside it, and a page of them is the first thing
+you see on a sheet that is meant to read as paper. Dashed was the other
+candidate and is spoken for, it means an unfilled figure slot, so the
+softening had to be in the colour rather than the stroke.
+
+Inside, the order is title, one-line summary, tags, and a `Read` handle
+sized and set like `.project-links` on the homepage. The handle is redundant
+to a reader who has already worked out that the box clicks, and that is the
+point: the whole-box target is invisible until it is tapped, and this is the
+mark that says outright there is somewhere to go.
+
+`Read` is a sibling of the date, not the last child of the entry, so the two
+share the right-hand column and one right edge. Placed inside the entry it
+aligned to the entry's own right edge, which stops short of the date's by
+the width of the column gap, and a handle that nearly lines up with
+something reads as a mistake rather than a choice. Below 40rem the column
+disappears, so the date and the handle simply follow the entry and both go
+flush left with everything else.
+
+### The tag bar says what it is for
+
+`SELECT TAGS`, a `--muted` legend above the chips rather than beside them.
+The bar was a row of chips and nothing else, and `All 1` next to a tag name
+reads as metadata about the list below it at least as readily as it reads as
+a control you are meant to press. The accent does not settle that on its
+own, because the chips sit directly under a heading and a lede that are not
+controls either. The label is also what the `nav` is named by
+(`aria-labelledby`), so a screen reader announces the words on the page
+instead of a second phrasing only it can hear.
 
 Light only, committed. The use scene is a recruiter skimming on a laptop
 in daylight, and the world is a printed document. No dark theme; if that
@@ -366,7 +436,7 @@ seconds and moved the whole page with it. `.tagline` reserves
 term while `max-width: 22ch` is what decides the wrap.
 
 **Below about 358px the viewport binds before 22ch does**, the measure
-narrows, and the longest term, "physical and digital ideas.", takes a
+narrows, and the longest term, "physical & digital systems.", takes a
 fourth line where the other six still take three. A second reserve,
 `min-height: 5em` under `@media (max-width: 22.4rem)`, covers exactly
 that range. Above it nothing changes and the reserve still costs nothing.
