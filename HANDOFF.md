@@ -345,6 +345,29 @@ for.
   the cluster nearest white as dish and background, report the ratio of the
   two left. Its stack gained computer vision and K-means clustering.
 
+**Both long summaries were cut, and the rule behind it is worth keeping.**
+The owner's words: "i want people to open the repo". P2 ran 441 characters
+and P7 ran 414, against a median of 214. Both were correct and both were
+doing the repository's job.
+
+- P2 is now 202: a quadruped forked from Locke's Nova SM3, the servos were
+  not sourceable in the Philippines, every leg part redrawn from scratch.
+  The U-bracket, the servo horn, the joint axis and the attribution table
+  are in his README, told better and at length.
+- P7 is now 219: what it measures, and the one step that is not obvious,
+  pulling each pixel toward a reference colour before clustering. The blur,
+  the resize, the dropped background cluster and the final ratio are in the
+  repository.
+
+**The rule: a summary exists to get the repository opened, not to explain
+the project.** That is "the site shows and GitHub tells" from 3 Sep applied
+to prose rather than to pictures. Both rows had drifted off it in the course
+of being made accurate, which is the failure mode to watch: correcting a
+summary tends to lengthen it, and length is the thing that stops it working.
+
+Longest is now SEAOIL at 305, which `DESIGN.md` already names as the one
+row allowed three sentences. Median 210.
+
 **P2's role is "Builder and modder", and its summary had the attribution
 backwards.** The role change was asked for directly. The summary correction
 was not, but the owner supplied the Modded-Nova-SM3 README as context and it

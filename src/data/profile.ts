@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '1.3',
+	rev: '1.4',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -454,15 +454,25 @@ export const PROJECTS: Project[] = [
 		   else's kit, and not a design of my own from nothing, but the
 		   engineering in between".
 
-		   The horn detail is kept because it is the constraint that makes
-		   the redesign hard rather than merely tedious: the horn is where
-		   the joint axis lives, so moving it changes every link length and
-		   voids the inherited gait tuning.
+		   **The summary's job is to get the repository opened, not to explain
+		   the robot.** That is the site's own rule, "the site shows and
+		   GitHub tells", and this row had stopped following it: the first
+		   attempt at a correct summary ran 441 characters against a median
+		   of 226, spending the U-bracket, the servo horn and the full
+		   attribution list on a reader who has not clicked anything yet.
+
+		   What survives is the hook: a real constraint, a place, and a
+		   consequence big enough to be worth reading about. The bracket, the
+		   horn, the joint axis and the attribution table are all in the
+		   README, told better and at length. Sending someone there is the
+		   point.
 
 		   Gaits, the servo motion engine and the master/slave architecture
-		   are still Chris Locke's and are still named as his. */
+		   are Chris Locke's. Naming him here plus `open-source fork` in the
+		   role is the credit this length allows; the README carries the
+		   full division of work. */
 		summary:
-			'A twelve-servo quadruped forked from Chris Locke\'s open-source Nova SM3, whose concept, gaits, servo motion engine and master/slave architecture are his. The servos it is drawn around were not sourceable in the Philippines and the replacements hang in a bracket instead of bolting through, so the coax, femur and tibia were redesigned from scratch around them, holding the servo horn fixed so the inherited gait tuning still meant something.',
+			'A quadruped forked from Chris Locke\'s open-source Nova SM3. The servos it is designed around were not sourceable in the Philippines, so every leg part was redrawn from scratch around the ones that were.',
 		params: [
 			/* "Open-source fork", not "fork of an open-source design": same two
 			   facts in half the words, and it puts "open source" where a
@@ -685,19 +695,25 @@ export const PROJECTS: Project[] = [
 	},
 	{
 		title: 'Automated colour analysis for percentage coverage',
-		/* The old summary said "an image-segmentation algorithm measuring
-		   percentage colour coverage", which is the category, not the method.
-		   It now names the steps that do the work, from the owner's own
-		   description of the pipeline: blur, pull each pixel toward the
-		   nearest reference colour, K-means into three, drop the background
-		   cluster, report the ratio of the two that remain.
+		/* Two revisions, and the second undid half the first. The original
+		   said "an image-segmentation algorithm measuring percentage colour
+		   coverage", which is the category rather than the method. Naming
+		   every step fixed that and overshot: 414 characters against a
+		   median of 214, the whole pipeline spent on a reader who has not
+		   clicked anything.
 
-		   The reference colours are not named here. The owner's account of
-		   the pull step and the labels on the figure do not use the same
-		   third colour, so "three reference colours" is the accurate thing to
-		   say and naming them would be guessing at which is right. */
+		   What is left is the one step that is not obvious, pulling each
+		   pixel toward a reference colour before clustering, which is what
+		   makes K-means converge on clean groups. The blur, the resize, the
+		   dropped background cluster and the final ratio are all in the
+		   repository. **The summary exists to get that repository opened.**
+
+		   The reference colours are still not named. The owner's account of
+		   the pull step and the labels that used to be on the figure did not
+		   use the same third colour, so "three reference colours" is what
+		   can be said without guessing at which is right. */
 		summary:
-			'A computer-vision pipeline that reports what percentage of a sample has browned: it blurs the photograph, pulls each pixel toward the nearest of three reference colours, K-means clusters into three, discards the cluster nearest white as dish and background, and reports browned as a share of the two that remain. Cited by the judging panel as the key contribution in a first-place school science competition entry.',
+			'Measures what percentage of a sample has browned, by K-means clustering pixels pulled toward three reference colours. Cited by the judging panel as the key contribution in a first-place school science competition entry.',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
 			{ key: 'Stack', value: 'Python · computer vision · image segmentation · K-means clustering' },
