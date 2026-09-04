@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '1.4',
+	rev: '1.5',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -613,7 +613,12 @@ export const PROJECTS: Project[] = [
 			'A 2D N-body gravity simulator. Force computation uses the Barnes-Hut approximation over a dynamically built quadtree, taking the algorithm from O(n^2) to O(n log n).',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
-			{ key: 'Stack', value: 'Python · Pygame · NumPy' },
+			/* "Physics" is spelled out rather than left implicit in "N-body"
+			   and "gravity". It is the discipline word a reader scans for,
+			   the same reason P6 and P7 say "computer vision", and it is the
+			   one term on this row that ties the project to the degree
+			   leading §1. */
+			{ key: 'Stack', value: 'Python · physics simulation · Pygame · NumPy' },
 			{ key: 'Year', value: '2024' },
 		],
 		titleHref: 'https://github.com/BentoOre0/GravSim',
