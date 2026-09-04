@@ -11,16 +11,23 @@ session logs and no longer read as a handoff.
 ## Where things stand
 
 **Live at https://jeremyaidanhernandezyu.vercel.app**, deployed from
-`master`, currently `396e297`, which merged PR #6. `npm run build` passes,
-**12 pages**.
+`master`, currently `38fc509`, which merged `feat/newlayoutandmedia` on
+4 Sep. `npm run build` passes, **5 pages**.
 
-**The 3 Sep work is live.** PR #6 took it to `master` on 4 Sep. Everything
-under "What shipped on 3 Sep" and "3 Sep, second half" below is in
-production.
+**Everything in this file is live.** The 3 Sep work went up with PR #6 and
+the whole of the 4 Sep work followed in that merge. There is no unmerged
+branch and nothing described below is waiting.
 
-**The 4 Sep work is not.** It sits at the head of `feat/newlayoutandmedia`
-with a Vercel preview of its own, and `master` is ahead of that branch by
-two merge commits that carry no content the branch is missing.
+**Five pages, not twelve**, and that is the intended state rather than a
+regression: homepage, `/blog`, the one real post, its `about-me` tag
+archive, and 404. The five Astro demo posts and their four tag archives
+stopped being built when they became `draft: true`. Every one of those
+pages returns the moment a real post carries the tag.
+
+Verified on production after the merge: the six URLs that should be 200
+are, the four hidden demo URLs are 404, `rss.xml` carries one item, and
+`/googlefa2bccd6d59141b7.html` serves byte-exact with nothing injected
+into it.
 
 The site is a **component datasheet**: title block, credentials as a
 features list, a details table, projects as numbered figures, a revision
