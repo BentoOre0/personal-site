@@ -569,7 +569,7 @@ export const PROJECTS: Project[] = [
 		   facts he asked for are still here, and so is the certification
 		   rocket. 168 characters, against a median of 223. */
 		summary:
-			'Helped build the rocket with a team of three and a lead, and integrated its avionics for separation tests. Also built a personal certification rocket for a Class H motor.',
+			'Helped build the rocket with a team of three and a lead from zero knowledge, and integrated its avionics for separation tests. Also built a personal certification rocket for a Class H motor.',
 		params: [
 			{ key: 'Role', value: 'Avionics hardware · test rocket subteam' },
 			/* `Build`, not `Stack`, on this row alone. Every other project
