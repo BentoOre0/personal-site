@@ -9,9 +9,19 @@ import type { ImageMetadata } from 'astro';
    link lands on that same loading screen, so the card and the first frame
    of the site are the same picture. It replaced `blog-placeholder-1.jpg`,
    Astro stock art that had been the preview for every page on the site.
+   **It is sized for a phone feed, not for a 1200px canvas.** LinkedIn
+   renders a card around 340 to 400px wide, so everything on it divides by
+   three: the first version set the line under the name at 28px and a
+   footer at 19px, which land at 9px and 6px on a phone and were reported
+   as unreadable. The floor is about 42px in the source, which is 14px at
+   400px wide. The name is 86px and the line is 46px. The footer is gone
+   because LinkedIn already prints the domain under the card, so repeating
+   it inside cost the rest of the card its size.
+
    Regenerate it the way it was made: an HTML card served from `dist/`,
    captured at 1200x630 with `--force-device-scale-factor=2` and
-   downsampled. */
+   downsampled. Check it by shrinking the result to 380px wide and reading
+   it, which is the size it is actually judged at. */
 import FallbackImage from '../assets/og-card.png';
 import { SITE_TITLE } from '../consts';
 import { SEO } from '../data/profile';
