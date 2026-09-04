@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '1.2',
+	rev: '1.3',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -464,7 +464,12 @@ export const PROJECTS: Project[] = [
 		summary:
 			'A twelve-servo quadruped forked from Chris Locke\'s open-source Nova SM3, whose concept, gaits, servo motion engine and master/slave architecture are his. The servos it is drawn around were not sourceable in the Philippines and the replacements hang in a bracket instead of bolting through, so the coax, femur and tibia were redesigned from scratch around them, holding the servo horn fixed so the inherited gait tuning still meant something.',
 		params: [
-			{ key: 'Role', value: 'Builder and modder · fork of an open-source design' },
+			/* "Open-source fork", not "fork of an open-source design": same two
+			   facts in half the words, and it puts "open source" where a
+			   reader scanning the params column will hit it. The summary
+			   names Chris Locke and the licence position in full, so this
+			   line only has to flag it. */
+			{ key: 'Role', value: 'Builder and modder · open-source fork' },
 			{ key: 'Stack', value: 'C++ · Teensy 4.0, Arduino Nano, Raspberry Pi (for testing), MPU-6050 IMU · I2C, PWM, bit-banged PS2 remote control · PCB soldering and testing · 3D printing' },
 			{ key: 'Status', value: 'Ongoing' },
 			{ key: 'Year', value: '2026–present' },
