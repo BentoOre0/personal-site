@@ -52,27 +52,35 @@
 		padding: max(var(--s-4), env(safe-area-inset-top)) var(--s-4)
 			max(var(--s-4), env(safe-area-inset-bottom));
 		background: var(--ink);
-		transform: translateY(0);
+		transform: translate3d(0, 0, 0);
 		visibility: visible;
 		/* The sheet is pulled off the page rather than dissolved, a fade
 		   leaves the art hanging half-visible over the content behind it. */
 		transition:
 			transform 480ms cubic-bezier(0.66, 0, 0.2, 1),
 			visibility 0s linear 480ms;
+		/* **This is the element that moves**, and it was the one thing not
+		   promoted. The children were given `will-change` and this was not,
+		   so a phone was repainting a full-viewport opaque rectangle every
+		   frame of the exit instead of letting the compositor slide a
+		   finished layer. `translate3d` rather than `translateY` for the
+		   same reason on older iOS. */
+		will-change: transform;
+		backface-visibility: hidden;
 		/* Failsafe: if the script never runs, the overlay still leaves
 		   rather than sealing the page shut. */
 		animation: loader-failsafe 0s linear 6s forwards;
 	}
 
 	.loader.is-done {
-		transform: translateY(-100%);
+		transform: translate3d(0, -100%, 0);
 		visibility: hidden;
 		pointer-events: none;
 	}
 
 	@keyframes loader-failsafe {
 		to {
-			transform: translateY(-100%);
+			transform: translate3d(0, -100%, 0);
 			visibility: hidden;
 			pointer-events: none;
 		}
@@ -199,9 +207,24 @@
 	const announce = () => document.dispatchEvent(new CustomEvent('loader:done'));
 
 	const dismiss = (loader: HTMLElement, instant = false) => {
-		if (instant) loader.classList.add('is-instant');
-		loader.classList.add('is-done');
-		announce();
+		if (instant) {
+			loader.classList.add('is-instant', 'is-done');
+			announce();
+			return;
+		}
+		/* Two frames before the slide starts. The class change is what first
+		   reveals the page underneath, and that reveal is the most expensive
+		   paint on the site: a long, image-heavy homepage, first paint, on a
+		   phone. Landing it inside the same frame that begins the transition
+		   spends that cost on frame one of the animation, which is exactly
+		   where a stutter is most visible. Waiting two frames lets the paint
+		   settle and starts the slide on a clean boundary. */
+		requestAnimationFrame(() =>
+			requestAnimationFrame(() => {
+				loader.classList.add('is-done');
+				announce();
+			}),
+		);
 	};
 
 	// A client-side navigation brings in fresh markup with the overlay
