@@ -69,7 +69,8 @@ never as a catalog of everything ever attempted.
   built. They are kept as a working template, not published. Nothing
   invented is live.
 
-**Still unfilled:** `og:image` is still the Astro placeholder. Every project
+**Still unfilled:** nothing on the homepage. `og:image` was the last of it
+and is now a real card. Every project
 figure slot is now either filled or a deliberate `figure: null`; no row prints
 a shot spec any more. `IDENTITY.resume.href` holds a real Google Drive
 link. Unfilled things ship as visibly marked placeholders. They are never

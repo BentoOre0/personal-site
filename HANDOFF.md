@@ -24,10 +24,8 @@ archive, and 404. The five Astro demo posts and their four tag archives
 stopped being built when they became `draft: true`. Every one of those
 pages returns the moment a real post carries the tag.
 
-Verified on production after the merge: the six URLs that should be 200
-are, the four hidden demo URLs are 404, `rss.xml` carries one item, and
-`/googlefa2bccd6d59141b7.html` serves byte-exact with nothing injected
-into it.
+Verified on production after the merge: the URLs that should be 200 are,
+the four hidden demo URLs are 404, and `rss.xml` carries one item.
 
 The site is a **component datasheet**: title block, credentials as a
 features list, a details table, projects as numbered figures, a revision
@@ -87,10 +85,23 @@ files stay. **See Decisions.**
 
 **Still unfilled:**
 
-1. **`og:image`** is still `blog-placeholder-1.jpg`, so sharing any link
-   shows Astro stock art. This is the highest-value unfilled item on the
-   list: discovery here is almost entirely a pasted link, and the unfurl
-   card is a first impression the page never gets to correct.
+1. **`og:image` is done.** It was `blog-placeholder-1.jpg`, Astro stock art,
+   on every page of the site. It is now `src/assets/og-card.png`, a 1200x630
+   card built from the site's own parts: the loading screen's figure, the
+   name and the tagline, in Geist, on the loader's ink ground. A reader who
+   clicks the link lands on that same loading screen, so the card and the
+   first frame of the site are the same picture.
+
+   **A post previews with its own hero now.** `BlogPost.astro` never passed
+   `heroImage` to `BaseHead`, so every post unfurled as the site default
+   however good its banner was. It also sends `og:type="article"`.
+   `og:site_name`, `og:image:width`, `og:image:height` and `og:image:alt`
+   were all missing and are set; `og:url` uses the canonical URL rather than
+   `Astro.url`.
+
+   Both images are emitted as PNG, not WebP, because they are referenced
+   from meta tags rather than through `<Image>`. Some scrapers still do not
+   read WebP, so leave it that way.
 2. **`REVISION` is no longer stale, and this item is closed.** `rev` and
    `updated` move on every commit from 4 Sep, the rev by one tenth with 0.9
    wrapping to 1.0. `status` was `PRELIMINARY` and is now `DEPLOYED`, at the

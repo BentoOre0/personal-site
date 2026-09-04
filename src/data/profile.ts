@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '2.2',
+	rev: '2.3',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -43,9 +43,17 @@ export const REVISION = {
 
 export const IDENTITY = {
 	name: 'Jeremy Aidan Hernandez Yu',
-	/* Used for the page title and meta description. */
+	/* Not shown on the page. This is the meta description, the og:description,
+	   the RSS channel description and the line on the link-preview card, so
+	   it is the sentence that does the work everywhere the site is quoted
+	   rather than visited.
+
+	   It ended "I want to build things", which the owner cut: "that's what
+	   makes mine stick out, don't just say build things like every swe kid".
+	   Physical and digital is the differentiator, and it is the same claim
+	   the rotator makes on the page. */
 	tagline:
-		'Engineering physics student with a background in competitive programming. I want to build things.',
+		'Engineering physics student with a background in competitive programming. I build physical and digital things.',
 	/* The tagline's fixed half. */
 	taglinePrefix: 'Engineering physics student building',
 	/* Rotates through these, one at a time. Add or remove freely;
