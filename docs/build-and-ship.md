@@ -36,7 +36,7 @@ it moves with the site:
 
 ```ts
 export const REVISION = {
-	rev: '0.3',
+	rev: '0.4',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -165,6 +165,11 @@ git add -A
 git commit -m "Say what changed and why"
 git push -u origin some-descriptive-branch
 ```
+
+`public/googlefa2bccd6d59141b7.html` is Google Search Console's verification
+file. It is served verbatim at the site root and Google re-checks it, so
+**do not delete or rename it** while the property is verified; anything in
+`public/` ships as-is, which is the whole reason it is there and not a page.
 
 **Pushing any branch that is not `master` gives you a preview URL**, a
 complete, real deployment of that branch at its own address. This is the safest

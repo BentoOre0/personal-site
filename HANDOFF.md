@@ -11,12 +11,16 @@ session logs and no longer read as a handoff.
 ## Where things stand
 
 **Live at https://jeremyaidanhernandezyu.vercel.app**, deployed from
-`master`, currently `f163393`. `npm run build` passes, **12 pages**.
+`master`, currently `396e297`, which merged PR #6. `npm run build` passes,
+**12 pages**.
 
-**The 3 and 4 Sep work is not live.** It sits at the head of
-`feat/newlayoutandmedia`, unmerged, and has a Vercel preview URL of its own.
-Everything under "4 Sep", "What shipped on 3 Sep" and "3 Sep, second half"
-below is on that branch only.
+**The 3 Sep work is live.** PR #6 took it to `master` on 4 Sep. Everything
+under "What shipped on 3 Sep" and "3 Sep, second half" below is in
+production.
+
+**The 4 Sep work is not.** It sits at the head of `feat/newlayoutandmedia`
+with a Vercel preview of its own, and `master` is ahead of that branch by
+two merge commits that carry no content the branch is missing.
 
 The site is a **component datasheet**: title block, credentials as a
 features list, a details table, projects as numbered figures, a revision

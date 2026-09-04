@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '0.3',
+	rev: '0.4',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
