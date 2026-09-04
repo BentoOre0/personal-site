@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '3.1',
+	rev: '3.2',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -560,9 +560,16 @@ export const PROJECTS: Project[] = [
 		   order the row should have had.
 
 		   "Helped" is his word and stays. So is the team size; do not round
-		   it up or drop the lead. */
+		   it up or drop the lead.
+
+		   Cut back on his follow-up to keep it concise. What went is the
+		   mechanism, "firing black powder charges through web-app-triggered
+		   e-matches", which is the best detail on the row and exactly the
+		   kind of thing the repository should be the one to tell. Both
+		   facts he asked for are still here, and so is the certification
+		   rocket. 168 characters, against a median of 223. */
 		summary:
-			"Helped build the rocket with a team of three and a team lead, and integrated its avionics for separation tests firing black powder charges through web-app-triggered e-matches. Also built a personal certification rocket for a Class H motor.",
+			'Helped build the rocket with a team of three and a lead, and integrated its avionics for separation tests. Also built a personal certification rocket for a Class H motor.',
 		params: [
 			{ key: 'Role', value: 'Avionics hardware · test rocket subteam' },
 			/* `Build`, not `Stack`, on this row alone. Every other project
