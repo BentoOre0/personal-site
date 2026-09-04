@@ -274,7 +274,41 @@ PROJECTS.forEach((p, i) => {
 				tick();
 			};
 
-			document.addEventListener('astro:page-load', start);
+			/* Wait for the loading screen to leave before typing.
+
+			   The rotator wrote a character every 62ms from `astro:page-load`,
+			   which is the same instant the loader begins its 1400ms hold. So
+			   for the whole time the overlay is up, this was doing layout on
+			   the main thread behind an opaque sheet where nobody could see
+			   it, competing with the one animation that is on screen. That is
+			   the choppiness, and the fix costs nothing: the typing was
+			   invisible anyway.
+
+			   It also reads better. The reader now sees the term typed from
+			   its first character instead of arriving part-way through.
+
+			   The failsafe matters. If Loader.astro never runs, the event
+			   never fires, so a timer starts the rotator regardless. The
+			   tagline animating late is a small fault; a tagline stuck on one
+			   term forever is a visible one. */
+			const startOnce = (() => {
+				let started = false;
+				return () => {
+					if (started) return;
+					started = true;
+					start();
+				};
+			})();
+
+			document.addEventListener('astro:page-load', () => {
+				const loader = document.getElementById('loader');
+				if (!loader || loader.classList.contains('is-done')) {
+					start();
+					return;
+				}
+				document.addEventListener('loader:done', startOnce, { once: true });
+				setTimeout(startOnce, 3000);
+			});
 		</script>
 	</body>
 </html>

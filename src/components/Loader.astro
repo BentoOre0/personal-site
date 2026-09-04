@@ -91,6 +91,10 @@
 		width: min(clamp(180px, 30vw, 260px), 47vh);
 		aspect-ratio: 485 / 568;
 		animation: trot 660ms ease-in-out infinite;
+		/* Three transform animations run nested here, the stage and the two
+		   layers inside it. Without a promotion hint a phone composites them
+		   on the main thread every frame and the whole loader stutters. */
+		will-change: transform;
 	}
 
 	.art {
@@ -103,11 +107,23 @@
 	.notes {
 		animation: notes 900ms ease-in-out infinite;
 		transform-origin: 78% 44%;
+		will-change: transform, opacity;
 	}
 
 	.zzz {
 		animation: zzz 420ms steps(2, jump-none) infinite;
 		transform-origin: 66% 14%;
+		will-change: transform;
+	}
+
+	/* Nothing inside moves while the sheet slides off. The exit is 480ms of
+	   the compositor moving one layer; leaving three nested animations
+	   running underneath it is the most expensive frame on the site, on the
+	   slowest device, at the moment it is most visible. */
+	.loader.is-done .stage,
+	.loader.is-done .notes,
+	.loader.is-done .zzz {
+		animation: none;
 	}
 
 	.label {
@@ -177,24 +193,36 @@
 	const el = () => document.getElementById('loader');
 	let swapped = false;
 
+	/* Fired the moment the overlay starts leaving, so animations behind it
+	   can hold off. Anything listening must also have its own failsafe: if
+	   this script never runs, the event never comes. */
+	const announce = () => document.dispatchEvent(new CustomEvent('loader:done'));
+
+	const dismiss = (loader: HTMLElement, instant = false) => {
+		if (instant) loader.classList.add('is-instant');
+		loader.classList.add('is-done');
+		announce();
+	};
+
 	// A client-side navigation brings in fresh markup with the overlay
 	// visible. Kill it immediately, only a full load or an explicit
 	// replay should show the loading screen.
 	document.addEventListener('astro:after-swap', () => {
 		swapped = true;
-		el()?.classList.add('is-instant', 'is-done');
+		const loader = el();
+		if (loader) dismiss(loader, true);
 	});
 
 	document.addEventListener('astro:page-load', () => {
 		const loader = el();
 		if (!loader) return;
 		if (swapped) {
-			loader.classList.add('is-instant', 'is-done');
+			dismiss(loader, true);
 			return;
 		}
 		const start = performance.now();
 		const finish = () =>
-			setTimeout(() => loader.classList.add('is-done'), Math.max(0, HOLD - (performance.now() - start)));
+			setTimeout(() => dismiss(loader), Math.max(0, HOLD - (performance.now() - start)));
 		if (document.readyState === 'complete') finish();
 		else window.addEventListener('load', finish, { once: true });
 	});

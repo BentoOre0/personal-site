@@ -365,6 +365,32 @@ for.
   the cluster nearest white as dish and background, report the ratio of the
   two left. Its stack gained computer vision and K-means clustering.
 
+**The loading screen was choppy on a phone. Three causes, all fixed.**
+
+1. **The tagline was typing behind the overlay.** The rotator started on
+   `astro:page-load`, which is the same instant the loader begins its
+   1400ms hold, and wrote a character every 62ms. So for the whole time the
+   opaque sheet was up, the main thread was doing layout on text nobody
+   could see, competing with the one animation that was on screen. The
+   rotator now waits for a `loader:done` event, with a 3s timer as a
+   failsafe in case `Loader.astro` never runs. It also reads better: the
+   term is now typed from its first character instead of arriving part-way
+   through.
+2. **The loader's animated layers were never promoted.** Three transform
+   animations run nested, the stage plus the two layers inside it, and
+   without a hint a phone composites them on the main thread every frame.
+   `will-change` on all three.
+3. **The inner animations kept running during the exit slide.** The 480ms
+   slide should be the compositor moving one layer; instead it was moving
+   one layer with three animations running underneath it, at the moment the
+   loader is most visible. They stop when `is-done` lands.
+
+**This was diagnosed from the code, not measured on a device.** No phone
+profiling was possible from here. If it is still choppy the next thing to
+look at is the three loader PNGs: they are 485x568 and render at about
+180px, so the compositor holds a texture more than seven times the area it
+draws.
+
 **Code review, 4 Sep, five findings, all fixed.**
 
 1. **185KB of images were shipping for pages that 404.** The five hidden
