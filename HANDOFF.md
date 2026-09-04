@@ -369,8 +369,27 @@ which is the ratio `BlogPost.astro` builds a hero at. The recolour works off
 the blue channel to get the stroke's coverage, so the antialiasing survives
 and the black line art is untouched.
 
+**It is laid out as a question and answer**, asked for after the first
+version shipped as unbroken prose. Eight `h2`s, each one a question the
+paragraph under it already answers; **his prose is byte-identical**, the
+headings are inserted between paragraphs and nothing else moved. It closes
+with "(The one and only) Jeremy Aidan Hernandez Yu", his line, set in italic
+so it reads as a sign-off rather than another paragraph.
+
+**The questions are accent red**, also asked for. That is a new use of the
+accent and it is recorded in `DESIGN.md` with the reasoning and the limit:
+post `h2` only, never `h3`, never running prose.
+
 The build is back to four pages and the feed has one item. The demo posts
 stay `draft: true`.
+
+**One thing found and not changed:** `BlogPost.astro` renders the hero with
+`loading="lazy"`, because that is Astro's default and nothing overrides it.
+A hero at the very top of the page is the LCP element and should be eager;
+the homepage avatar already sets `loading="eager"` for this reason. It is
+one attribute. It also made a headless capture come back with an empty
+frame where the banner should be, which is worth knowing before someone
+reports it as a broken image.
 
 **A seventh rotator term, "physical and digital ideas.", placed after
 "websites."** Asked for. It is the longest term the tagline has carried and

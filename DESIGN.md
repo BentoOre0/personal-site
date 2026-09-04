@@ -133,8 +133,20 @@ never running prose.
 - the contact glyphs and the revision stamp
 - the disclosure arrow on a foldable credential, `\25B8` / `\25BE`
 - `P1`'s designator, and only P1's
+- **`h2` inside a blog post**, at the owner's request, added 4 Sep
 
 Counted from the built CSS, that is **28 resting marks** on the homepage.
+The `h2` rule is on post pages only and the homepage is unaffected.
+
+**On the `h2`s.** "Hello, I'm Jeremy" is written as a question-and-answer,
+so the headings are the questions and the colour marks one kind of thing
+rather than decorating headings in general. It is the closest the site
+comes to breaking its own rule, because red teaches "clickable" and §1
+already had to pull the credential notes back to muted for exactly that
+reason. A heading survives the test the note failed: it is 20px, it has no
+underline, it stands on its own line with `--s-6` above it, and no other
+prose on the page is red, so there is no link beside it to be confused
+with. Do not extend this to `h3` or to running prose.
 
 **Three things were tried in the accent on 3 Sep and taken back out**, and
 the reasons are worth keeping because each is a different failure:

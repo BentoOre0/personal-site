@@ -143,8 +143,21 @@ const { title, description, pubDate, updatedDate, heroImage, tags, noindex } = A
 		padding-bottom: var(--s-6);
 	}
 
+	/* Accent, at the owner's request. The post is written as a Q and A and
+	   the h2s are the questions, so the colour is marking one kind of thing
+	   rather than decorating headings generally.
+
+	   This is the page's second accent rule after links, and the risk is the
+	   one §1 already ran into once: red teaches "clickable", and the
+	   credential notes had to be pulled back to muted for exactly that
+	   reason. A heading is safer than that note was. It is 20px, it has no
+	   underline, it sits on its own line with space above it, and nothing
+	   else in the prose is red, so there is no link nearby for it to be
+	   confused with. #e51b23 on paper is 4.65:1, which clears AA for body
+	   text and this is larger than body text. */
 	.prose :global(h2) {
 		font-size: var(--t-md);
+		color: var(--accent);
 		margin-top: var(--s-6);
 		margin-bottom: var(--s-3);
 	}
