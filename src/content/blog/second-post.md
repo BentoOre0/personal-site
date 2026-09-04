@@ -4,8 +4,10 @@ description: 'Lorem ipsum dolor sit amet'
 tags: ['robotics', 'embedded']
 pubDate: 'Jul 15 2022'
 heroImage: '../../assets/blog-placeholder-4.jpg'
-# Astro demo content, kept on the site on purpose but kept out of
-# search results. Delete this line when the post is real.
+# Astro demo content. Kept as a working template, not published: `draft`
+# takes it off /blog, out of the tag archives, out of the feed, and stops
+# its page being built. Delete both lines when the post is real.
+draft: true
 noindex: true
 ---
 

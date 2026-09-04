@@ -136,8 +136,8 @@ never running prose.
 
 Counted from the built CSS, that is **28 resting marks** on the homepage.
 
-**Three things were tried in the accent on 3 Sep and taken back out**, and
-the reasons are worth keeping because each is a different failure:
+**Five things have been tried in the accent and taken back out**, and the
+reasons are worth keeping because each is a different failure:
 
 - **Figure captions and panel labels.** Six captions and three labels put a
   red block under every figure in §3, and a caption sits directly above the
@@ -156,8 +156,17 @@ the reasons are worth keeping because each is a different failure:
   non-text boundary needs) and still wrong: a hairline running the full
   width of the sheet is the largest mark on the page by area, and it pulled
   rank over the headings it was carrying.
+- **Blog-post `h2`s, 4 Sep, in and out the same day.** "Hello, I'm Jeremy"
+  is laid out as a question and answer, so the headings are the questions,
+  and the argument was that the colour marked one kind of thing rather than
+  decorating headings generally. The owner looked at it and did not like
+  it, which is the whole test. Worth recording anyway: a heading passes the
+  checks the credential note failed, being 20px, underline-free, alone on
+  its line and nowhere near a link, and it *still* was not worth doing. **A
+  mark that survives the argument can lose on sight.** The headings are ink
+  and the questions carry themselves.
 
-The test that survives all four: **the accent marks what you can click, plus
+The test that survives all five: **the accent marks what you can click, plus
 a small closed set of stamps and controls.** Anything else that wants to be
 red is prose, and prose does not get it.
 
@@ -222,10 +231,27 @@ Body measure caps at 68ch; summaries at 60ch.
 
 ### Graded legibility
 
-The credential list leads with one step above the rest: the first entry
-is set at 28px, the others at 20px. The list is ordered most-impressive
-first, so the lead entry is the hook PRODUCT.md names; it had been set
-identically to the last credential.
+The credential list runs three tiers: the first entry at 28px, the second
+at 20px, the rest at 16px. The list is ordered most-impressive first, so
+the lead entry is the hook PRODUCT.md names; it had been set identically
+to the last credential.
+
+**Engineering physics leads, and the NOI placing sits directly under it.**
+The degree is the fact a reader outside the field cannot decode on sight,
+and it is the entry that carries sources saying what the program is, so
+it gets the position where someone will actually read it. The NOI placing
+is the strongest single fact on the page and does not need explaining, so
+it takes the second tier: a step below the lead and clear of everything
+under it.
+
+Every tier is a step the scale already has. There is nothing between 20px
+and 28px, so the second tier was made by dropping the tail to 16px rather
+than by inventing a 24px step. 16px is body size, which is the floor a
+list of facts sits at, not below it.
+
+All three are keyed to position rather than to a rank in the data, the
+same way the project list descends, so reordering `CREDENTIALS` reorders
+the emphasis with it.
 
 The project list compresses as it descends: the lead entry is set at 28px
 with full-strength body copy, the middle entries at 20px in muted, the
@@ -266,12 +292,23 @@ position moves, and only where there is room for it.
 
 Two details that are load-bearing:
 
-- **The figure track is a fixed 22rem on every row, including rows with no
-  figure.** Sized `auto` it took the figure's own max-width and squeezed
-  P1's summary to about 35 characters; omitted on figure-less rows it let
-  P3 and P8 run the full 914px while their neighbours sat at 300, and §3
-  came out ragged down the right. Fixed and always present, every row's
-  text column is 530px, near the 60ch the summary is capped at anyway.
+- **The figure track is a fixed 22rem, not `auto`.** Sized `auto` it took
+  whatever the figure's own max-width happened to be, which squeezed P1's
+  summary to about 35 characters. Fixed, every row that carries a figure
+  gets the same 478px text column. (Measured, not derived: the sheet caps
+  at 960px but carries 24px of padding a side, so the tracks divide 912.)
+- **A row with no figure drops the track and takes the width back**, keyed
+  off a `has-figure` class on `.project-body` rather than `:has(> figure)`,
+  because the figure carries `Figure.astro`'s scope id rather than the
+  page's and Astro's scoping would have to reach inside the `:has()`. The
+  data already knows; it just has to say so.
+
+  This was the other way round first, with the track reserved on every row
+  so the right edge stayed tidy. It cost SEAOIL a wrapped title and left
+  P3 and P8 with a visibly empty column and nothing explaining it. The
+  summary is capped at 60ch either way, so a sprawling row does not become
+  a 914px line of body copy; what widens is the title and the params table,
+  which is the part that was cramped.
 - **The span is `1 / span 12`, not `1 / -1`.** There is no
   `grid-template-rows` here, so `-1` resolves against an explicit grid that
   does not exist, the figure collapses into the title's row and stretches
@@ -309,12 +346,24 @@ building") above a typed line that cycles through the terms in
 The caret is solid while characters move and blinks only at rest.
 
 Splitting stem from typed line does **not** prevent reflow; they share
-one line box and wrap together. Measured with Geist, every term fills
-three lines from 1440px down to 320px, but the half-typed states are
-shorter, so the block grew and shrank a line every couple of seconds
-and moved the whole page with it. `.tagline` now reserves `min-height:
-3.75em`. Because the settled state is three lines at every width, the
-reserve costs nothing. `prefers-reduced-motion` disables the
+one line box and wrap together. The half-typed states are shorter than
+the settled one, so the block grew and shrank a line every couple of
+seconds and moved the whole page with it. `.tagline` reserves
+`min-height: 3.75em`, three lines, which is the settled height of every
+term while `max-width: 22ch` is what decides the wrap.
+
+**Below about 358px the viewport binds before 22ch does**, the measure
+narrows, and the longest term, "physical and digital ideas.", takes a
+fourth line where the other six still take three. A second reserve,
+`min-height: 5em` under `@media (max-width: 22.4rem)`, covers exactly
+that range. Above it nothing changes and the reserve still costs nothing.
+
+**A new term has to be measured, not reasoned about.** Arithmetic on
+character counts gets this wrong, because the font fits more than 22
+characters into 22ch. Set `rotating` to the one term you are testing: the
+script returns early below two terms, so the page renders it statically
+and a screenshot can show it. That is the way around the rule that the
+typed tagline is frozen in every capture. `prefers-reduced-motion` disables the
 cycle and the blink, leaving the first term static; with JavaScript off
 the first term is server-rendered, so the line is never empty.
 
@@ -517,7 +566,7 @@ wash and failed AA.
 ### The foot of the page, on a phone
 
 Below 40rem the revision block collapses from a three-row `.spec` table to
-one line: `Rev 0.2 · PRELIMINARY · 2026-09-01`. The table is
+one line, `Rev <n> · <status> · <date>`. The table is
 `display: none`, so it leaves the accessibility tree rather than being read
 twice.
 
@@ -533,16 +582,37 @@ not built.
 
 ## Placeholder discipline
 
-The document is stamped `PRELIMINARY` with a revision number while
-content is incomplete, and unfilled values read `TBD`; both native to
-the format, so honesty costs the design nothing. All page content lives
-in `src/data/profile.ts`, with every placeholder marked. All five
-credentials on the page are now confirmed and sourced from the résumé
-of 25 Aug 2026; `IDENTITY.resume.href` is the one field still unfilled.
-Nothing on this site may be invented to fill a gap.
+The document carries a status stamp and a revision number, and unfilled
+values read `TBD`; both native to the format, so honesty costs the design
+nothing. It read `PRELIMINARY` while content was incomplete, which on a
+datasheet means the spec may still change. It reads `DEPLOYED` from 4 Sep,
+because that stopped being true: the credentials are confirmed and
+sourced, the résumé link is real, no row prints a shot spec and no project
+figure is an empty slot.
 
-The blog is the one surface where that rule is currently broken, and
-not by the design: `src/content/blog/` still holds four Astro demo
-posts whose bodies are Lorem ipsum and whose tags, `embedded`,
-`robotics`, `algorithms`, are invented. They are live and syndicated
-through `rss.xml`.
+**The stamp is a claim and has to stay one.** If the page goes back to
+carrying placeholders, it goes back to `PRELIMINARY`. All page content
+lives in `src/data/profile.ts`, with every placeholder marked. Nothing on
+this site may be invented to fill a gap.
+
+The blog was the one surface where that rule was broken, and not by
+the design: `src/content/blog/` holds five Astro demo posts whose bodies
+are Lorem ipsum and whose tags, `embedded`, `robotics`, `algorithms`,
+are invented. They are now `draft: true`, so nothing invented is served.
+The files stay as a working template. `/blog` shows the same dashed
+plate the unshot figures use, which is the format saying a section is
+unpopulated rather than pretending otherwise.
+
+## One value per row may be marked
+
+`params` entries take an optional `strong`. It renders the value bold and
+underlined, and is for the one value in a row that is the row's claim rather
+than its description: SEAOIL's `DEPLOYED IN PRODUCTION` is the only one.
+
+The underline is ink, not accent. Every row ends in a red `Repository` link,
+and a red underline four lines above it reads as a link that does not click.
+Nothing else in the params table is bold or underlined, so ink is already
+enough separation.
+
+**At most one per row, and not on most rows.** The mark stops meaning anything
+if every row has one.

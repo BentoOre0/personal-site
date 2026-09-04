@@ -16,14 +16,29 @@ import anthRopic from '../assets/anth-ropic.png';
 import baybayinGlyph from '../assets/baybayin-glyph.png';
 import cliffordBench from '../assets/clifford-bench.jpg';
 import cliffordWalkStill from '../assets/clifford-walk-still.jpg';
+import colourClusters from '../assets/colour-clusters.png';
 import galaxyStill from '../assets/galaxy-formation-still.png';
 import quadtreeStill from '../assets/quadtree-subdivision-still.png';
 import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
 
+/* The revision block at the foot of every page.
+
+   `rev` steps one tenth on every commit, and the tenths wrap: 0.9 is
+   followed by 1.0, not 0.10. `updated` moves to the commit's own date at
+   the same time, because the footer prints it as "Last revised".
+
+   Bump both in the same commit as the change they describe, never as a
+   follow-up commit of their own. A rev that lags the site is worse than
+   no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '0.2',
-	status: 'PRELIMINARY',
-	updated: '2026-09-01',
+	rev: '2.1',
+	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
+	   still change. It stopped being true: the credentials are confirmed
+	   and sourced, the résumé link is real, no row prints a shot spec and
+	   no project figure is an empty slot. `DEPLOYED` at the owner's
+	   request. */
+	status: 'DEPLOYED',
+	updated: '2026-09-04',
 };
 
 export const IDENTITY = {
@@ -38,6 +53,7 @@ export const IDENTITY = {
 	rotating: [
 		'AI Slop ಠಿ_ಠ...? ',
 		'websites. ',
+		'physical and digital ideas. ',
 		'robots [^3^]. ',
 		'rockets. ',
 		'automation solutions. ',
@@ -147,22 +163,6 @@ export type Credential = {
 };
 export const CREDENTIALS: Credential[] = [
 	{
-		text: 'National Olympiad in Informatics: 4th in the Philippines (2024)',
-		note: 'Top 20 nationally for three consecutive years, 2023–2025',
-		href: 'https://noi.ph/2024-national-eliminations/',
-		/* "National Olympiad in Informatics" means nothing to a reader who
-		   has not competed. NOI.PH's own about page says what it is and what
-		   placing in it leads to, in one sentence each. */
-		sources: [
-			{
-				text: 'The National Olympiad in Informatics – Philippines (NOI.PH) is an annual programming contest for Filipino high school students held by the non-government organization of the same name. Top scorers of this competition will be among the training pool of the Philippines for the International Olympiad in Informatics.',
-				source: 'NOI.PH',
-				href: 'https://noi.ph/about/',
-			},
-		],
-		confirmed: true,
-	},
-	{
 		text: 'BASc Engineering Physics, University of British Columbia',
 		note: '2025–present · 92.3%',
 		/* Most readers do not know what engineering physics is. This is the
@@ -183,6 +183,22 @@ export const CREDENTIALS: Credential[] = [
 			{
 				text: 'Basically a triple major of engineering, physics and cs',
 				source: 'My uncle, UBC Engineering Physics 1999',
+			},
+		],
+		confirmed: true,
+	},
+	{
+		text: 'National Olympiad in Informatics: 4th in the Philippines (2024)',
+		note: 'Top 20 nationally for three consecutive years, 2023–2025',
+		href: 'https://noi.ph/2024-national-eliminations/',
+		/* "National Olympiad in Informatics" means nothing to a reader who
+		   has not competed. NOI.PH's own about page says what it is and what
+		   placing in it leads to, in one sentence each. */
+		sources: [
+			{
+				text: 'The National Olympiad in Informatics – Philippines (NOI.PH) is an annual programming contest for Filipino high school students held by the non-government organization of the same name. Top scorers of this competition will be among the training pool of the Philippines for the International Olympiad in Informatics.',
+				source: 'NOI.PH',
+				href: 'https://noi.ph/about/',
 			},
 		],
 		confirmed: true,
@@ -236,8 +252,24 @@ export const CREDENTIALS: Credential[] = [
 		/* The note says what the award is, not what it says about him, in the
 		   same way the APIO note describes the contest. The href is UBC's own
 		   page for the scholarship, so the "top 5%" is checkable rather than
-		   claimed. */
-		note: 'Awarded 2026 · top 5% of each undergraduate year and faculty',
+		   claimed.
+
+		   "Cash award", because "Awarded 2026" read as a title conferred and
+		   this is a paid award.
+
+		   **The value is deliberately not recorded, here or anywhere in this
+		   repo**, at the owner's request. Do not add it, in the note, in a
+		   quotation, or in a comment. The `href` goes to UBC's page, which
+		   states it, so a reader who wants the figure gets it from UBC.
+
+		   That is also why this row has no `sources` block, unlike the four
+		   competition credentials: UBC's one quotable sentence is built
+		   around the value, and cutting the value out of it would misquote
+		   them rather than trim them. A link is the honest way to carry a
+		   fact we are choosing not to print.
+
+		   "and school" is UBC's own third term and was missing. */
+		note: 'Cash award, 2026 · top 5% of each undergraduate year, faculty and school',
 		href: 'https://students.ubc.ca/finances/awards-scholarships-bursaries/trek-excellence-scholarship/',
 		confirmed: true,
 	},
@@ -334,7 +366,11 @@ export type Plate = {
 export type Project = {
 	title: string;
 	summary: string;
-	params: { key: string; value: string }[];
+	/* `strong` marks the one value in a row that is the row's claim rather
+	   than its description, such as a status that says the thing is live.
+	   At most one per row; the mark stops meaning anything if every row
+	   has one. */
+	params: { key: string; value: string; strong?: boolean }[];
 	/* A figure is either real panels or a specification for a shot not yet
 	   taken. Give it `plates` once the images exist; give it `spec` until
 	   then. `ratio` applies to both, so a slot does not change size when the
@@ -408,30 +444,76 @@ export const PROJECTS: Project[] = [
 		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/personal-site' }],
 	},
 	{
-		title: 'Clifford Spot Micro: Robot Dog',
+		title: 'Clifford: A Mutated Spot Micro',
+		/* Condensed from the owner's own README at Modded-Nova-SM3, which is
+		   the source of record for what is his and what is Chris Locke's.
+
+		   **The old summary had the attribution backwards on the one thing
+		   the project is about.** It read "The mechanical design, gait
+		   development and servo motion engine are his; mine is the firmware
+		   and the physical build". The README says the opposite about the
+		   mechanical side: the DS3218 the design is drawn around was not
+		   sourceable, the RDS3218 he could buy hangs in a U-bracket instead
+		   of bolting through, and so the coax, femur and tibia were redrawn
+		   from scratch around a different way of holding a servo. That
+		   redesign is the project, in his words "not a build of someone
+		   else's kit, and not a design of my own from nothing, but the
+		   engineering in between".
+
+		   **The summary's job is to get the repository opened, not to explain
+		   the robot.** That is the site's own rule, "the site shows and
+		   GitHub tells", and this row had stopped following it: the first
+		   attempt at a correct summary ran 441 characters against a median
+		   of 226, spending the U-bracket, the servo horn and the full
+		   attribution list on a reader who has not clicked anything yet.
+
+		   What survives is the hook: a real constraint, a place, and a
+		   consequence big enough to be worth reading about. The bracket, the
+		   horn, the joint axis and the attribution table are all in the
+		   README, told better and at length. Sending someone there is the
+		   point.
+
+		   Gaits, the servo motion engine and the master/slave architecture
+		   are Chris Locke's. Naming him here plus `open-source fork` in the
+		   role is the credit this length allows; the README carries the
+		   full division of work. */
 		summary:
-			'Firmware and build work on Nova SM3, a Spot-Mini Micro clone quadruped, forked from Chris Locke\'s open-source design. The mechanical design, gait development and servo motion engine are his; mine is the firmware and the physical build.',
+			'A quadruped forked from Chris Locke\'s open-source Nova SM3. The servos it is designed around were not sourceable in the Philippines, so every leg part was redrawn from scratch around the ones that were.',
 		params: [
-			{ key: 'Role', value: 'Firmware and hardware · fork of an open-source design' },
+			/* "Open-source fork", not "fork of an open-source design": same two
+			   facts in half the words, and it puts "open source" where a
+			   reader scanning the params column will hit it. The summary
+			   names Chris Locke and the licence position in full, so this
+			   line only has to flag it. */
+			{ key: 'Role', value: 'Builder and modder · open-source fork' },
 			{ key: 'Stack', value: 'C++ · Teensy 4.0, Arduino Nano, Raspberry Pi (for testing), MPU-6050 IMU · I2C, PWM, bit-banged PS2 remote control · PCB soldering and testing · 3D printing' },
 			{ key: 'Status', value: 'Ongoing' },
 			{ key: 'Year', value: '2026–present' },
 		],
 		titleHref: 'https://github.com/BentoOre0/Modded-Nova-SM3',
 		figure: {
-			caption: 'Clifford walking, and on the bench with its shell off.',
-			/* The slot asked for a still side view. A gait is the thing this
-			   build either does or does not do, so panel (a) is three
-			   seconds cut from the owner's own demo clip, cropped square
-			   from a portrait phone video. Panel (b) is the row's other
-			   half: this is a firmware and hardware project, and the walk
-			   shows none of the hardware. Both are the owner's own. */
+			caption: 'Clifford, the red robot dog.',
+			/* The slot asked for a still side view. One angle cannot carry a
+			   machine this cluttered, so panel (a) is the owner's own
+			   walkaround, cropped square from a portrait phone clip: the
+			   camera circles the standing robot and every side gets a turn.
+			   It runs forward then back, which costs about 300KB over a
+			   one-way cut but spares the reader a jump from the closest
+			   frame to the widest every few seconds. Panel (b) is the row's
+			   other half: the shell comes off and the boards show.
+
+			   The caption names the subject and stops there, at the owner's
+			   direction. It read "Clifford assembled, and on the bench with
+			   its shell off", which described the two panels and got them
+			   wrong. The per-panel detail is the panel labels' job and they
+			   already do it, so a caption repeating them is both redundant
+			   and a second place for the description to drift out of true. */
 			plates: [
 				{
 					still: cliffordWalkStill,
 					motion: '/clifford/walk.webp',
-					alt: 'A red, blue and white 3D-printed quadruped robot stepping towards the camera on a wooden floor beside a desk, its servo-driven legs swinging in turn and its wiring running along the body.',
-					label: 'Walking, seen head-on',
+					alt: 'A red, blue and white 3D-printed quadruped robot standing on a desk, filmed from a camera circling it. Servos sit at each leg joint, a small numeric display faces out of the red body, and wiring loops between the panels.',
+					label: 'Circled once, shell on',
 				},
 				{
 					still: cliffordBench,
@@ -453,7 +535,7 @@ export const PROJECTS: Project[] = [
 		params: [
 			{ key: 'Role', value: 'Sole developer · AI & Automation Engineering intern' },
 			{ key: 'Stack', value: 'Node.js · NestJS · AWS Lambda · Viber API' },
-			{ key: 'Status', value: 'Deployed in production' },
+			{ key: 'Status', value: 'DEPLOYED IN PRODUCTION', strong: true },
 			{ key: 'Year', value: '2025' },
 		],
 		titleHref: 'https://github.com/BentoOre0/JAHY-Seaoil-Work',
@@ -466,7 +548,35 @@ export const PROJECTS: Project[] = [
 			"Integrated avionics for separation tests firing black powder charges through web-app-triggered e-matches. Also built a personal certification rocket for a Class H motor.",
 		params: [
 			{ key: 'Role', value: 'Avionics hardware · test rocket subteam' },
-			{ key: 'Stack', value: 'CAD · 3D printing · wet layup composites · lathe and mill' },
+			/* `Build`, not `Stack`, on this row alone. Every other project
+			   uses `Stack` and should keep it, but this row is CAD, filament,
+			   composites and machine tools, and "stack" is a software word
+			   doing a poor job of covering a lathe. The params table is
+			   per-project by design, `Status` appears on two rows of eight,
+			   so a key that fits the row is the pattern rather than a break
+			   from it. Flip it back to `Stack` if the scannable column
+			   matters more than the precise word.
+
+			   Grouped by layer like Clifford's stack line, not listed flat,
+			   so design, printing, composites and machining each read as one
+			   slot. "Basic" is the owner's own word for the CNC training and
+			   stays.
+
+			   The PHAS machine shop is named because it is where the lathe,
+			   mill and drill press work happened, not because it is a
+			   separate affiliation: it is associated with UBC Rocket, and
+			   this whole row is UBC Rocket. The CNC training is the team's
+			   own and needs no attribution for the same reason. An earlier
+			   version read "basic CNC training at the PHAS machine shop",
+			   which put the training in the wrong place.
+
+			   The separation-test electronics are deliberately not repeated
+			   here: they are the Role and the summary's first sentence. */
+			{
+				key: 'Build',
+				value:
+					'SOLIDWORKS · Bambu Lab FDM in PA6-GF and PA6-CF · wet layup carbon fibre and fibreglass · lathe, mill and drill press at the PHAS machine shop · basic CNC training',
+			},
 			{ key: 'Year', value: '2025–present' },
 		],
 		titleHref: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work/tree/main',
@@ -509,7 +619,12 @@ export const PROJECTS: Project[] = [
 			'A 2D N-body gravity simulator. Force computation uses the Barnes-Hut approximation over a dynamically built quadtree, taking the algorithm from O(n^2) to O(n log n).',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
-			{ key: 'Stack', value: 'Python · Pygame · NumPy' },
+			/* "Physics" is spelled out rather than left implicit in "N-body"
+			   and "gravity". It is the discipline word a reader scans for,
+			   the same reason P6 and P7 say "computer vision", and it is the
+			   one term on this row that ties the project to the degree
+			   leading §1. */
+			{ key: 'Stack', value: 'Python · physics simulation · Pygame · NumPy' },
 			{ key: 'Year', value: '2024' },
 		],
 		titleHref: 'https://github.com/BentoOre0/GravSim',
@@ -546,17 +661,29 @@ export const PROJECTS: Project[] = [
 			"Research comparing convolutional neural networks against support vector classifiers at recognising Baybayin script under rotation and noise. CNNs proved more resilient to distortion; SVCs were more accurate on clean data, where the script's diacritics carry the distinction.",
 		params: [
 			{ key: 'Role', value: 'Sole author · IB Extended Essay' },
-			{ key: 'Stack', value: 'Python · CNN · SVC' },
+			/* The libraries, not the two model families: "CNN vs. SVC" is
+			   already the title and the summary compares them, so repeating
+			   them here spent a row saying nothing new. "Computer vision" is
+			   the discipline term a reader scans for and the page never said
+			   it anywhere. */
+			{
+				key: 'Stack',
+				value:
+					'Python · computer vision · TensorFlow/Keras · scikit-learn · NumPy · Pandas · Pillow · Matplotlib',
+			},
 			{ key: 'Year', value: '2024–2025' },
 		],
 		titleHref: 'https://github.com/BentoOre0/Portfolio/tree/main/SVCvsCNNEXTENDED',
 		figure: {
-			caption: 'A Baybayin character dissolving into noise.',
+			caption: 'The Baybayin "Ba", broken into pixels for computer vision.',
 			/* The slot specified an accuracy chart, 16:9, and this is not that:
 			   it is an illustration of the problem, not a result. The caption
-			   says only what the picture shows, and must keep doing so. The
-			   row's claim about CNNs and SVCs is carried by the summary and by
-			   the linked paper, which is where it was already carried; this
+			   names the character and what is being done to it, at the owner's
+			   direction; it said "dissolving into noise", which the picture
+			   does not show. What it shows is a glyph breaking into a grid of
+			   squares, which is pixelation, and pixelation is the step before
+			   a model sees anything. The row's claim about CNNs and SVCs is
+			   still carried by the summary and by the linked paper; this
 			   figure adds a subject, not evidence.
 
 			   Square, so `ratio` follows the artwork rather than cropping a
@@ -564,7 +691,7 @@ export const PROJECTS: Project[] = [
 			plates: [
 				{
 					still: baybayinGlyph,
-					alt: 'A single heavy black Baybayin letterform on off-white, its right-hand side breaking up into a scatter of small squares that thin out toward the edge of the frame.',
+					alt: 'The Baybayin character "Ba", a single heavy black letterform on off-white, its right-hand side breaking up into a grid of small squares that scatters and thins toward the edge of the frame.',
 				},
 			],
 			ratio: '1 / 1',
@@ -579,18 +706,51 @@ export const PROJECTS: Project[] = [
 	},
 	{
 		title: 'Automated colour analysis for percentage coverage',
+		/* Two revisions, and the second undid half the first. The original
+		   said "an image-segmentation algorithm measuring percentage colour
+		   coverage", which is the category rather than the method. Naming
+		   every step fixed that and overshot: 414 characters against a
+		   median of 214, the whole pipeline spent on a reader who has not
+		   clicked anything.
+
+		   What is left is the one step that is not obvious, pulling each
+		   pixel toward a reference colour before clustering, which is what
+		   makes K-means converge on clean groups. The blur, the resize, the
+		   dropped background cluster and the final ratio are all in the
+		   repository. **The summary exists to get that repository opened.**
+
+		   The reference colours are still not named. The owner's account of
+		   the pull step and the labels that used to be on the figure did not
+		   use the same third colour, so "three reference colours" is what
+		   can be said without guessing at which is right. */
 		summary:
-			'An image-segmentation algorithm measuring percentage colour coverage, cited by the judging panel as the key contribution in a first-place school science competition entry.',
+			'Measures what percentage of a sample has browned, by K-means clustering pixels pulled toward three reference colours. Cited by the judging panel as the key contribution in a first-place school science competition entry.',
 		params: [
 			{ key: 'Role', value: 'Sole developer' },
-			{ key: 'Stack', value: 'Python · image segmentation' },
+			{ key: 'Stack', value: 'Python · computer vision · image segmentation · K-means clustering' },
 			{ key: 'Year', value: '2024' },
 		],
 		titleHref: 'https://github.com/BentoOre0/ColorSegmentationAlgoPercentageCoverage',
 		figure: {
-			caption: 'Segmentation output against the source image.',
-			spec: '16:9 · screenshot or vector',
-			ratio: '16 / 9',
+			/* The legend was painted out of the source PNG at the owner's
+			   request: it labelled the three clusters "White (background)",
+			   "Yellow (fresh)" and "Brown (browned)", and the picture makes
+			   the point without it. The clusters are drawn in their own
+			   colours, so the naming was redundant, and the labels were the
+			   one part of this figure that went illegible when it shrank.
+
+			   That also settles `wide` for this row. The legend's small type
+			   was the only argument ever made for it; there is no small type
+			   left. */
+			caption:
+				'The three colour classes the algorithm separates, drawn as clusters in colour space.',
+			plates: [
+				{
+					still: colourClusters,
+					alt: 'A dark three-dimensional plot of a colour space holding three separated clusters of dots, each ringed by an outline in its own colour: one white, one yellow, one brown. Leader lines run from all three clusters to a photograph of a spotted banana in the corner.',
+				},
+			],
+			ratio: '966 / 627',
 		},
 		links: [
 			{

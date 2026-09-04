@@ -63,15 +63,23 @@ never as a catalog of everything ever attempted.
 - Competitive programming results are a credential, not a project.
 - The Astro starter is gone. `src/pages`, `src/consts.ts` and
   `src/data/profile.ts` now carry real content, sourced from the résumé of
-  25 Aug 2026. **`src/content/blog/` is the exception and is still starter
-  output**: four demo posts with Lorem ipsum bodies and invented tags,
-  live at the public URL and syndicated through `rss.xml`.
+  25 Aug 2026. `src/content/blog/` still holds five demo posts with Lorem
+  ipsum bodies and invented tags, but **they are `draft: true` and no
+  longer reach the site**: not listed on `/blog`, not in the feed, no page
+  built. They are kept as a working template, not published. Nothing
+  invented is live.
 
-**Still unfilled:** `IDENTITY.resume.href` in `src/data/profile.ts` is `'#'`,
-the four project figures are unshot, and `og:image` is still the Astro
-placeholder. These ship as visibly marked placeholders. They are never
+**Still unfilled:** `og:image` is still the Astro placeholder. Every project
+figure slot is now either filled or a deliberate `figure: null`; no row prints
+a shot spec any more. `IDENTITY.resume.href` holds a real Google Drive
+link. Unfilled things ship as visibly marked placeholders. They are never
 invented, never approximated, and never filled with plausible-sounding
 text.
+
+Two projects, SEAOIL and BSM Varsity, carry `figure: null` rather than an
+empty slot. That is a decision, not a gap: neither has an artifact to show
+yet. SEAOIL is the one worth changing, being the strongest row on the page
+and the only one with nothing to look at.
 
 ## Evidence on Hand
 
@@ -103,9 +111,12 @@ credential not listed above.
 
 ## Product Principles
 
-1. **The credential is the hook.** The strongest externally verifiable fact
-   (NOI, 4th in the Philippines, 2024) does the work in the first screen. It is stated
-   plainly, never buried under narrative.
+1. **The credential is the hook.** The externally verifiable facts do the
+   work in the first screen, stated plainly and never buried under
+   narrative. The degree leads, because engineering physics is the one a
+   reader outside the field cannot decode on sight and it carries the
+   sources that explain it. The strongest single fact, NOI 4th in the
+   Philippines, 2024, sits directly under it and needs no explaining.
 2. **Breadth is range, not a catalog.** Every project earns its slot on
    impact. Cutting a weak project strengthens the site more than adding one.
 3. **Show the artifact.** Hardware is proved by photographs, software by

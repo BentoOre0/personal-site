@@ -11,7 +11,16 @@ session logs and no longer read as a handoff.
 ## Where things stand
 
 **Live at https://jeremyaidanhernandezyu.vercel.app**, deployed from
-`master` at `db43178`. `npm run build` passes, **12 pages**.
+`master`, currently `396e297`, which merged PR #6. `npm run build` passes,
+**12 pages**.
+
+**The 3 Sep work is live.** PR #6 took it to `master` on 4 Sep. Everything
+under "What shipped on 3 Sep" and "3 Sep, second half" below is in
+production.
+
+**The 4 Sep work is not.** It sits at the head of `feat/newlayoutandmedia`
+with a Vercel preview of its own, and `master` is ahead of that branch by
+two merge commits that carry no content the branch is missing.
 
 The site is a **component datasheet**: title block, credentials as a
 features list, a details table, projects as numbered figures, a revision
@@ -58,37 +67,50 @@ content lives in `src/data/profile.ts`.
 TREK Excellence Scholarship and the UBC Computer Science TA appointment.
 He gave both facts and the September 2026 start date; nothing else about
 them was assumed. The TREK note describes the award rather than him, and
-links UBC's own page for it, so the "top 5%" is checkable. **The résumé
+links UBC's own page for it, so the "top 5%" is checkable. It reads "Cash
+award" as of 4 Sep, because "Awarded 2026" read as a title conferred and
+the thing is money. **The amount is deliberately not on the page**, at the
+owner's request; UBC's page states it and the link goes there. **The résumé
 is now behind the site by two credentials.**
 
-**Not real:** the four Astro demo posts in `src/content/blog/` are Lorem
-ipsum with invented tags, live and RSS-syndicated. **This is deliberate,
-see Decisions.**
+**Not real, and no longer served:** the five Astro demo posts in
+`src/content/blog/` are Lorem ipsum with invented tags. They are
+`draft: true` as of 4 Sep, so they are unlisted, unfed and unbuilt. The
+files stay. **See Decisions.**
 
 **Still unfilled:**
 
-1. **The résumé link.** `IDENTITY.resume.href` is `'#'`. The only dead
-   link on the site and plausibly the highest-intent recruiter click.
-   Owner intended a Google Drive share link; if the PDF goes in
-   `public/` instead, note the repo is public and history is permanent.
-2. **Two figures.** P6 Baybayin and P7 colour analysis. Every empty slot
-   prints the exact shot it needs, so they can be produced to spec. Owner's
-   hardware photos exist but are unedited; a Drive folder is linked from the
-   UBC Rocket row.
-3. **`og:image`** is still `blog-placeholder-1.jpg`, so sharing any link
-   shows Astro stock art.
-4. `REVISION.status` still reads `PRELIMINARY`.
+1. **`og:image`** is still `blog-placeholder-1.jpg`, so sharing any link
+   shows Astro stock art. This is the highest-value unfilled item on the
+   list: discovery here is almost entirely a pasted link, and the unfurl
+   card is a first impression the page never gets to correct.
+2. **`REVISION` is no longer stale, and this item is closed.** `rev` and
+   `updated` move on every commit from 4 Sep, the rev by one tenth with 0.9
+   wrapping to 1.0. `status` was `PRELIMINARY` and is now `DEPLOYED`, at the
+   owner's request: the credentials are confirmed, the résumé link is real,
+   no row prints a shot spec and no figure is an empty slot, so the
+   preliminary claim had stopped being true. See `docs/build-and-ship.md`.
+3. **The résumé link is filled**, a real Google Drive share link. Drive mints
+   a new file id on every re-upload, so it will need repointing whenever the
+   PDF is replaced.
+
+Two rows carry `figure: null` on purpose rather than an empty slot: SEAOIL
+and BSM Varsity. SEAOIL is the one worth filling, being the strongest row on
+the page and the only one with nothing to look at.
 
 **Never invent anything to fill these.** That rule has held throughout.
 
 ## Decisions worth not relitigating
 
-- **The demo posts stay. The owner wants a template blog.** He said so
-  directly ("i want a template blog why did you kill it") after a test
-  briefly made them 404. The critique rated them the site's biggest
-  problem and that assessment stands on the merits, but it is decided.
-  Do not propose deleting them again. `/blog` has a real empty state if
-  he ever does clear them.
+- **The demo post files stay. They are hidden, not deleted.** The owner
+  asked on 4 Sep to "HIDE the template stuff on blog page", saying he was
+  about to write a real post. They are `draft: true`: off `/blog`, off the
+  tag archives, out of the feed, no page built, files untouched.
+  This is the settled shape of an earlier decision, not a reversal of it.
+  He had said "i want a template blog why did you kill it" after a test
+  briefly made the posts 404, and what he wanted was the template kept.
+  `draft` keeps it. **Do not delete the files**, and do not put them back
+  on the site without being asked.
 - **Accent `#e51b23`**, sampled from the red X in the owner's sketch and
   darkened to clear 4.5:1. It is 4.65:1 on paper and paints links, the
   rotating term, contact glyphs, the revision stamp and every tag chip,
@@ -206,6 +228,437 @@ them. The rule is in `CLAUDE.md` under Scope.
 Links pointing at other repositories can move without warning. If one breaks,
 repoint it here.
 
+## 4 Sep
+
+**Fig. 2's animated panel was replaced and P2 was renamed.** Both at the
+owner's direction. The title is now `Clifford: A Mutated Spot Micro`, was
+`Clifford Spot Micro: Robot Dog`.
+
+The old panel (a) was three seconds of the robot walking, cut from
+`Clifford demo.MOV`. The new one is `~/Downloads/clifford-walkaround.gif`, a
+handheld orbit of the machine standing on a desk. **The subject changed, so the
+words had to.** The caption, the panel label and the alt text all described a
+gait that is no longer on screen, and the rationale comment in `profile.ts`
+argued for showing a gait at all. All four were rewritten. If a clip is ever
+swapped again, those four are the things to check, not just the file path.
+
+**What was done to the source**, 480x640, 36 frames, 3.6s at 10fps:
+
+- **Frames 30 to 35 dropped.** The camera pushes in until the machine stops
+  being legible, and a hand enters at 34.
+- **Cropped square at y=80**, the centre. y=0 cuts the legs off in the opening
+  frames, y=160 cuts the head off in the middle ones.
+- **Resized to 384px** from 480. See `docs/adding-a-project.md`; 865KB became
+  641KB and the slot is 288px wide.
+- **Bounced, 0 to 29 then 28 to 1.** An orbit has no natural loop point. 58
+  frames, 5.8s.
+- **The still is frame 24**, picked by ranking every kept frame on edge
+  variance and then looking at the top few. It is the sharpest frame that is
+  also a legible three-quarter view. Frame 0 scores badly and is visibly
+  motion-blurred, which matters because the still is what reduced-motion
+  readers get instead of the animation, not just a poster.
+
+`public/clifford/walk.webp` is 641,434 bytes, 58 `ANMF` chunks, 384x384.
+`src/assets/clifford-walk-still.jpg` is 51,835 bytes at 480x480.
+
+**Page weight went up about 104KB** against the clip it replaced, for nearly
+double the runtime and no loop cut. It was already on the open-findings list at
+3.96 MiB and this does not help.
+
+**Fig. 7 is filled.** The source is `~/Pictures/Screenshots/bananastuff.png`, a
+colour-space plot with the three classes the algorithm separates, each cluster
+hulled and labelled, with leader lines to a banana. It ships at its native
+`966 / 627` rather than the `16:9` the old slot asked for, because the legend,
+the axes and the banana each sit hard against a different edge and any crop
+loses one.
+
+**It was shipped `wide: true` and that was reverted within the hour.** The
+argument for wide was the legend: in the 18rem column its text lands near 6px,
+and the legend is the part that says what the three clusters mean. The argument
+against, which won, is that it was simply too big. A `wide` figure takes
+`grid-row: auto`, so it spans the sheet under the title and pushes the summary
+below it, breaking the text-left artifact-right rhythm every other row keeps
+and leaving the right half of the row empty. It also made P7 the largest figure
+on the page, against the "most impressive first" ordering in `CLAUDE.md`.
+
+**So `wide` still has no user on this page.** It remains built and documented.
+The lesson is that legibility of a diagram's own labels is not enough reason on
+its own; the row has to be worth the width. Anyone tempted to reach for it
+should look at this reversal first.
+
+Filling this slot also closed the open finding that P7 printed its internal
+shot spec to visitors: no row carries `spec` any more.
+
+**`params` entries take an optional `strong`.** Set on SEAOIL's
+`DEPLOYED IN PRODUCTION` at the owner's request. It renders bold with an
+underline, and the underline is **ink, not accent, on purpose**: the row's
+`Repository` link sits four lines below it in red with a red underline, and an
+accented underline in the same row reads as a link that does not click. Nothing
+else in the params table is bold or underlined, so ink already separates it.
+At most one per row; the mark stops meaning anything if every row has one.
+
+**P4's stack row is now `Build`, and carries the real list.** It said "CAD ·
+3D printing · wet layup composites · lathe and mill", which understated it.
+It now names SOLIDWORKS, Bambu Lab FDM in PA6-GF and PA6-CF, wet layup carbon
+fibre and fibreglass, lathe, mill and drill press at the PHAS machine shop,
+and basic CNC training. All the owner's own words; "basic" is his and stays.
+
+**PHAS is associated with UBC Rocket, not a separate affiliation.** The shop
+is named because it is where the lathe, mill and drill press work happened,
+and the whole row is UBC Rocket regardless. The CNC training is the team's own
+and needs no attribution for the same reason. A first pass read "basic CNC
+training at the PHAS machine shop", which put the training in the wrong place.
+
+**The key changed on that row alone.** Every other project keeps `Stack`.
+"Stack" is a software word and was doing a poor job of covering a lathe. The
+params table is per-project by design, `Status` appears on two rows of eight,
+so a key that fits the row is the pattern rather than a break from it. The
+cost is that a reader scanning down the `Stack` column skips this row; flip it
+back if that matters more. The separation-test electronics are not repeated in
+`Build`: they are the Role and the summary's first sentence.
+
+**Fig. 6's caption said something the picture does not show.** It read "A
+Baybayin character dissolving into noise". The artwork is a glyph breaking
+into a grid of squares, which is pixelation, not noise. It now reads 'The
+Baybayin "Ba", broken into pixels for computer vision', naming the character
+on the owner's say-so and the step the picture illustrates. The alt text was
+updated with it, since it also said "scatter of small squares" without naming
+the character.
+
+**Fig. 2's caption described its two panels and got them wrong.** It read
+"Clifford assembled, and on the bench with its shell off". At the owner's
+direction it is now just "Clifford, the red robot dog." The panel labels
+already carry the per-panel detail, so a caption repeating them was both
+redundant and a second place for the description to drift out of true. Worth
+generalising: **a caption names the subject, the panel labels say what each
+panel shows.**
+
+**P6 and P7 both say "computer vision" now**, asked for directly. The term
+appeared nowhere on the site, and it is the discipline word a reader scans
+for.
+
+- P6's stack was "Python · CNN · SVC", which repeated the title. It is now
+  the actual libraries, the owner's own list: Python, computer vision,
+  TensorFlow/Keras, scikit-learn, NumPy, Pandas, Pillow, Matplotlib.
+- P7's summary said "an image-segmentation algorithm measuring percentage
+  colour coverage", which is the category rather than the method. It now
+  names the steps, from the owner's own account of the pipeline: blur, pull
+  each pixel toward the nearest reference colour, K-means into three, drop
+  the cluster nearest white as dish and background, report the ratio of the
+  two left. Its stack gained computer vision and K-means clustering.
+
+**The blog has a real post.** `hello-im-jeremy.md`, at `/blog/hello-im-jeremy/`.
+**The words are the owner's own, pasted in full and unedited**, minus the `#
+Hello, I'm Jeremy` heading, which the layout already renders from the title.
+
+Two things in it are not his and are his to change:
+
+- **The `description`**, "Who I am, how I learn, and the gaps I am trying to
+  close next." It is a one-sentence condensation of his own text, but he did
+  not write that sentence. It shows on `/blog`, in search results and in the
+  feed.
+- **No `tags`.** Tags are free text and inventing categories for someone's
+  own writing is the same rule as inventing anything else. With none, the
+  filter bar does not render and no tag archives are built, which is correct
+  rather than broken.
+
+**The banner is `src/assets/hello-banner.png`**, made from his
+`stuff for my blog.png`: the yellow sparkles recoloured to the site accent
+`#e51b23`, the white margin trimmed, and the result padded to 2:1 on white,
+which is the ratio `BlogPost.astro` builds a hero at. The recolour works off
+the blue channel to get the stroke's coverage, so the antialiasing survives
+and the black line art is untouched.
+
+**It is laid out as a question and answer**, asked for after the first
+version shipped as unbroken prose. Eight `h2`s, each one a question the
+paragraph under it already answers; **his prose is byte-identical**, the
+headings are inserted between paragraphs and nothing else moved. It closes
+with "(The one and only) Jeremy Aidan Hernandez Yu", his line, set in italic
+so it reads as a sign-off rather than another paragraph.
+
+**The questions were accent red for about two minutes and are now ink.**
+Asked for, then reversed on sight: "i dont linke the red for the questions
+remove it". Recorded in `DESIGN.md` as the fifth thing tried in the accent
+and taken back out, because the lesson is a real one. The heading passed
+every check the credential note failed, being 20px, underline-free, alone on
+its line and nowhere near a link, and it still was not worth doing. **A mark
+that survives the argument can lose on sight.**
+
+**Tagged `about-me`**, his tag, not an invented one. That is the first real
+tag on the site, so `/blog` now renders the filter bar and
+`/blog/tags/about-me/` is built. Five pages.
+
+**"What are you trying to learn next?" and "What kind of work are you looking
+for?" are one section**, "What are you looking for next?", at his request.
+The knowledge gaps and the kind of work he wants were the same answer split
+over two questions.
+
+The build is back to four pages and the feed has one item. The demo posts
+stay `draft: true`.
+
+**One thing found and not changed:** `BlogPost.astro` renders the hero with
+`loading="lazy"`, because that is Astro's default and nothing overrides it.
+A hero at the very top of the page is the LCP element and should be eager;
+the homepage avatar already sets `loading="eager"` for this reason. It is
+one attribute. It also made a headless capture come back with an empty
+frame where the banner should be, which is worth knowing before someone
+reports it as a broken image.
+
+**A seventh rotator term, "physical and digital ideas.", placed after
+"websites."** Asked for. It is the longest term the tagline has carried and
+it broke the height reserve on narrow phones, which is the bug that was
+fixed on 1 Sep and is easy to reintroduce.
+
+`.tagline` reserves `min-height: 3.75em`, exactly three lines, so the block
+cannot change height as the rotator types. That holds while `max-width: 22ch`
+is what decides the wrap. Below about 358px the viewport binds first, the
+measure narrows, and this term takes a **fourth** line where the other six
+still take three. On a 320px phone the hero grew about 35px every time the
+rotator reached it.
+
+Fixed with `@media (max-width: 22.4rem) { .tagline { min-height: 5em } }`,
+four lines reserved exactly where four are needed. Above that width nothing
+changes.
+
+**Measured on the real page, not computed.** My arithmetic said the term
+would break at every width and it was wrong; the font fits more than 22
+characters into 22ch. 320 and 340 wrap to four lines; 360, 375 and 384 wrap
+identically to each other and to 390, which is 22ch binding rather than the
+viewport.
+
+**The trick worth reusing:** the rotator script returns early at
+`terms.length < 2`, so setting `rotating` to a single term makes the real
+page render that term statically, and a screenshot can then show it. That
+is the way around "the typed tagline is frozen in every capture". Proof the
+reserve holds is two renders at 320px, one long term and one short, diffed:
+they differ only in rows 429 to 485, the tagline's own text, and are
+pixel-identical below it.
+
+**Add another term and this has to be measured again.** Anything much past
+21 characters will need the same check.
+
+**Both long summaries were cut, and the rule behind it is worth keeping.**
+The owner's words: "i want people to open the repo". P2 ran 441 characters
+and P7 ran 414, against a median of 214. Both were correct and both were
+doing the repository's job.
+
+- P2 is now 202: a quadruped forked from Locke's Nova SM3, the servos were
+  not sourceable in the Philippines, every leg part redrawn from scratch.
+  The U-bracket, the servo horn, the joint axis and the attribution table
+  are in his README, told better and at length.
+- P7 is now 219: what it measures, and the one step that is not obvious,
+  pulling each pixel toward a reference colour before clustering. The blur,
+  the resize, the dropped background cluster and the final ratio are in the
+  repository.
+
+**The rule: a summary exists to get the repository opened, not to explain
+the project.** That is "the site shows and GitHub tells" from 3 Sep applied
+to prose rather than to pictures. Both rows had drifted off it in the course
+of being made accurate, which is the failure mode to watch: correcting a
+summary tends to lengthen it, and length is the thing that stops it working.
+
+Longest is now SEAOIL at 305, which `DESIGN.md` already names as the one
+row allowed three sentences. Median 210.
+
+**P2's role is "Builder and modder", and its summary had the attribution
+backwards.** The role change was asked for directly. The summary correction
+was not, but the owner supplied the Modded-Nova-SM3 README as context and it
+contradicts what the site was saying about the half of the project that
+matters most.
+
+The old summary: "The mechanical design, gait development and servo motion
+engine are his; mine is the firmware and the physical build." The README says
+the mechanical design is **his own**: the DS3218 the Nova SM3 is drawn around
+was not sourceable in the Philippines, the RDS3218 he could buy hangs in a
+U-bracket instead of bolting through four sets of holes, and so the coax,
+femur and tibia were redrawn from scratch around a different way of holding a
+servo. In his words, "not a build of someone else's kit, and not a design of
+my own from nothing, but the engineering in between".
+
+The site was crediting Chris Locke for the one thing that is not his and
+underselling the owner accordingly. Gaits, the servo motion engine and the
+master/slave architecture **are** Locke's and are still named as his.
+
+**The README has more the row is not using yet**, and it is the owner's to
+decide on:
+
+- The servo specifications, 8x RDS3218 at 20 kg.cm and 4x RDS3235 at 35 kg.cm,
+  all 270 degrees. The whole project turns on servos and the stack line does
+  not mention one.
+- The electronics work: the v5.2b wiring pictogram revised with a short
+  corrected, and power distribution reworked from cascaded converters to
+  parallel.
+- The firmware v6.0 restructure: 6,390 lines in one file, 85 undocumented
+  protocol strings, an 812-line function, two real bugs found.
+- **Status is the honest question.** The row says "Ongoing". The README is
+  blunter: walking does not work, because `NovaServos.h` still holds Locke's
+  `servoHome[]` and `servoLimit[]` values byte-identical to v5.1, which are
+  measurements of his servos in his geometry. "Ongoing" is not false, and
+  going further is a judgement call about his own work, so it was left alone.
+
+**Fig. 7's legend is painted out of the source PNG.** It labelled the three
+clusters "White (background)", "Yellow (fresh)" and "Brown (browned)". Asked
+for directly: the clusters are drawn in their own colours and the picture
+carries the concept without naming them.
+
+Done in `src/assets/colour-clusters.png` itself, not in CSS: the box sat over
+plain ground in the top-right corner with no plot content behind it. The
+ground is not flat, it has a gentle 2D gradient, so a flat fill would have
+shown. The patch fits a plane to every background pixel in the image, then
+per row interpolates a correction between clean strips either side of the box
+and adds grain matched to the measured background noise, sd about 0.85. No
+seam at 1:1. The original is in git; the file also got 59KB smaller.
+
+**This settles `wide` for that row.** The legend's small type was the only
+argument ever made for a wide figure on this site, and there is no small type
+left. Recorded in `docs/adding-a-project.md`.
+
+The alt text was rewritten with it, since it described the labels.
+
+**The reference colours are deliberately not named in P7.** The owner's
+account of the pull step and the labels on the figure do not agree on the
+third colour, so "three reference colours" is what can be said without
+guessing. Ask him before naming them.
+
+**The TREK scholarship note says it is money.** "Awarded 2026 · top 5% of
+each undergraduate year and faculty" read as a title conferred rather than a
+paid award, which the owner flagged. It is now "Cash award, 2026 · top 5% of
+each undergraduate year, faculty and school".
+
+**The value stays off the page and out of this repo**, asked for directly and
+then again after it had been written into a code comment and into this file.
+Do not record it: not in the note, not as a quotation, not in a comment. The
+credential already links to UBC's page, which states it, so a reader who wants
+the figure gets it from UBC rather than from him.
+
+That is also why the row has no `sources` block, unlike the four competition
+credentials: UBC's one quotable sentence is built around the value, and
+cutting the value out of it would misquote them rather than trim them. A link
+is the honest way to carry a fact the page is choosing not to print. "and
+school" is UBC's third term and had been missing.
+
+**The Astro demo posts are hidden.** Asked for directly: "can you HIDE the
+template stuff on blog page / I will write a blog post in a bit."
+
+Done with a new `draft` frontmatter flag rather than by deleting anything,
+because the standing decision is that the template stays. All five demo posts
+carry `draft: true`. The files are otherwise untouched.
+
+The filter lives in one place, `getSortedPosts()` in `src/lib/posts.ts`, which
+was already the single definition of "every post" for `/blog`, the tag archives
+and the feed. **`blog/[...slug].astro` was the one surface not going through
+it**, calling `getCollection('blog')` directly, which would have left every
+draft publicly reachable at its URL while it sat unlisted everywhere else. It
+now uses the helper, so a draft has no page built and its URL 404s. That was
+the only real trap in the change.
+
+Everything else fell out for free, because the empty states already existed:
+`TagFilter` renders nothing at zero tags, `/blog` already had a dashed "No
+entries" plate, and `@astrojs/rss` emits a valid feed with no items. The one
+fix needed was on the index, which rendered the plate *and* an empty `<ol>`;
+it is now one or the other, since an empty list still announces itself to a
+screen reader directly under a plate saying the section is unpopulated.
+
+The build went from **12 pages to 3**: homepage, `/blog`, 404. Five post pages
+and four tag archives stopped being built. The sitemap is down to two URLs and
+`rss.xml` has no items. **All of that reverses the moment a real post lands**,
+which is the point.
+
+`scripts/shots.sh` captured `/blog/first-post/`, which now 404s. That line is
+commented out with the slug to restore.
+
+**Not done, and deliberately:** the empty-state copy was left alone. It reads
+"This section is unpopulated. Entries appear here newest first, each with a
+title, a one-line summary, its tags and a date," which is the format's own
+voice and is true.
+
+## 3 Sep, second half
+
+Committed on `feat/newlayoutandmedia` as `cbff832`. All of it at the owner's
+direction, in a fast back-and-forth; several of these reverse a decision taken
+an hour earlier in the same session, and the reversals are the useful part.
+
+**§3 was rebuilt around the idea that the site shows and GitHub tells.**
+
+- **Summaries cut 38%**, 2,646 characters to 1,639, by deletion only, no
+  sentence rewritten. The rule is recorded in `DESIGN.md`: a row with an image
+  gets two sentences, a row without a figure may run longer because nothing
+  else carries the claim. **SEAOIL is the named exception** and keeps its
+  three.
+- **Text left, artifact right above 60rem.** A three-column grid, designator
+  gutter, text, figure. This was built once before as a float and reverted
+  because a float put the figure after the summary in source order; grid
+  placement has no such cost and the DOM order is untouched.
+- **Figures grade like the type**, 22rem for the lead row and 18rem below it.
+- **Row padding halved**, 48px to 24px. `.section` uses 48px, so two rows
+  inside one list had been sitting exactly as far apart as two whole sections.
+- **`.params` runs to 38rem** instead of 24rem. Free on a phone: the cap was
+  already inoperative at 390px.
+- **Figure numbers now equal project numbers.** See `docs/adding-a-project.md`.
+
+**The accent was widened, then pulled most of the way back**, and the
+end state is documented in `DESIGN.md` under Palette. Briefly it painted every
+designator, every caption and panel label, every credential note, and the
+section-head hairlines. Four things came back out, each for a different reason,
+and the surviving test is: **the accent marks what you can click, plus a small
+closed set of stamps and controls.** Prose never gets it.
+
+The instructive failure was the credential notes. Seven red lines that are not
+links, sitting directly under five credential titles that are, in black. A
+reader who learned "red means clickable" from the nav was being taught the
+opposite by §1.
+
+**Links are underlined at rest now**, 45% accent, full on hover and focus. The
+old treatment was a gradient sweep living inside `@media (hover: hover)`, so a
+phone drew every underline and a laptop drew none. A side effect worth keeping:
+credentials with no `href` now visibly differ from those with one.
+
+**NOI is the lead credential**, promoted above the BASc entry, which puts it
+above the 844px fold on a 390px phone. `PRODUCT.md` principle 1 names it as
+the hook and it had been second.
+
+**The mobile footer collapses** below 40rem to one line. It was 325px of
+metadata with no media queries, spelling over four labelled rows the same Rev
+and date the hero already carries.
+
+**Three figures filled:** Fig. 2 (P2 Clifford) is a two-panel cycling window,
+an animated WebP plus a bench photo with the shell off (the animated panel was
+a walk clip on the day; it was replaced by a walkaround on 4 Sep);
+Fig. 6 (P6 Baybayin) is a supplied glyph illustration. Note what Fig. 6 is
+**not**: the slot specified an accuracy chart, and an illustration is a
+subject, not evidence. The caption says only what the picture shows, and must
+keep doing so. The row's claim is carried by the summary and the linked paper.
+
+### An /impeccable critique ran against this state
+
+Snapshot at `.impeccable/critique/2026-09-03T11-59-52Z__src-pages-index-astro.md`,
+scored **22/32**. Detector: zero findings on the page and on `src/components`.
+Contrast claims in `DESIGN.md` verified true. No browser overlay was available,
+so that step was skipped rather than faked.
+
+Open findings nobody has acted on:
+
+1. **Cycling figures print `Fig. N` twice**, adjacently: the panel label then
+   the caption, both starting "Fig. 2", the caption half-describing a panel
+   that is not currently visible. It reads as a duplication bug. The fix is
+   for `<figcaption>` to carry only the bare handle when `cycle` is set.
+2. **No pause control** on the 8s panel swaps. `prefers-reduced-motion` is a
+   preference, not the WCAG 2.2.2 mechanism.
+3. **`rotating[2]` is `'robots [^3^]. '`** and renders literally in the hero.
+   That bracket is a leaked citation marker, not a joke. The owner was told
+   and has left it; do not change it without asking.
+4. **P8 has nothing clickable**, `links: []` and no `titleHref`.
+5. **P7's dashed plate prints its internal shot spec** to visitors.
+6. **Breakpoints are 12 `max-width` against 1 `min-width`**, measured, against
+   a pinned brief saying mobile is the default case.
+7. **Page weight is 3.96 MiB** across 38 files, 1.7MB of it animation. All
+   five largest assets are lazy, so first paint is far lighter, but the total
+   is large for a phone skim.
+
+The owner was asked about the two P0s the critique raised, the "AI Slop"
+default tagline term and "This website" holding the P1 slot, and **said both
+are deliberate. Do not re-raise them.**
+
 ## What shipped on 2 Sep
 
 Uncommitted at time of writing, at the owner's instruction.
@@ -294,6 +747,10 @@ shipped here is the technical half:
   owner chose this over leaving them indexed, when told they are byte-
   identical boilerplate on thousands of sites. **This is not a reversal of
   "the demo posts stay."** They stay.
+  **Superseded on 4 Sep**: the same posts are now `draft: true` as well, so
+  they are not published at all and `noindex` is moot on them. `noindex`
+  itself is unchanged and still the right flag for a real post that should
+  be readable but not found.
 - The sitemap now filters those out. `astro.config.mjs` reads the frontmatter
   off disk, because content collections are not available in that file.
   Listing a `noindex` URL in a sitemap is a contradiction Search Console

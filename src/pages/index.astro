@@ -196,7 +196,9 @@ PROJECTS.forEach((p, i) => {
 											{p.params.map((param) => (
 												<tr>
 													<th scope="row">{param.key}</th>
-													<td class:list={[{ tbd: param.value === 'TBD' }]}>{param.value}</td>
+													<td class:list={[{ tbd: param.value === 'TBD', strong: param.strong }]}>
+														{param.value}
+													</td>
 												</tr>
 											))}
 										</tbody>
@@ -311,6 +313,25 @@ PROJECTS.forEach((p, i) => {
 		margin: var(--s-4) 0 0 0;
 		max-width: 22ch;
 		min-height: 3.75em;
+	}
+
+	/* The reserve above is three lines, which is what every term needs while
+	   `max-width: 22ch` is the thing deciding the wrap. Below about 358px the
+	   viewport binds first, the measure narrows, and the longest term,
+	   "physical and digital ideas.", takes a fourth line where the other six
+	   still take three. That is the height change the reserve exists to
+	   prevent, so the reserve grows to four lines exactly where it has to.
+
+	   Measured on the real page, not computed: 320 and 340 wrap to four
+	   lines, 360, 375 and 384 wrap identically to each other and to 390,
+	   which is 22ch binding rather than the viewport. Add a longer term and
+	   this has to be measured again; the way to do it is to set `rotating`
+	   to that one term, since the script leaves the text static below two
+	   terms and a screenshot can then show it. */
+	@media (max-width: 22.4rem) {
+		.tagline {
+			min-height: 5em;
+		}
 	}
 
 	/* The typed term is the tail of the sentence, so characters are only
@@ -475,13 +496,32 @@ PROJECTS.forEach((p, i) => {
 		}
 	}
 
+	/* Three tiers, and every one of them a step the scale already has:
+	   28px, 20px, 16px. There is nothing between 20 and 28 to reach for,
+	   so the second tier is made by dropping the tail to 16 rather than by
+	   inventing a 24. The tail is body size, which is the floor a list of
+	   facts should sit at, not below it.
+
+	   Keyed to position, like the project list's descent, so reordering
+	   `CREDENTIALS` reorders the emphasis with it. A rank written into the
+	   data is a number somebody has to remember to move, and the one thing
+	   this page does everywhere else is derive the numbering. */
 	.feature-text {
+		font-size: var(--t-base);
+		line-height: 1.45;
+	}
+
+	/* Second tier. Engineering physics leads because a reader outside the
+	   field does not know what it is and it carries the sources that say;
+	   the NOI placing is the strongest fact on the page and sits directly
+	   under it, a step down but clear of everything below. */
+	.features li:nth-child(2) .feature-text {
 		font-size: var(--t-md);
 		line-height: 1.35;
 		letter-spacing: -0.01em;
 	}
 
-	/* The list is ordered most-impressive-first, so the lead entry is the
+	/* Lead. The list is ordered most-impressive-first, so this entry is the
 	   hook PRODUCT.md names. It was set identically to the last credential;
 	   the project list has carried graded legibility all along and this one
 	   never got it. */
@@ -520,8 +560,16 @@ PROJECTS.forEach((p, i) => {
 		}
 	}
 
+	/* An unconfirmed credential is knocked back to the tail size and muted
+	   whatever position it holds, so a fact still being checked cannot lead
+	   the section. Same specificity as the two tier rules above and it
+	   comes after them on purpose; moving it earlier silently lets an
+	   unconfirmed entry render at 28px. Dormant today, every credential is
+	   confirmed. */
 	.features li.unconfirmed .feature-text {
 		font-size: var(--t-base);
+		line-height: 1.45;
+		letter-spacing: normal;
 		color: var(--muted);
 	}
 

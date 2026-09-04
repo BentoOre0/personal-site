@@ -105,13 +105,20 @@ you find yourself writing one of these out, something is wrong:
 | What | Derived from |
 |---|---|
 | `P1`, `P2`, `P3`… project designators | position in `PROJECTS` |
-| `Fig. 1`, `Fig. 2`… figure numbers | order of the projects that *have* a figure |
+| `Fig. 1`, `Fig. 2`… figure numbers | the project's own number, so `Fig. 4` sits in P4 |
 | `§1`, `§2`, `§3` section numbers | position in the `SECTIONS` list in `index.astro` |
 | Which project title is largest | position in `PROJECTS`, the list compresses as it descends |
 
 Reorder the data and the numbers follow. This matters because the alternative,
 typing them in, fails silently: the build passes, the page looks fine, and you
-have two `§3`s or a `Fig. 4` that follows `Fig. 2`.
+have two `§3`s, or a caption pointing at the picture above it.
+
+A figure number matching its row is also why the sequence has gaps. P3 and P8
+carry no figure, so there is no `Fig. 3` and no `Fig. 8`. That is correct: a
+missing number says "that row has no picture", which is visible one row up. It
+used to be a separate running count with no gaps, and the cost was that P4 read
+`Fig. 3` and P7 read `Fig. 6`, drifting further apart with every figure-less
+row added above.
 
 The same principle covers anything two pages both need:
 

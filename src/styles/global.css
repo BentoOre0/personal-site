@@ -257,6 +257,21 @@ a {
 	letter-spacing: 0.06em;
 }
 
+/* A status that is the row's claim, not its description. The table is
+   monospace and the value itself is typed in capitals in `profile.ts`, not
+   transformed here, so weight alone barely registers against its neighbours;
+   the underline is what does the work. Deliberately ink and not
+   accent: the row's Repository link sits four lines below with red text and a
+   red underline, and an accented underline here would read as a link that
+   does not click. Nothing else in the table is bold or underlined, so ink is
+   already enough separation. */
+.spec td.strong {
+	font-weight: 600;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+}
+
 .sr-only {
 	position: absolute;
 	width: 1px;
