@@ -111,9 +111,12 @@ credential not listed above.
 
 ## Product Principles
 
-1. **The credential is the hook.** The strongest externally verifiable fact
-   (NOI, 4th in the Philippines, 2024) does the work in the first screen. It is stated
-   plainly, never buried under narrative.
+1. **The credential is the hook.** The externally verifiable facts do the
+   work in the first screen, stated plainly and never buried under
+   narrative. The degree leads, because engineering physics is the one a
+   reader outside the field cannot decode on sight and it carries the
+   sources that explain it. The strongest single fact, NOI 4th in the
+   Philippines, 2024, sits directly under it and needs no explaining.
 2. **Breadth is range, not a catalog.** Every project earns its slot on
    impact. Cutting a weak project strengthens the site more than adding one.
 3. **Show the artifact.** Hardware is proved by photographs, software by

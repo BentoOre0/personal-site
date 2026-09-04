@@ -222,10 +222,27 @@ Body measure caps at 68ch; summaries at 60ch.
 
 ### Graded legibility
 
-The credential list leads with one step above the rest: the first entry
-is set at 28px, the others at 20px. The list is ordered most-impressive
-first, so the lead entry is the hook PRODUCT.md names; it had been set
-identically to the last credential.
+The credential list runs three tiers: the first entry at 28px, the second
+at 20px, the rest at 16px. The list is ordered most-impressive first, so
+the lead entry is the hook PRODUCT.md names; it had been set identically
+to the last credential.
+
+**Engineering physics leads, and the NOI placing sits directly under it.**
+The degree is the fact a reader outside the field cannot decode on sight,
+and it is the entry that carries sources saying what the program is, so
+it gets the position where someone will actually read it. The NOI placing
+is the strongest single fact on the page and does not need explaining, so
+it takes the second tier: a step below the lead and clear of everything
+under it.
+
+Every tier is a step the scale already has. There is nothing between 20px
+and 28px, so the second tier was made by dropping the tail to 16px rather
+than by inventing a 24px step. 16px is body size, which is the floor a
+list of facts sits at, not below it.
+
+All three are keyed to position rather than to a rank in the data, the
+same way the project list descends, so reordering `CREDENTIALS` reorders
+the emphasis with it.
 
 The project list compresses as it descends: the lead entry is set at 28px
 with full-strength body copy, the middle entries at 20px in muted, the

@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '0.6',
+	rev: '0.7',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -157,22 +157,6 @@ export type Credential = {
 };
 export const CREDENTIALS: Credential[] = [
 	{
-		text: 'National Olympiad in Informatics: 4th in the Philippines (2024)',
-		note: 'Top 20 nationally for three consecutive years, 2023–2025',
-		href: 'https://noi.ph/2024-national-eliminations/',
-		/* "National Olympiad in Informatics" means nothing to a reader who
-		   has not competed. NOI.PH's own about page says what it is and what
-		   placing in it leads to, in one sentence each. */
-		sources: [
-			{
-				text: 'The National Olympiad in Informatics – Philippines (NOI.PH) is an annual programming contest for Filipino high school students held by the non-government organization of the same name. Top scorers of this competition will be among the training pool of the Philippines for the International Olympiad in Informatics.',
-				source: 'NOI.PH',
-				href: 'https://noi.ph/about/',
-			},
-		],
-		confirmed: true,
-	},
-	{
 		text: 'BASc Engineering Physics, University of British Columbia',
 		note: '2025–present · 92.3%',
 		/* Most readers do not know what engineering physics is. This is the
@@ -193,6 +177,22 @@ export const CREDENTIALS: Credential[] = [
 			{
 				text: 'Basically a triple major of engineering, physics and cs',
 				source: 'My uncle, UBC Engineering Physics 1999',
+			},
+		],
+		confirmed: true,
+	},
+	{
+		text: 'National Olympiad in Informatics: 4th in the Philippines (2024)',
+		note: 'Top 20 nationally for three consecutive years, 2023–2025',
+		href: 'https://noi.ph/2024-national-eliminations/',
+		/* "National Olympiad in Informatics" means nothing to a reader who
+		   has not competed. NOI.PH's own about page says what it is and what
+		   placing in it leads to, in one sentence each. */
+		sources: [
+			{
+				text: 'The National Olympiad in Informatics – Philippines (NOI.PH) is an annual programming contest for Filipino high school students held by the non-government organization of the same name. Top scorers of this competition will be among the training pool of the Philippines for the International Olympiad in Informatics.',
+				source: 'NOI.PH',
+				href: 'https://noi.ph/about/',
 			},
 		],
 		confirmed: true,
