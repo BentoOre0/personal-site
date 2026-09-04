@@ -60,7 +60,19 @@ const { title, description, pubDate, updatedDate, heroImage, tags, noindex } = A
 				{
 					heroImage && (
 						<figure class="hero">
-							<Image width={1440} height={720} src={heroImage} alt="" />
+							{/* Eager and high priority. This is the first thing under the
+							    masthead and the LCP element on a post, and Astro's default
+							    is `loading="lazy"`, which asks the browser to wait for a
+							    picture that is already on screen. The homepage avatar is
+							    eager for the same reason. */}
+							<Image
+								width={1440}
+								height={720}
+								src={heroImage}
+								alt=""
+								loading="eager"
+								fetchpriority="high"
+							/>
 							<figcaption>
 								<span class="designator">Fig. 1</span> {title}
 							</figcaption>

@@ -553,11 +553,20 @@ PROJECTS.forEach((p, i) => {
 	}
 
 	@media (hover: hover) {
-		.feature-text a:hover,
-		.feature-text a:focus-visible {
+		.feature-text a:hover {
 			color: var(--accent);
 			text-decoration-color: var(--accent);
 		}
+	}
+
+	/* Outside the hover query on purpose. Keyboard focus has nothing to do
+	   with whether the device has a pointer, and nesting it in `hover: hover`
+	   dropped this treatment for anyone tabbing on a touch device with a
+	   keyboard. The global 2px outline still fired, so it was never
+	   invisible, only inconsistent. */
+	.feature-text a:focus-visible {
+		color: var(--accent);
+		text-decoration-color: var(--accent);
 	}
 
 	/* An unconfirmed credential is knocked back to the tail size and muted
@@ -851,11 +860,20 @@ PROJECTS.forEach((p, i) => {
 	}
 
 	@media (hover: hover) {
-		.project h3 a:hover,
-		.project h3 a:focus-visible {
+		.project h3 a:hover {
 			color: var(--accent);
 			text-decoration-color: var(--accent);
 		}
+	}
+
+	/* Outside the hover query on purpose. Keyboard focus has nothing to do
+	   with whether the device has a pointer, and nesting it in `hover: hover`
+	   dropped this treatment for anyone tabbing on a touch device with a
+	   keyboard. The global 2px outline still fired, so it was never
+	   invisible, only inconsistent. */
+	.project h3 a:focus-visible {
+		color: var(--accent);
+		text-decoration-color: var(--accent);
 	}
 
 	@media (prefers-reduced-motion: reduce) {

@@ -8,8 +8,10 @@
   Here the host comes from `site` in `astro.config.mjs`, the same source as
   every canonical URL on the site.
 
-  Nothing is disallowed. The site is eleven static pages and there is
-  nothing on it a crawler should not read. Pages that should stay out of
+  Nothing is disallowed. The site is a handful of static pages and there
+  is nothing on it a crawler should not read. (It said "eleven" until the
+  demo posts became drafts; a counted number in a comment goes stale, so
+  this one no longer counts.) Pages that should stay out of
   the index carry `noindex` on the page itself, which is the directive
   that actually removes a URL; `Disallow` only stops the crawl, and a
   blocked URL can still be listed from someone else's link.

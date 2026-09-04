@@ -365,6 +365,34 @@ for.
   the cluster nearest white as dish and background, report the ratio of the
   two left. Its stack gained computer vision and K-means clustering.
 
+**Code review, 4 Sep, five findings, all fixed.**
+
+1. **185KB of images were shipping for pages that 404.** The five hidden
+   demo posts are drafts and build no page, but their `heroImage`
+   frontmatter still resolved through the content schema's `image()`, so
+   Astro emitted six optimised JPEGs anyway. `heroImage` is now commented
+   out in each draft, with a note saying why and to uncomment when the post
+   is real. Six assets and 189KB became one and 21KB. The one that remains
+   is `blog-placeholder-about.jpg`, an inline body image in the markdown
+   style guide; it stays because breaking that path would make the example
+   wrong, and it is 21KB.
+2. **The post hero was `loading="lazy"`.** It is the LCP element on a post
+   page and Astro's default was asking the browser to defer a picture that
+   is already on screen. Now `eager` with `fetchpriority="high"`, matching
+   the homepage avatar.
+3. **`:focus-visible` was nested inside `@media (hover: hover)`** in two
+   places, so anyone tabbing on a touch device with a keyboard lost the
+   accent treatment. Never invisible, the global 2px outline still fired,
+   but focus has nothing to do with pointer capability. Both unnested.
+4. **The sitemap's `noindex` filter listed five paths that are never
+   built.** It now skips drafts, so the list describes reality.
+5. **A comment in `robots.txt.ts` said "eleven static pages".** It is five.
+   Replaced with a phrase that cannot go stale.
+
+**Not fixed, and deliberately:** the post's `og:image` is the 291KB banner
+PNG. It is well inside every scraper limit and PNG is the safe format for a
+meta tag, so the bytes buy compatibility.
+
 **The blog has a real post.** `hello-im-jeremy.md`, at `/blog/hello-im-jeremy/`.
 **The words are the owner's own, pasted in full and unedited**, minus the `#
 Hello, I'm Jeremy` heading, which the layout already renders from the title.

@@ -22,6 +22,10 @@ const noindexedPostPaths = readdirSync(BLOG_DIR)
 	.filter((file) => {
 		const source = readFileSync(new URL(file, BLOG_DIR), 'utf-8');
 		const frontmatter = source.split('---')[1] ?? '';
+		/* A draft builds no page, so it can never appear in the sitemap and
+		   listing it here would be filtering something that is not there. The
+		   two flags are independent and `draft` is the stronger one. */
+		if (/^draft:\s*true\s*$/m.test(frontmatter)) return false;
 		return /^noindex:\s*true\s*$/m.test(frontmatter);
 	})
 	.map((file) => `/blog/${file.replace(/\.(md|mdx)$/, '')}/`);
