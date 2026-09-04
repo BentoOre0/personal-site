@@ -266,12 +266,23 @@ position moves, and only where there is room for it.
 
 Two details that are load-bearing:
 
-- **The figure track is a fixed 22rem on every row, including rows with no
-  figure.** Sized `auto` it took the figure's own max-width and squeezed
-  P1's summary to about 35 characters; omitted on figure-less rows it let
-  P3 and P8 run the full 914px while their neighbours sat at 300, and §3
-  came out ragged down the right. Fixed and always present, every row's
-  text column is 530px, near the 60ch the summary is capped at anyway.
+- **The figure track is a fixed 22rem, not `auto`.** Sized `auto` it took
+  whatever the figure's own max-width happened to be, which squeezed P1's
+  summary to about 35 characters. Fixed, every row that carries a figure
+  gets the same 478px text column. (Measured, not derived: the sheet caps
+  at 960px but carries 24px of padding a side, so the tracks divide 912.)
+- **A row with no figure drops the track and takes the width back**, keyed
+  off a `has-figure` class on `.project-body` rather than `:has(> figure)`,
+  because the figure carries `Figure.astro`'s scope id rather than the
+  page's and Astro's scoping would have to reach inside the `:has()`. The
+  data already knows; it just has to say so.
+
+  This was the other way round first, with the track reserved on every row
+  so the right edge stayed tidy. It cost SEAOIL a wrapped title and left
+  P3 and P8 with a visibly empty column and nothing explaining it. The
+  summary is capped at 60ch either way, so a sprawling row does not become
+  a 914px line of body copy; what widens is the title and the params table,
+  which is the part that was cramped.
 - **The span is `1 / span 12`, not `1 / -1`.** There is no
   `grid-template-rows` here, so `-1` resolves against an explicit grid that
   does not exist, the figure collapses into the title's row and stretches
@@ -517,7 +528,7 @@ wash and failed AA.
 ### The foot of the page, on a phone
 
 Below 40rem the revision block collapses from a three-row `.spec` table to
-one line: `Rev 0.2 · PRELIMINARY · 2026-09-01`. The table is
+one line, `Rev <n> · <status> · <date>`. The table is
 `display: none`, so it leaves the accessibility tree rather than being read
 twice.
 
@@ -546,3 +557,17 @@ not by the design: `src/content/blog/` still holds four Astro demo
 posts whose bodies are Lorem ipsum and whose tags, `embedded`,
 `robotics`, `algorithms`, are invented. They are live and syndicated
 through `rss.xml`.
+
+## One value per row may be marked
+
+`params` entries take an optional `strong`. It renders the value bold and
+underlined, and is for the one value in a row that is the row's claim rather
+than its description: SEAOIL's `DEPLOYED IN PRODUCTION` is the only one.
+
+The underline is ink, not accent. Every row ends in a red `Repository` link,
+and a red underline four lines above it reads as a link that does not click.
+Nothing else in the params table is bold or underlined, so ink is already
+enough separation.
+
+**At most one per row, and not on most rows.** The mark stops meaning anything
+if every row has one.

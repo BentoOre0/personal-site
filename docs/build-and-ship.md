@@ -26,8 +26,31 @@ broken import. That is the entire point of the rule in `CLAUDE.md`:
 ## The loop
 
 ```
-edit → look at it in dev → npm run build → screenshot → commit
+edit → look at it in dev → npm run build → screenshot → bump the rev → commit
 ```
+
+### Bump the rev on every commit
+
+`REVISION` in `src/data/profile.ts` is printed at the foot of every page, and
+it moves with the site:
+
+```ts
+export const REVISION = {
+	rev: '0.3',
+	status: 'PRELIMINARY',
+	updated: '2026-09-04',
+};
+```
+
+- **`rev` steps one tenth per commit**, and the tenths wrap. `0.8`, `0.9`,
+  `1.0`, `1.1`. Never `0.10`; it is a revision number, not a decimal.
+- **`updated` becomes the date of the commit.** The footer labels it "Last
+  revised", so a date that lags is a printed untruth.
+- **Both go in the same commit as the change they describe**, not a tidying
+  commit afterwards. A rev bumped on its own dates nothing.
+
+`status` is separate and does not move on its own. It reads `PRELIMINARY`
+until the owner decides the document is not preliminary any more.
 
 **Screenshot before you judge any visual change:**
 
@@ -49,6 +72,82 @@ Two things about these captures, both learned the hard way:
   illegible when it is fine on a real device.
 - **The typed tagline is frozen** in every capture. Screenshots can never tell
   you anything about the rotating word.
+
+---
+
+## Testing on localhost
+
+Two local servers, and they are not interchangeable.
+
+| | What it serves | Use it for |
+|---|---|---|
+| `npm run dev` | live, unbuilt, on `:4321` | editing; it reloads as you type |
+| `npm run preview` | the real `dist/`, on `:4321` | **checking anything for real** |
+
+**`npm run dev` injects the Astro dev toolbar**, a dark floating pill at the
+bottom of the page. It is not in production, it is not in `dist/`, and it will
+sit in the bottom of every screenshot you take against the dev server. Anything
+you intend to *look at and judge* should be served from the build:
+
+```bash
+npm run build && npm run preview     # then open http://localhost:4321
+```
+
+If you want a plain static server with nothing injected at all, any will do:
+
+```bash
+cd dist && python3 -m http.server 8899     # then http://localhost:8899
+```
+
+Stop it with `pkill -f "http.server 8899"` when you are done. `dist/` is
+gitignored, so nothing here can end up committed.
+
+### Checking a specific viewport by hand
+
+`./scripts/shots.sh` covers 390 / 768 / 1440. When you want one width, or a
+width it does not cover, drive Chrome directly:
+
+```bash
+google-chrome --headless --disable-gpu --no-sandbox --hide-scrollbars \
+  --force-device-scale-factor=2 --virtual-time-budget=25000 \
+  --window-size=390,8000 --screenshot=/tmp/shot.png http://localhost:4321/
+```
+
+**Three things will silently give you a wrong picture.** Each of these has
+already cost real time on this project:
+
+1. **`--virtual-time-budget` under about 5000 captures the loading screen**,
+   not the page. The loader holds 1400ms and slides for 480ms, but virtual
+   time is consumed by everything on the page, so a tall window with many
+   images needs far more than the wall-clock figure suggests. 25000 is safe.
+   A capture that comes back as a near-black rectangle is this.
+2. **Chrome clips a screenshot at 16384 device pixels.** At
+   `--force-device-scale-factor=2` that is 8192 CSS pixels, and the homepage
+   is taller than that on a phone. The capture is cut off with no warning and
+   no error, and **the cut looks exactly like the end of the document**. If
+   you are measuring page height or checking the footer, capture at scale
+   factor 1.
+3. **A tall `--window-size` inflates the page.** The viewport height is
+   whatever you asked for, so anything sized against the viewport stretches
+   to fill it, and "how tall is the page" becomes unanswerable from the
+   image. Do not measure document height from a tall screenshot; it is only
+   good for looking at things.
+
+### Checking reduced motion
+
+Four things on this site move on their own: the typed tagline, the loading
+screen, the quote bar at the foot of `/blog`, and any figure that animates or
+cycles. All four are supposed to stop under `prefers-reduced-motion`.
+
+```bash
+google-chrome --headless --force-prefers-reduced-motion ...
+```
+
+The way to prove a thing is *actually* still is to capture it twice at
+different `--virtual-time-budget` values and compare the two files. If they are
+byte-identical, nothing moved. This works for the quote bar and for cycling
+figures. **It does not work for the typed tagline**, which virtual time freezes
+either way, so a screenshot can never tell you anything about the rotator.
 
 ---
 
@@ -81,6 +180,7 @@ it lands there, it is the live site.
 
 - [ ] `npm run build` passes
 - [ ] You looked at the phone screenshot
+- [ ] **`REVISION.rev` is bumped one tenth and `REVISION.updated` is today**
 - [ ] **No secrets in the diff.** Read what you are committing:
       `git diff --staged`
 - [ ] No real personal data that does not belong on a public site

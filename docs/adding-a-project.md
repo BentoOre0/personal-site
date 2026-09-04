@@ -118,12 +118,19 @@ linked title. Position carried a meaning nothing announced.
 Now the title can point at a write-up while the row below lists the repository
 and the paper, which is the common case once a project has a post about it.
 
-### On phones the title link is always underlined
+### Linked titles are underlined at rest, everywhere
 
-Underlines that only appear on hover are invisible on a touch screen, so under
-`@media (hover: none)` every project-title link draws its underline
-permanently. That is why some titles look underlined on your phone and not on
-your laptop. It is deliberate, so a thumb can tell which titles are tappable.
+A project title with a `titleHref` draws a faint underline at 45% accent on
+every device, going to full red on hover and keyboard focus. A title without
+one draws nothing. **The underline is how a reader tells the two apart**, so
+whether you give a row a `titleHref` is a visible decision, not just a
+behavioural one.
+
+This used to appear only on hover, with a `@media (hover: none)` rule adding it
+back for touch. The effect was that a phone showed every underline and a laptop
+showed none: on a desktop, every project title was plain black text with no cue
+that it went anywhere. Clicking through to a repository is the thing this page
+is trying to cause, so it is now drawn at rest and hover only confirms it.
 
 ---
 
@@ -211,6 +218,95 @@ useless for anything dense: GravSim's simulations are fields of specks, which at
 Every panel of a window sits in the same grid cell, so the figure is as tall as
 its tallest panel and the swap cannot move the page. Panel (a) is visible
 without JavaScript.
+
+### The two kinds of movement, and how they combine
+
+A figure can move in two completely independent ways. Mixing them up is the
+usual source of confusion, so: **one is a panel that is itself animated, the
+other is the figure swapping between panels.** A figure can do either, both, or
+neither.
+
+| | What moves | Set by | Runs on |
+|---|---|---|---|
+| **An animated panel** | the picture itself | `motion` on a plate | nothing; the browser plays the file |
+| **A cycling window** | which panel is showing | `cycle: true` on the figure | a small script, 8s hold, 500ms fade |
+
+**Fig. 2 (Clifford) uses both at once.** Panel (a) is an animated WebP of a
+camera circling the robot, panel (b) is a still bench photograph, and the figure
+cycles between them every 8 seconds. So panel (a) is playing its own animation
+*while* the window is counting down to swap it out.
+
+#### An animated panel
+
+```ts
+{
+  still: cliffordWalkStill,           // imported from src/assets
+  motion: '/clifford/walk.webp',      // URL into public/
+  alt: '…',
+}
+```
+
+This renders a `<picture>` with two sources:
+
+```html
+<picture>
+  <source media="(prefers-reduced-motion: no-preference)" srcset="/clifford/walk.webp">
+  <img src="…still…" alt="…" loading="lazy">
+</picture>
+```
+
+Three things follow from that shape, and all three are the point:
+
+- **The browser chooses, not a script.** A reader who has asked for less motion
+  matches the `<source>`'s media query never, so they get the `<img>`, the
+  still. There is no JavaScript in this path at all.
+- **They never download the animation.** The `<source>` is not selected, so the
+  bytes are never fetched. This is why `still` is required rather than a
+  nicety: leave it out and a reduced-motion reader gets nothing.
+- **It is lazy.** `loading="lazy"` on the `<img>` governs the whole `<picture>`,
+  so a figure far down the page costs nothing until someone scrolls to it. The
+  animations are the heaviest things on the site, and most readers never fetch
+  them.
+
+#### A cycling window
+
+```ts
+figure: {
+  plates: [ {...}, {...} ],
+  ratio: '1 / 1',
+  cycle: true,
+}
+```
+
+Without `cycle`, two or more plates is a **collage**: side by side where there
+is room, stacked where there is not. With `cycle`, it is a **window**: one at a
+time, swapping every 8 seconds with a 500ms cross-fade.
+
+- **Every panel sits in the same grid cell**, so the figure is as tall as its
+  tallest panel and a swap cannot move the page.
+- **Panel (a) carries `is-on` from the server**, so with no JavaScript, or
+  under `prefers-reduced-motion` where the script deliberately never starts,
+  the figure is a plain static picture rather than an empty box.
+- **Panels letter off the figure number**: `Fig. 2(a)`, `Fig. 2(b)`, derived
+  from position like everything else.
+
+Choose window over collage by **how much each picture needs to be seen**. In a
+30rem figure a two-panel collage gives each about 232px. That is fine for a
+poster and useless for anything dense, which is why GravSim's two simulations
+are a window: a field of specks at 232px is texture, not a simulation.
+
+#### What a reader with reduced motion actually gets
+
+Both mechanisms stop, by different routes, and the result is a completely
+static figure showing panel (a)'s still:
+
+- the animation, because the `<source>`'s media query does not match
+- the cycling, because the script checks
+  `matchMedia('(prefers-reduced-motion: reduce)')` and returns before starting
+
+To confirm it, capture twice at different `--virtual-time-budget` values with
+`--force-prefers-reduced-motion` and check the two files are identical. See
+[build-and-ship.md](build-and-ship.md).
 
 ### Animated GIFs
 
@@ -308,10 +404,29 @@ frames instead. Check `ANMF` afterwards either way.
 
 **Video is heavier than a rendered animation.** Handheld footage changes every
 pixel of every frame, so inter-frame compression has almost nothing to work
-with. Clifford's three seconds are 525KB at 640px and 10fps, against GravSim's
-478KB for four seconds of a sparse simulation. Cut the clip to the seconds that
-carry the point, drop the frame rate to 10 or 12, and check the size before
-committing it.
+with. Clifford's walkaround is 641KB for 5.8 seconds at 384px and 10fps,
+against GravSim's 478KB for four seconds of a sparse simulation. Cut the clip
+to the seconds that carry the point, drop the frame rate to 10 or 12, and check
+the size before committing it.
+
+**Resolution is the cheapest thing to give up on video.** Clifford's clip
+started at 480px square and came to 865KB. At 384px, which still covers the
+288px slot at 1.33x, the same frames cost 641KB. The source is a phone GIF that
+has already been through 256-colour quantisation, so there was no detail at
+480px to protect.
+
+**A pan does not loop; make it bounce.** A gait cycle ends where it began, so a
+walk can be cut anywhere and looped. A camera orbit ends somewhere else
+entirely, and looping it puts a hard cut between the closest frame and the
+widest one every few seconds. Writing the frames out forward and then backward
+costs roughly double the bytes and removes the cut:
+
+```python
+seq = list(range(0, 30)) + list(range(28, 0, -1))
+```
+
+Both endpoints are dropped from the return leg, or they play twice and the
+bounce stutters.
 
 ### Wide figures, for diagrams only
 
@@ -322,6 +437,15 @@ Use it for diagrams and nothing else. A diagram carries type of its own, and
 labelled boxes, which at 30rem land at about five pixels each. The figure is
 then decoration and the reader learns nothing. A photograph never needs this,
 because it has no small type to lose.
+
+**Being a diagram is necessary, not sufficient.** Nothing on the page uses
+`wide` today. Fig. 7 shipped with it and lost it the same hour: the legend was
+readable at full sheet and illegible at 18rem, and it still came out too big.
+A wide figure takes `grid-row: auto`, so it spans the sheet under the title and
+pushes the summary below it, which breaks the text-left artifact-right rhythm
+every other row keeps and leaves the right half of the row empty. It also made
+the largest figure on the page belong to P7. Before reaching for `wide`, ask
+whether the row deserves the width, not just whether the labels are small.
 
 ### If you want a dummy photo and want to see the size
 
@@ -346,9 +470,15 @@ leave `spec` in place; it is ignored when `plates` is set.
 A dashed border means unshot, a solid one means done. Real and specified figures
 can sit side by side in the list with no problem.
 
-Figure numbers, like designators, count themselves. `Fig. 1`, `Fig. 2` … are
-assigned in order across the projects that *have* a figure, skipping the ones
-that do not. You never write a figure number by hand.
+Figure numbers, like designators, count themselves, and **a figure carries the
+number of the row it sits in**: `Fig. 4` is in P4. You never write one by hand.
+
+So the sequence has gaps wherever a project has no figure. P3 and P8 have none,
+so the page runs `Fig. 1, 2, 4, 5, 6, 7`. That is deliberate. It used to be a
+separate count that skipped the gaps and stayed contiguous, which meant P4 was
+labelled `Fig. 3` and P7 was labelled `Fig. 6`, drifting one further apart with
+every figure-less row inserted above. A gap explains itself, because the row
+with no picture is right there; a mismatch between `P4` and `Fig. 3` does not.
 
 ---
 

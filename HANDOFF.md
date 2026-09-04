@@ -11,7 +11,12 @@ session logs and no longer read as a handoff.
 ## Where things stand
 
 **Live at https://jeremyaidanhernandezyu.vercel.app**, deployed from
-`master` at `db43178`. `npm run build` passes, **12 pages**.
+`master`, currently `f163393`. `npm run build` passes, **12 pages**.
+
+**The 3 and 4 Sep work is not live.** It sits at the head of
+`feat/newlayoutandmedia`, unmerged, and has a Vercel preview URL of its own.
+Everything under "4 Sep", "What shipped on 3 Sep" and "3 Sep, second half"
+below is on that branch only.
 
 The site is a **component datasheet**: title block, credentials as a
 features list, a details table, projects as numbered figures, a revision
@@ -67,17 +72,21 @@ see Decisions.**
 
 **Still unfilled:**
 
-1. **The résumé link.** `IDENTITY.resume.href` is `'#'`. The only dead
-   link on the site and plausibly the highest-intent recruiter click.
-   Owner intended a Google Drive share link; if the PDF goes in
-   `public/` instead, note the repo is public and history is permanent.
-2. **Two figures.** P6 Baybayin and P7 colour analysis. Every empty slot
-   prints the exact shot it needs, so they can be produced to spec. Owner's
-   hardware photos exist but are unedited; a Drive folder is linked from the
-   UBC Rocket row.
-3. **`og:image`** is still `blog-placeholder-1.jpg`, so sharing any link
-   shows Astro stock art.
-4. `REVISION.status` still reads `PRELIMINARY`.
+1. **`og:image`** is still `blog-placeholder-1.jpg`, so sharing any link
+   shows Astro stock art. This is the highest-value unfilled item on the
+   list: discovery here is almost entirely a pasted link, and the unfurl
+   card is a first impression the page never gets to correct.
+2. `REVISION.status` still reads `PRELIMINARY`. That one is the owner's to
+   change. `REVISION.rev` and `REVISION.updated` are no longer stale: from
+   4 Sep they move on every commit, the rev by one tenth with 0.9 wrapping
+   to 1.0. See `docs/build-and-ship.md`.
+3. **The résumé link is filled**, a real Google Drive share link. Drive mints
+   a new file id on every re-upload, so it will need repointing whenever the
+   PDF is replaced.
+
+Two rows carry `figure: null` on purpose rather than an empty slot: SEAOIL
+and BSM Varsity. SEAOIL is the one worth filling, being the strongest row on
+the page and the only one with nothing to look at.
 
 **Never invent anything to fill these.** That rule has held throughout.
 
@@ -205,6 +214,162 @@ them. The rule is in `CLAUDE.md` under Scope.
 
 Links pointing at other repositories can move without warning. If one breaks,
 repoint it here.
+
+## 4 Sep
+
+**Fig. 2's animated panel was replaced and P2 was renamed.** Both at the
+owner's direction. The title is now `Clifford: A Mutated Spot Micro`, was
+`Clifford Spot Micro: Robot Dog`.
+
+The old panel (a) was three seconds of the robot walking, cut from
+`Clifford demo.MOV`. The new one is `~/Downloads/clifford-walkaround.gif`, a
+handheld orbit of the machine standing on a desk. **The subject changed, so the
+words had to.** The caption, the panel label and the alt text all described a
+gait that is no longer on screen, and the rationale comment in `profile.ts`
+argued for showing a gait at all. All four were rewritten. If a clip is ever
+swapped again, those four are the things to check, not just the file path.
+
+**What was done to the source**, 480x640, 36 frames, 3.6s at 10fps:
+
+- **Frames 30 to 35 dropped.** The camera pushes in until the machine stops
+  being legible, and a hand enters at 34.
+- **Cropped square at y=80**, the centre. y=0 cuts the legs off in the opening
+  frames, y=160 cuts the head off in the middle ones.
+- **Resized to 384px** from 480. See `docs/adding-a-project.md`; 865KB became
+  641KB and the slot is 288px wide.
+- **Bounced, 0 to 29 then 28 to 1.** An orbit has no natural loop point. 58
+  frames, 5.8s.
+- **The still is frame 24**, picked by ranking every kept frame on edge
+  variance and then looking at the top few. It is the sharpest frame that is
+  also a legible three-quarter view. Frame 0 scores badly and is visibly
+  motion-blurred, which matters because the still is what reduced-motion
+  readers get instead of the animation, not just a poster.
+
+`public/clifford/walk.webp` is 641,434 bytes, 58 `ANMF` chunks, 384x384.
+`src/assets/clifford-walk-still.jpg` is 51,835 bytes at 480x480.
+
+**Page weight went up about 104KB** against the clip it replaced, for nearly
+double the runtime and no loop cut. It was already on the open-findings list at
+3.96 MiB and this does not help.
+
+**Fig. 7 is filled.** The source is `~/Pictures/Screenshots/bananastuff.png`, a
+colour-space plot with the three classes the algorithm separates, each cluster
+hulled and labelled, with leader lines to a banana. It ships at its native
+`966 / 627` rather than the `16:9` the old slot asked for, because the legend,
+the axes and the banana each sit hard against a different edge and any crop
+loses one.
+
+**It was shipped `wide: true` and that was reverted within the hour.** The
+argument for wide was the legend: in the 18rem column its text lands near 6px,
+and the legend is the part that says what the three clusters mean. The argument
+against, which won, is that it was simply too big. A `wide` figure takes
+`grid-row: auto`, so it spans the sheet under the title and pushes the summary
+below it, breaking the text-left artifact-right rhythm every other row keeps
+and leaving the right half of the row empty. It also made P7 the largest figure
+on the page, against the "most impressive first" ordering in `CLAUDE.md`.
+
+**So `wide` still has no user on this page.** It remains built and documented.
+The lesson is that legibility of a diagram's own labels is not enough reason on
+its own; the row has to be worth the width. Anyone tempted to reach for it
+should look at this reversal first.
+
+Filling this slot also closed the open finding that P7 printed its internal
+shot spec to visitors: no row carries `spec` any more.
+
+**`params` entries take an optional `strong`.** Set on SEAOIL's
+`DEPLOYED IN PRODUCTION` at the owner's request. It renders bold with an
+underline, and the underline is **ink, not accent, on purpose**: the row's
+`Repository` link sits four lines below it in red with a red underline, and an
+accented underline in the same row reads as a link that does not click. Nothing
+else in the params table is bold or underlined, so ink already separates it.
+At most one per row; the mark stops meaning anything if every row has one.
+
+## 3 Sep, second half
+
+Committed on `feat/newlayoutandmedia` as `cbff832`. All of it at the owner's
+direction, in a fast back-and-forth; several of these reverse a decision taken
+an hour earlier in the same session, and the reversals are the useful part.
+
+**§3 was rebuilt around the idea that the site shows and GitHub tells.**
+
+- **Summaries cut 38%**, 2,646 characters to 1,639, by deletion only, no
+  sentence rewritten. The rule is recorded in `DESIGN.md`: a row with an image
+  gets two sentences, a row without a figure may run longer because nothing
+  else carries the claim. **SEAOIL is the named exception** and keeps its
+  three.
+- **Text left, artifact right above 60rem.** A three-column grid, designator
+  gutter, text, figure. This was built once before as a float and reverted
+  because a float put the figure after the summary in source order; grid
+  placement has no such cost and the DOM order is untouched.
+- **Figures grade like the type**, 22rem for the lead row and 18rem below it.
+- **Row padding halved**, 48px to 24px. `.section` uses 48px, so two rows
+  inside one list had been sitting exactly as far apart as two whole sections.
+- **`.params` runs to 38rem** instead of 24rem. Free on a phone: the cap was
+  already inoperative at 390px.
+- **Figure numbers now equal project numbers.** See `docs/adding-a-project.md`.
+
+**The accent was widened, then pulled most of the way back**, and the
+end state is documented in `DESIGN.md` under Palette. Briefly it painted every
+designator, every caption and panel label, every credential note, and the
+section-head hairlines. Four things came back out, each for a different reason,
+and the surviving test is: **the accent marks what you can click, plus a small
+closed set of stamps and controls.** Prose never gets it.
+
+The instructive failure was the credential notes. Seven red lines that are not
+links, sitting directly under five credential titles that are, in black. A
+reader who learned "red means clickable" from the nav was being taught the
+opposite by §1.
+
+**Links are underlined at rest now**, 45% accent, full on hover and focus. The
+old treatment was a gradient sweep living inside `@media (hover: hover)`, so a
+phone drew every underline and a laptop drew none. A side effect worth keeping:
+credentials with no `href` now visibly differ from those with one.
+
+**NOI is the lead credential**, promoted above the BASc entry, which puts it
+above the 844px fold on a 390px phone. `PRODUCT.md` principle 1 names it as
+the hook and it had been second.
+
+**The mobile footer collapses** below 40rem to one line. It was 325px of
+metadata with no media queries, spelling over four labelled rows the same Rev
+and date the hero already carries.
+
+**Three figures filled:** Fig. 2 (P2 Clifford) is a two-panel cycling window,
+an animated WebP plus a bench photo with the shell off (the animated panel was
+a walk clip on the day; it was replaced by a walkaround on 4 Sep);
+Fig. 6 (P6 Baybayin) is a supplied glyph illustration. Note what Fig. 6 is
+**not**: the slot specified an accuracy chart, and an illustration is a
+subject, not evidence. The caption says only what the picture shows, and must
+keep doing so. The row's claim is carried by the summary and the linked paper.
+
+### An /impeccable critique ran against this state
+
+Snapshot at `.impeccable/critique/2026-09-03T11-59-52Z__src-pages-index-astro.md`,
+scored **22/32**. Detector: zero findings on the page and on `src/components`.
+Contrast claims in `DESIGN.md` verified true. No browser overlay was available,
+so that step was skipped rather than faked.
+
+Open findings nobody has acted on:
+
+1. **Cycling figures print `Fig. N` twice**, adjacently: the panel label then
+   the caption, both starting "Fig. 2", the caption half-describing a panel
+   that is not currently visible. It reads as a duplication bug. The fix is
+   for `<figcaption>` to carry only the bare handle when `cycle` is set.
+2. **No pause control** on the 8s panel swaps. `prefers-reduced-motion` is a
+   preference, not the WCAG 2.2.2 mechanism.
+3. **`rotating[2]` is `'robots [^3^]. '`** and renders literally in the hero.
+   That bracket is a leaked citation marker, not a joke. The owner was told
+   and has left it; do not change it without asking.
+4. **P8 has nothing clickable**, `links: []` and no `titleHref`.
+5. **P7's dashed plate prints its internal shot spec** to visitors.
+6. **Breakpoints are 12 `max-width` against 1 `min-width`**, measured, against
+   a pinned brief saying mobile is the default case.
+7. **Page weight is 3.96 MiB** across 38 files, 1.7MB of it animation. All
+   five largest assets are lazy, so first paint is far lighter, but the total
+   is large for a phone skim.
+
+The owner was asked about the two P0s the critique raised, the "AI Slop"
+default tagline term and "This website" holding the P1 slot, and **said both
+are deliberate. Do not re-raise them.**
 
 ## What shipped on 2 Sep
 

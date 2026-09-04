@@ -67,11 +67,17 @@ never as a catalog of everything ever attempted.
   output**: four demo posts with Lorem ipsum bodies and invented tags,
   live at the public URL and syndicated through `rss.xml`.
 
-**Still unfilled:** `IDENTITY.resume.href` in `src/data/profile.ts` is `'#'`,
-the four project figures are unshot, and `og:image` is still the Astro
-placeholder. These ship as visibly marked placeholders. They are never
+**Still unfilled:** `og:image` is still the Astro placeholder. Every project
+figure slot is now either filled or a deliberate `figure: null`; no row prints
+a shot spec any more. `IDENTITY.resume.href` holds a real Google Drive
+link. Unfilled things ship as visibly marked placeholders. They are never
 invented, never approximated, and never filled with plausible-sounding
 text.
+
+Two projects, SEAOIL and BSM Varsity, carry `figure: null` rather than an
+empty slot. That is a decision, not a gap: neither has an artifact to show
+yet. SEAOIL is the one worth changing, being the strongest row on the page
+and the only one with nothing to look at.
 
 ## Evidence on Hand
 

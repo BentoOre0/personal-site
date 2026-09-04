@@ -16,14 +16,24 @@ import anthRopic from '../assets/anth-ropic.png';
 import baybayinGlyph from '../assets/baybayin-glyph.png';
 import cliffordBench from '../assets/clifford-bench.jpg';
 import cliffordWalkStill from '../assets/clifford-walk-still.jpg';
+import colourClusters from '../assets/colour-clusters.png';
 import galaxyStill from '../assets/galaxy-formation-still.png';
 import quadtreeStill from '../assets/quadtree-subdivision-still.png';
 import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
 
+/* The revision block at the foot of every page.
+
+   `rev` steps one tenth on every commit, and the tenths wrap: 0.9 is
+   followed by 1.0, not 0.10. `updated` moves to the commit's own date at
+   the same time, because the footer prints it as "Last revised".
+
+   Bump both in the same commit as the change they describe, never as a
+   follow-up commit of their own. A rev that lags the site is worse than
+   no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '0.2',
+	rev: '0.3',
 	status: 'PRELIMINARY',
-	updated: '2026-09-01',
+	updated: '2026-09-04',
 };
 
 export const IDENTITY = {
@@ -334,7 +344,11 @@ export type Plate = {
 export type Project = {
 	title: string;
 	summary: string;
-	params: { key: string; value: string }[];
+	/* `strong` marks the one value in a row that is the row's claim rather
+	   than its description, such as a status that says the thing is live.
+	   At most one per row; the mark stops meaning anything if every row
+	   has one. */
+	params: { key: string; value: string; strong?: boolean }[];
 	/* A figure is either real panels or a specification for a shot not yet
 	   taken. Give it `plates` once the images exist; give it `spec` until
 	   then. `ratio` applies to both, so a slot does not change size when the
@@ -408,7 +422,7 @@ export const PROJECTS: Project[] = [
 		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/personal-site' }],
 	},
 	{
-		title: 'Clifford Spot Micro: Robot Dog',
+		title: 'Clifford: A Mutated Spot Micro',
 		summary:
 			'Firmware and build work on Nova SM3, a Spot-Mini Micro clone quadruped, forked from Chris Locke\'s open-source design. The mechanical design, gait development and servo motion engine are his; mine is the firmware and the physical build.',
 		params: [
@@ -419,19 +433,21 @@ export const PROJECTS: Project[] = [
 		],
 		titleHref: 'https://github.com/BentoOre0/Modded-Nova-SM3',
 		figure: {
-			caption: 'Clifford walking, and on the bench with its shell off.',
-			/* The slot asked for a still side view. A gait is the thing this
-			   build either does or does not do, so panel (a) is three
-			   seconds cut from the owner's own demo clip, cropped square
-			   from a portrait phone video. Panel (b) is the row's other
-			   half: this is a firmware and hardware project, and the walk
-			   shows none of the hardware. Both are the owner's own. */
+			caption: 'Clifford assembled, and on the bench with its shell off.',
+			/* The slot asked for a still side view. One angle cannot carry a
+			   machine this cluttered, so panel (a) is the owner's own
+			   walkaround, cropped square from a portrait phone clip: the
+			   camera circles the standing robot and every side gets a turn.
+			   It runs forward then back, which costs about 300KB over a
+			   one-way cut but spares the reader a jump from the closest
+			   frame to the widest every few seconds. Panel (b) is the row's
+			   other half: the shell comes off and the boards show. */
 			plates: [
 				{
 					still: cliffordWalkStill,
 					motion: '/clifford/walk.webp',
-					alt: 'A red, blue and white 3D-printed quadruped robot stepping towards the camera on a wooden floor beside a desk, its servo-driven legs swinging in turn and its wiring running along the body.',
-					label: 'Walking, seen head-on',
+					alt: 'A red, blue and white 3D-printed quadruped robot standing on a desk, filmed from a camera circling it. Servos sit at each leg joint, a small numeric display faces out of the red body, and wiring loops between the panels.',
+					label: 'Circled once, shell on',
 				},
 				{
 					still: cliffordBench,
@@ -453,7 +469,7 @@ export const PROJECTS: Project[] = [
 		params: [
 			{ key: 'Role', value: 'Sole developer · AI & Automation Engineering intern' },
 			{ key: 'Stack', value: 'Node.js · NestJS · AWS Lambda · Viber API' },
-			{ key: 'Status', value: 'Deployed in production' },
+			{ key: 'Status', value: 'DEPLOYED IN PRODUCTION', strong: true },
 			{ key: 'Year', value: '2025' },
 		],
 		titleHref: 'https://github.com/BentoOre0/JAHY-Seaoil-Work',
@@ -588,9 +604,15 @@ export const PROJECTS: Project[] = [
 		],
 		titleHref: 'https://github.com/BentoOre0/ColorSegmentationAlgoPercentageCoverage',
 		figure: {
-			caption: 'Segmentation output against the source image.',
-			spec: '16:9 · screenshot or vector',
-			ratio: '16 / 9',
+			caption:
+				'The three colour classes the algorithm separates, drawn as clusters in colour space.',
+			plates: [
+				{
+					still: colourClusters,
+					alt: 'A dark three-dimensional plot of a colour space holding three separated clusters of dots, each ringed by an outline: grey labelled white for background, yellow labelled fresh, and brown labelled browned. Leader lines run from the yellow and brown clusters to a photograph of a spotted banana in the corner.',
+				},
+			],
+			ratio: '966 / 627',
 		},
 		links: [
 			{

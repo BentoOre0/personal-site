@@ -196,7 +196,9 @@ PROJECTS.forEach((p, i) => {
 											{p.params.map((param) => (
 												<tr>
 													<th scope="row">{param.key}</th>
-													<td class:list={[{ tbd: param.value === 'TBD' }]}>{param.value}</td>
+													<td class:list={[{ tbd: param.value === 'TBD', strong: param.strong }]}>
+														{param.value}
+													</td>
 												</tr>
 											))}
 										</tbody>
