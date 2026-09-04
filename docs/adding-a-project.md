@@ -151,8 +151,7 @@ import avionicsBay from '../assets/avionics-bay.jpg';
 ```
 
 **Import it, never write a string path.** The import is what lets Astro
-optimise the file, and what turns a typo into a build error instead of a broken
-image on the live site.
+optimise the file.
 
 **2. Give the figure a `plates` list naming it:**
 
