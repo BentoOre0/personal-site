@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '3.5',
+	rev: '3.6',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -542,7 +542,9 @@ export const PROJECTS: Project[] = [
 			"Built and shipped as sole developer on an internship, 60 days ahead of schedule, and running in production against SEAOIL and SEAGAS delivery operations. Automates rider messaging and order confirmation through the Viber API on AWS Lambda. A Google Apps Script MVP put the process in ground staff's hands.",
 		params: [
 			{ key: 'Role', value: 'Sole developer · AI & Automation Engineering intern' },
-			{ key: 'Stack', value: 'Node.js · NestJS · AWS Lambda · Viber API' },
+			/* Google Apps Script was in the summary and not here. The MVP it
+			   built is part of what shipped, so it is part of the stack. */
+			{ key: 'Stack', value: 'Node.js · NestJS · AWS Lambda · Viber API · Google Apps Script' },
 			{ key: 'Status', value: 'DEPLOYED IN PRODUCTION', strong: true },
 			{ key: 'Year', value: '2025' },
 		],
