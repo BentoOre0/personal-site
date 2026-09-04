@@ -376,9 +376,22 @@ headings are inserted between paragraphs and nothing else moved. It closes
 with "(The one and only) Jeremy Aidan Hernandez Yu", his line, set in italic
 so it reads as a sign-off rather than another paragraph.
 
-**The questions are accent red**, also asked for. That is a new use of the
-accent and it is recorded in `DESIGN.md` with the reasoning and the limit:
-post `h2` only, never `h3`, never running prose.
+**The questions were accent red for about two minutes and are now ink.**
+Asked for, then reversed on sight: "i dont linke the red for the questions
+remove it". Recorded in `DESIGN.md` as the fifth thing tried in the accent
+and taken back out, because the lesson is a real one. The heading passed
+every check the credential note failed, being 20px, underline-free, alone on
+its line and nowhere near a link, and it still was not worth doing. **A mark
+that survives the argument can lose on sight.**
+
+**Tagged `about-me`**, his tag, not an invented one. That is the first real
+tag on the site, so `/blog` now renders the filter bar and
+`/blog/tags/about-me/` is built. Five pages.
+
+**"What are you trying to learn next?" and "What kind of work are you looking
+for?" are one section**, "What are you looking for next?", at his request.
+The knowledge gaps and the kind of work he wants were the same answer split
+over two questions.
 
 The build is back to four pages and the feed has one item. The demo posts
 stay `draft: true`.

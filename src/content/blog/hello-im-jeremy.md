@@ -2,6 +2,7 @@
 title: "Hello, I'm Jeremy"
 description: 'Who I am, how I learn, and the gaps I am trying to close next.'
 pubDate: 'Sep 04 2026'
+tags: ['about-me']
 heroImage: '../../assets/hello-banner.png'
 ---
 
@@ -29,7 +30,7 @@ I know I am definitely not a gold medal Olympiad medalist who's doing quantitati
 
 I think the best way to learn something that feels vastly different from what you already know is to just throw yourself at it. The jump between Olympiad algorithms and physical engineering builds is pretty massive, but I just throw myself into it, learn, ask questions, and slowly build mental models.
 
-## What are you trying to learn next?
+## What are you looking for next?
 
 Right now, I am probably looking for a way to learn how to scale software and engineering.
 
@@ -38,8 +39,6 @@ A lot of my software engineering work has been on a relatively small scale, with
 I have a similar gap on the engineering side. A lot of the things I have built have been for relatively small teams or projects. How do I learn to set up an automated build process for a hardware product? How do I design something that can actually be manufactured repeatedly?
 
 These are the kind of knowledge gap I want to explore next.
-
-## What kind of work are you looking for?
 
 I also want to do more engineering work where I am building something for a client and have to interact with non-technical people. I want to learn how to figure out what someone actually needs through all the noise, then turn that into something useful.
 

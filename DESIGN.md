@@ -133,23 +133,11 @@ never running prose.
 - the contact glyphs and the revision stamp
 - the disclosure arrow on a foldable credential, `\25B8` / `\25BE`
 - `P1`'s designator, and only P1's
-- **`h2` inside a blog post**, at the owner's request, added 4 Sep
 
 Counted from the built CSS, that is **28 resting marks** on the homepage.
-The `h2` rule is on post pages only and the homepage is unaffected.
 
-**On the `h2`s.** "Hello, I'm Jeremy" is written as a question-and-answer,
-so the headings are the questions and the colour marks one kind of thing
-rather than decorating headings in general. It is the closest the site
-comes to breaking its own rule, because red teaches "clickable" and §1
-already had to pull the credential notes back to muted for exactly that
-reason. A heading survives the test the note failed: it is 20px, it has no
-underline, it stands on its own line with `--s-6` above it, and no other
-prose on the page is red, so there is no link beside it to be confused
-with. Do not extend this to `h3` or to running prose.
-
-**Three things were tried in the accent on 3 Sep and taken back out**, and
-the reasons are worth keeping because each is a different failure:
+**Five things have been tried in the accent and taken back out**, and the
+reasons are worth keeping because each is a different failure:
 
 - **Figure captions and panel labels.** Six captions and three labels put a
   red block under every figure in §3, and a caption sits directly above the
@@ -168,8 +156,17 @@ the reasons are worth keeping because each is a different failure:
   non-text boundary needs) and still wrong: a hairline running the full
   width of the sheet is the largest mark on the page by area, and it pulled
   rank over the headings it was carrying.
+- **Blog-post `h2`s, 4 Sep, in and out the same day.** "Hello, I'm Jeremy"
+  is laid out as a question and answer, so the headings are the questions,
+  and the argument was that the colour marked one kind of thing rather than
+  decorating headings generally. The owner looked at it and did not like
+  it, which is the whole test. Worth recording anyway: a heading passes the
+  checks the credential note failed, being 20px, underline-free, alone on
+  its line and nowhere near a link, and it *still* was not worth doing. **A
+  mark that survives the argument can lose on sight.** The headings are ink
+  and the questions carry themselves.
 
-The test that survives all four: **the accent marks what you can click, plus
+The test that survives all five: **the accent marks what you can click, plus
 a small closed set of stamps and controls.** Anything else that wants to be
 red is prose, and prose does not get it.
 
