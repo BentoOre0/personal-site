@@ -19,7 +19,7 @@ I directed this project rather than typed it. The agent wrote most of the
 code; my job was deciding what the site should be and refusing the parts that
 were not good enough.
 
-**Design.** Every visual decision here is mine. The ordering of the projects,
+**Design.** Every visual decision here is mine (apart from the thumbnail above which chat gpt helped photoshop). The ordering of the projects,
 putting the figure directly under each project title instead of beside it, the
 typographic hierarchy, and the choice to keep the blog off the homepage. Where
 the site breaks its own pinned design brief, I asked for the exception and the
