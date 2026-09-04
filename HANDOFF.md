@@ -67,7 +67,10 @@ content lives in `src/data/profile.ts`.
 TREK Excellence Scholarship and the UBC Computer Science TA appointment.
 He gave both facts and the September 2026 start date; nothing else about
 them was assumed. The TREK note describes the award rather than him, and
-links UBC's own page for it, so the "top 5%" is checkable. **The résumé
+links UBC's own page for it, so the "top 5%" is checkable. It reads "Cash
+award" as of 4 Sep, because "Awarded 2026" read as a title conferred and
+the thing is money. **The amount is deliberately not on the page**, at the
+owner's request; UBC's page states it and the link goes there. **The résumé
 is now behind the site by two credentials.**
 
 **Not real, and no longer served:** the five Astro demo posts in
@@ -291,6 +294,23 @@ underline, and the underline is **ink, not accent, on purpose**: the row's
 accented underline in the same row reads as a link that does not click. Nothing
 else in the params table is bold or underlined, so ink already separates it.
 At most one per row; the mark stops meaning anything if every row has one.
+
+**The TREK scholarship note says it is money.** "Awarded 2026 · top 5% of
+each undergraduate year and faculty" read as a title conferred rather than a
+paid award, which the owner flagged. It is now "Cash award, 2026 · top 5% of
+each undergraduate year, faculty and school".
+
+**The value stays off the page and out of this repo**, asked for directly and
+then again after it had been written into a code comment and into this file.
+Do not record it: not in the note, not as a quotation, not in a comment. The
+credential already links to UBC's page, which states it, so a reader who wants
+the figure gets it from UBC rather than from him.
+
+That is also why the row has no `sources` block, unlike the four competition
+credentials: UBC's one quotable sentence is built around the value, and
+cutting the value out of it would misquote them rather than trim them. A link
+is the honest way to carry a fact the page is choosing not to print. "and
+school" is UBC's third term and had been missing.
 
 **The Astro demo posts are hidden.** Asked for directly: "can you HIDE the
 template stuff on blog page / I will write a blog post in a bit."

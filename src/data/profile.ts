@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '0.8',
+	rev: '0.9',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -246,8 +246,24 @@ export const CREDENTIALS: Credential[] = [
 		/* The note says what the award is, not what it says about him, in the
 		   same way the APIO note describes the contest. The href is UBC's own
 		   page for the scholarship, so the "top 5%" is checkable rather than
-		   claimed. */
-		note: 'Awarded 2026 · top 5% of each undergraduate year and faculty',
+		   claimed.
+
+		   "Cash award", because "Awarded 2026" read as a title conferred and
+		   this is a paid award.
+
+		   **The value is deliberately not recorded, here or anywhere in this
+		   repo**, at the owner's request. Do not add it, in the note, in a
+		   quotation, or in a comment. The `href` goes to UBC's page, which
+		   states it, so a reader who wants the figure gets it from UBC.
+
+		   That is also why this row has no `sources` block, unlike the four
+		   competition credentials: UBC's one quotable sentence is built
+		   around the value, and cutting the value out of it would misquote
+		   them rather than trim them. A link is the honest way to carry a
+		   fact we are choosing not to print.
+
+		   "and school" is UBC's own third term and was missing. */
+		note: 'Cash award, 2026 · top 5% of each undergraduate year, faculty and school',
 		href: 'https://students.ubc.ca/finances/awards-scholarships-bursaries/trek-excellence-scholarship/',
 		confirmed: true,
 	},
