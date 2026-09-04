@@ -68,7 +68,14 @@
 		will-change: transform;
 		backface-visibility: hidden;
 		/* Failsafe: if the script never runs, the overlay still leaves
-		   rather than sealing the page shut. */
+		   rather than sealing the page shut.
+
+		   **It must not touch `transform`.** This element transitions
+		   `transform`, and an animation naming the same property outranks
+		   the transition and keeps the property flagged as animated, which
+		   can hold the slide on the main thread however much it is
+		   promoted. The failsafe only has to stop the overlay sealing the
+		   page, and hiding it does that; it does not need to slide. */
 		animation: loader-failsafe 0s linear 6s forwards;
 	}
 
@@ -80,7 +87,6 @@
 
 	@keyframes loader-failsafe {
 		to {
-			transform: translate3d(0, -100%, 0);
 			visibility: hidden;
 			pointer-events: none;
 		}
