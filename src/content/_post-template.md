@@ -7,6 +7,9 @@ tags: ['embedded', 'robotics']
 # heroImage: '../../assets/your-photo.jpg'
 # Optional. Only if you edit the post later.
 # updatedDate: 'Sep 10 2026'
+# Optional. Uncomment while the post is unfinished: it stays off /blog,
+# out of the tag archives and out of the feed, and its page is not built.
+# draft: true
 ---
 
 Write here. Plain Markdown.

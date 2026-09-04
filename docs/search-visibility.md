@@ -17,7 +17,7 @@ You do not need to touch any of this; it is here so you know what is covered.
 | A canonical URL on every page | `src/components/BaseHead.astro` |
 | A title and a description on every page | same file, per page |
 | Structured data identifying you as a person | `src/components/PersonLd.astro`, read from `profile.ts` |
-| The Astro demo posts kept out of the index | `noindex: true` in their frontmatter |
+| The Astro demo posts kept off the site entirely | `draft: true` in their frontmatter |
 
 Nothing is blocked. There is no `noindex` on the homepage, no `Disallow`, and
 Vercel is not sending a `x-robots-tag` header. The site is simply new, and
@@ -131,7 +131,26 @@ URL. Only search engines drop it. The build also leaves it out of the sitemap
 automatically, because listing a `noindex` URL in a sitemap is a contradiction
 that Search Console reports as an error.
 
-This is set on the five Astro demo posts. They are Lorem ipsum shipped with the
-template and byte-identical on thousands of other sites, so indexing them would
-have Google judging this site on filler rather than on your homepage. Delete
-the line when a post is real.
+## Keeping a page off the site entirely
+
+The stronger flag, and a different job:
+
+```yaml
+draft: true
+```
+
+A draft is not listed on `/blog`, not in any tag archive, not in the feed, and
+**its page is not built at all**, so its URL 404s. Nothing needs to be deleted
+to hide a post, and nothing needs to be recreated to bring it back.
+
+The two flags are independent, and `draft` makes `noindex` moot on the same
+post: an unbuilt page has no URL for Google to index. Reach for `noindex` when
+a post should be readable but not found; reach for `draft` when it should not
+be readable yet.
+
+Both are set on the five Astro demo posts. They are Lorem ipsum shipped with
+the template and byte-identical on thousands of other sites, so indexing them
+would have Google judging this site on filler rather than on your homepage.
+They are kept in `src/content/blog/` as a working template rather than
+deleted, which is why they are drafts and not gone. Delete both lines when a
+post is real.

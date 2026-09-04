@@ -552,11 +552,13 @@ credentials on the page are now confirmed and sourced from the résumé
 of 25 Aug 2026; `IDENTITY.resume.href` is the one field still unfilled.
 Nothing on this site may be invented to fill a gap.
 
-The blog is the one surface where that rule is currently broken, and
-not by the design: `src/content/blog/` still holds four Astro demo
-posts whose bodies are Lorem ipsum and whose tags, `embedded`,
-`robotics`, `algorithms`, are invented. They are live and syndicated
-through `rss.xml`.
+The blog was the one surface where that rule was broken, and not by
+the design: `src/content/blog/` holds five Astro demo posts whose bodies
+are Lorem ipsum and whose tags, `embedded`, `robotics`, `algorithms`,
+are invented. They are now `draft: true`, so nothing invented is served.
+The files stay as a working template. `/blog` shows the same dashed
+plate the unshot figures use, which is the format saying a section is
+unpopulated rather than pretending otherwise.
 
 ## One value per row may be marked
 

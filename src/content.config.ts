@@ -22,6 +22,17 @@ const blog = defineCollection({
 			   indexing them would have Google judge this site on them.
 			   A real post leaves this out. */
 			noindex: z.boolean().default(false),
+			/* Keep the post out of the site entirely. It is not listed on
+			   /blog, not in any tag archive, not in the RSS feed, and its
+			   page is not built, so its URL 404s. The file stays where it
+			   is and the flag is one line to remove.
+
+			   This is the stronger of the two flags and they are
+			   independent. `noindex` publishes a post and hides it from
+			   Google; `draft` does not publish it at all, which makes
+			   `noindex` moot on the same post. Set on the Astro demo posts,
+			   which are kept as a working template rather than deleted. */
+			draft: z.boolean().default(false),
 			heroImage: z.optional(image()),
 		}),
 });

@@ -12,9 +12,19 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'blog'>;
 
-/** Every post, newest first. The site's one publication order. */
+/**
+ * Every published post, newest first. The site's one publication order, and
+ * its one definition of "published".
+ *
+ * Drafts are dropped here rather than at each call site, so a post marked
+ * `draft: true` is absent from /blog, from every tag archive, from the RSS
+ * feed and from the built routes without any of them having to know the flag
+ * exists. Every surface that lists or builds a post goes through this
+ * function for exactly that reason; reaching for `getCollection('blog')`
+ * directly is how a draft leaks back onto the site.
+ */
 export async function getSortedPosts(): Promise<Post[]> {
-	return (await getCollection('blog')).sort(
+	return (await getCollection('blog', ({ data }) => !data.draft)).sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 	);
 }

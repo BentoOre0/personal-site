@@ -39,7 +39,7 @@ const tags = getTagCounts(posts);
 			<TagFilter tags={tags} total={posts.length} />
 
 			{
-				posts.length === 0 && (
+				posts.length === 0 ? (
 					<div class="plate">
 						<span class="legend">No entries</span>
 						<span class="plate-spec">
@@ -47,10 +47,14 @@ const tags = getTagCounts(posts);
 							a title, a one-line summary, its tags and a date.
 						</span>
 					</div>
+				) : (
+					/* Either the plate or the list, never both and never an empty
+					   `<ol>`. An empty list still announces itself to a screen
+					   reader as a list of no items, directly under a plate that
+					   has just said the section is unpopulated. */
+					<PostList posts={posts} />
 				)
 			}
-
-			<PostList posts={posts} />
 
 			<QuoteBar />
 		</main>

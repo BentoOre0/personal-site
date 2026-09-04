@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Screenshot the site at the viewports that matter.
 #
-# Uses the system Chrome — not a dependency, nothing to install. Until this
+# Uses the system Chrome, not a dependency and nothing to install. Until this
 # existed every design pass on this project was done blind, by reading CSS
 # and computing values, which is why visual defects survived four of them.
 #
@@ -29,10 +29,13 @@ shoot () { # name url width height dpr
     && echo "  $OUT/$1-$3.png" || echo "  FAILED: $1 @ $3"
 }
 
-for page in "home:/" "blog:/blog" "post:/blog/first-post/" "notfound:/404"; do
+# No post URL here: the Astro demo posts are `draft: true`, so they build no
+# page and /blog/first-post/ would capture the 404. Add the slug back when a
+# real post exists:  "post:/blog/<your-slug>/"
+for page in "home:/" "blog:/blog" "notfound:/404"; do
   name="${page%%:*}"; path="${page##*:}"
   echo "$name"
-  shoot "$name" "$BASE$path" 390 844 3     # phone, retina — 1x understates it
+  shoot "$name" "$BASE$path" 390 844 3     # phone, retina; 1x understates it
   shoot "$name" "$BASE$path" 768 1024 1    # tablet
   shoot "$name" "$BASE$path" 1440 900 1    # desktop
 done

@@ -70,9 +70,10 @@ them was assumed. The TREK note describes the award rather than him, and
 links UBC's own page for it, so the "top 5%" is checkable. **The résumé
 is now behind the site by two credentials.**
 
-**Not real:** the four Astro demo posts in `src/content/blog/` are Lorem
-ipsum with invented tags, live and RSS-syndicated. **This is deliberate,
-see Decisions.**
+**Not real, and no longer served:** the five Astro demo posts in
+`src/content/blog/` are Lorem ipsum with invented tags. They are
+`draft: true` as of 4 Sep, so they are unlisted, unfed and unbuilt. The
+files stay. **See Decisions.**
 
 **Still unfilled:**
 
@@ -96,12 +97,15 @@ the page and the only one with nothing to look at.
 
 ## Decisions worth not relitigating
 
-- **The demo posts stay. The owner wants a template blog.** He said so
-  directly ("i want a template blog why did you kill it") after a test
-  briefly made them 404. The critique rated them the site's biggest
-  problem and that assessment stands on the merits, but it is decided.
-  Do not propose deleting them again. `/blog` has a real empty state if
-  he ever does clear them.
+- **The demo post files stay. They are hidden, not deleted.** The owner
+  asked on 4 Sep to "HIDE the template stuff on blog page", saying he was
+  about to write a real post. They are `draft: true`: off `/blog`, off the
+  tag archives, out of the feed, no page built, files untouched.
+  This is the settled shape of an earlier decision, not a reversal of it.
+  He had said "i want a template blog why did you kill it" after a test
+  briefly made the posts 404, and what he wanted was the template kept.
+  `draft` keeps it. **Do not delete the files**, and do not put them back
+  on the site without being asked.
 - **Accent `#e51b23`**, sampled from the red X in the owner's sketch and
   darkened to clear 4.5:1. It is 4.65:1 on paper and paints links, the
   rotating term, contact glyphs, the revision stamp and every tag chip,
@@ -288,6 +292,41 @@ accented underline in the same row reads as a link that does not click. Nothing
 else in the params table is bold or underlined, so ink already separates it.
 At most one per row; the mark stops meaning anything if every row has one.
 
+**The Astro demo posts are hidden.** Asked for directly: "can you HIDE the
+template stuff on blog page / I will write a blog post in a bit."
+
+Done with a new `draft` frontmatter flag rather than by deleting anything,
+because the standing decision is that the template stays. All five demo posts
+carry `draft: true`. The files are otherwise untouched.
+
+The filter lives in one place, `getSortedPosts()` in `src/lib/posts.ts`, which
+was already the single definition of "every post" for `/blog`, the tag archives
+and the feed. **`blog/[...slug].astro` was the one surface not going through
+it**, calling `getCollection('blog')` directly, which would have left every
+draft publicly reachable at its URL while it sat unlisted everywhere else. It
+now uses the helper, so a draft has no page built and its URL 404s. That was
+the only real trap in the change.
+
+Everything else fell out for free, because the empty states already existed:
+`TagFilter` renders nothing at zero tags, `/blog` already had a dashed "No
+entries" plate, and `@astrojs/rss` emits a valid feed with no items. The one
+fix needed was on the index, which rendered the plate *and* an empty `<ol>`;
+it is now one or the other, since an empty list still announces itself to a
+screen reader directly under a plate saying the section is unpopulated.
+
+The build went from **12 pages to 3**: homepage, `/blog`, 404. Five post pages
+and four tag archives stopped being built. The sitemap is down to two URLs and
+`rss.xml` has no items. **All of that reverses the moment a real post lands**,
+which is the point.
+
+`scripts/shots.sh` captured `/blog/first-post/`, which now 404s. That line is
+commented out with the slug to restore.
+
+**Not done, and deliberately:** the empty-state copy was left alone. It reads
+"This section is unpopulated. Entries appear here newest first, each with a
+title, a one-line summary, its tags and a date," which is the format's own
+voice and is true.
+
 ## 3 Sep, second half
 
 Committed on `feat/newlayoutandmedia` as `cbff832`. All of it at the owner's
@@ -463,6 +502,10 @@ shipped here is the technical half:
   owner chose this over leaving them indexed, when told they are byte-
   identical boilerplate on thousands of sites. **This is not a reversal of
   "the demo posts stay."** They stay.
+  **Superseded on 4 Sep**: the same posts are now `draft: true` as well, so
+  they are not published at all and `noindex` is moot on them. `noindex`
+  itself is unchanged and still the right flag for a real post that should
+  be readable but not found.
 - The sitemap now filters those out. `astro.config.mjs` reads the frontmatter
   off disk, because content collections are not available in that file.
   Listing a `noindex` URL in a sitemap is a contradiction Search Console

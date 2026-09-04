@@ -1,9 +1,14 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { type CollectionEntry, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import { getSortedPosts } from '../../lib/posts';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
+	/* `getSortedPosts`, not `getCollection`, so a draft has no page built
+	   and its URL 404s. Reading the collection directly here would leave
+	   every draft publicly reachable while it sat unlisted everywhere
+	   else, which is the one way a hidden post stops being hidden. */
+	const posts = await getSortedPosts();
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: post,

@@ -63,9 +63,11 @@ never as a catalog of everything ever attempted.
 - Competitive programming results are a credential, not a project.
 - The Astro starter is gone. `src/pages`, `src/consts.ts` and
   `src/data/profile.ts` now carry real content, sourced from the résumé of
-  25 Aug 2026. **`src/content/blog/` is the exception and is still starter
-  output**: four demo posts with Lorem ipsum bodies and invented tags,
-  live at the public URL and syndicated through `rss.xml`.
+  25 Aug 2026. `src/content/blog/` still holds five demo posts with Lorem
+  ipsum bodies and invented tags, but **they are `draft: true` and no
+  longer reach the site**: not listed on `/blog`, not in the feed, no page
+  built. They are kept as a working template, not published. Nothing
+  invented is live.
 
 **Still unfilled:** `og:image` is still the Astro placeholder. Every project
 figure slot is now either filled or a deliberate `figure: null`; no row prints

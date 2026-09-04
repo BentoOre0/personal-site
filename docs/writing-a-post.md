@@ -63,7 +63,8 @@ updatedDate: 'Sep 10 2026'
 | `tags` | no | Defaults to `[]`. See below. |
 | `heroImage` | no | A path to an image. See below. |
 | `updatedDate` | no | Only if you edit the post after publishing. |
-| `noindex` | no | Defaults to `false`. `true` keeps the post off Google while leaving it published and listed on `/blog`. Set on the Astro demo posts. See [search-visibility.md](search-visibility.md). |
+| `noindex` | no | Defaults to `false`. `true` keeps the post off Google while leaving it published and listed on `/blog`. See [search-visibility.md](search-visibility.md). |
+| `draft` | no | Defaults to `false`. `true` keeps the post off the site entirely: not listed, not in the feed, page not built. Set on the Astro demo posts. See below. |
 
 Quote the strings. If a title contains an apostrophe, use double quotes around
 it: `title: "The rocket's avionics bay"`.
@@ -126,6 +127,30 @@ this.
 
 ---
 
+## Keeping a post unfinished
+
+```yaml
+draft: true
+```
+
+A draft is off the site completely: not on `/blog`, not in any tag archive,
+not in the RSS feed, and **its page is not built**, so its URL 404s. Write
+in the open without publishing, and delete the line to ship.
+
+This is set on the five Astro demo posts. They are the template this blog is
+built on, kept in `src/content/blog/` so the markup, the tags, the hero
+images and the MDX example all stay available to copy from, but hidden so
+nobody reads Lorem ipsum on the live site. `markdown-style-guide.md` is the
+one worth opening before you write; it is a working sample of every piece of
+Markdown this site renders.
+
+**`draft` and `noindex` are different jobs.** `noindex` publishes a post and
+hides it from Google. `draft` does not publish it at all, which makes
+`noindex` moot on the same file. The demo posts carry both, from before
+`draft` existed.
+
+---
+
 ## Checklist
 
 - [ ] Filename is lowercase-with-hyphens and is a URL you can live with
@@ -135,6 +160,7 @@ this.
 - [ ] `npm run build` passes
 - [ ] Read the post at `/blog/<slug>/` before shipping
 - [ ] No `noindex: true` left in the frontmatter, unless you meant it
+- [ ] **No `draft: true` left in the frontmatter**, or the post does not ship
 
 ---
 
