@@ -345,6 +345,42 @@ for.
   the cluster nearest white as dish and background, report the ratio of the
   two left. Its stack gained computer vision and K-means clustering.
 
+**P2's role is "Builder and modder", and its summary had the attribution
+backwards.** The role change was asked for directly. The summary correction
+was not, but the owner supplied the Modded-Nova-SM3 README as context and it
+contradicts what the site was saying about the half of the project that
+matters most.
+
+The old summary: "The mechanical design, gait development and servo motion
+engine are his; mine is the firmware and the physical build." The README says
+the mechanical design is **his own**: the DS3218 the Nova SM3 is drawn around
+was not sourceable in the Philippines, the RDS3218 he could buy hangs in a
+U-bracket instead of bolting through four sets of holes, and so the coax,
+femur and tibia were redrawn from scratch around a different way of holding a
+servo. In his words, "not a build of someone else's kit, and not a design of
+my own from nothing, but the engineering in between".
+
+The site was crediting Chris Locke for the one thing that is not his and
+underselling the owner accordingly. Gaits, the servo motion engine and the
+master/slave architecture **are** Locke's and are still named as his.
+
+**The README has more the row is not using yet**, and it is the owner's to
+decide on:
+
+- The servo specifications, 8x RDS3218 at 20 kg.cm and 4x RDS3235 at 35 kg.cm,
+  all 270 degrees. The whole project turns on servos and the stack line does
+  not mention one.
+- The electronics work: the v5.2b wiring pictogram revised with a short
+  corrected, and power distribution reworked from cascaded converters to
+  parallel.
+- The firmware v6.0 restructure: 6,390 lines in one file, 85 undocumented
+  protocol strings, an 812-line function, two real bugs found.
+- **Status is the honest question.** The row says "Ongoing". The README is
+  blunter: walking does not work, because `NovaServos.h` still holds Locke's
+  `servoHome[]` and `servoLimit[]` values byte-identical to v5.1, which are
+  measurements of his servos in his geometry. "Ongoing" is not false, and
+  going further is a judgement call about his own work, so it was left alone.
+
 **Fig. 7's legend is painted out of the source PNG.** It labelled the three
 clusters "White (background)", "Yellow (fresh)" and "Brown (browned)". Asked
 for directly: the clusters are drawn in their own colours and the picture

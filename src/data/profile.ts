@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '1.1',
+	rev: '1.2',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -439,10 +439,32 @@ export const PROJECTS: Project[] = [
 	},
 	{
 		title: 'Clifford: A Mutated Spot Micro',
+		/* Condensed from the owner's own README at Modded-Nova-SM3, which is
+		   the source of record for what is his and what is Chris Locke's.
+
+		   **The old summary had the attribution backwards on the one thing
+		   the project is about.** It read "The mechanical design, gait
+		   development and servo motion engine are his; mine is the firmware
+		   and the physical build". The README says the opposite about the
+		   mechanical side: the DS3218 the design is drawn around was not
+		   sourceable, the RDS3218 he could buy hangs in a U-bracket instead
+		   of bolting through, and so the coax, femur and tibia were redrawn
+		   from scratch around a different way of holding a servo. That
+		   redesign is the project, in his words "not a build of someone
+		   else's kit, and not a design of my own from nothing, but the
+		   engineering in between".
+
+		   The horn detail is kept because it is the constraint that makes
+		   the redesign hard rather than merely tedious: the horn is where
+		   the joint axis lives, so moving it changes every link length and
+		   voids the inherited gait tuning.
+
+		   Gaits, the servo motion engine and the master/slave architecture
+		   are still Chris Locke's and are still named as his. */
 		summary:
-			'Firmware and build work on Nova SM3, a Spot-Mini Micro clone quadruped, forked from Chris Locke\'s open-source design. The mechanical design, gait development and servo motion engine are his; mine is the firmware and the physical build.',
+			'A twelve-servo quadruped forked from Chris Locke\'s open-source Nova SM3, whose concept, gaits, servo motion engine and master/slave architecture are his. The servos it is drawn around were not sourceable in the Philippines and the replacements hang in a bracket instead of bolting through, so the coax, femur and tibia were redesigned from scratch around them, holding the servo horn fixed so the inherited gait tuning still meant something.',
 		params: [
-			{ key: 'Role', value: 'Firmware and hardware · fork of an open-source design' },
+			{ key: 'Role', value: 'Builder and modder · fork of an open-source design' },
 			{ key: 'Stack', value: 'C++ · Teensy 4.0, Arduino Nano, Raspberry Pi (for testing), MPU-6050 IMU · I2C, PWM, bit-banged PS2 remote control · PCB soldering and testing · 3D printing' },
 			{ key: 'Status', value: 'Ongoing' },
 			{ key: 'Year', value: '2026–present' },
