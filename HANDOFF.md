@@ -14,11 +14,11 @@ session logs and no longer read as a handoff.
 `master`, currently `38fc509`, which merged `feat/newlayoutandmedia` on
 4 Sep. `npm run build` passes, **5 pages**.
 
-**Everything in this file is live except the evening of 4 Sep.** The 3 Sep
-work went up with PR #6 and the whole of the earlier 4 Sep work followed in
-that merge. `feat/fixedwordingubcrocket` carries the blog-list and rotator
-work described under `## 4 Sep` and is **pushed but not merged**, so that
-section is the one thing here that is not on production.
+**Everything in this file is live.** The 3 Sep work went up with PR #6 and
+the earlier 4 Sep work followed in that merge. The evening of 4 Sep, the
+blog-list and rotator work described under `## 4 Sep`, went up from
+`feat/fixedwordingubcrocket`. There is no unmerged branch and nothing
+described below is waiting.
 
 **Five pages, not twelve**, and that is the intended state rather than a
 regression: homepage, `/blog`, the one real post, its `about-me` tag
@@ -213,15 +213,6 @@ the page and the only one with nothing to look at.
 
 ## Open findings, measured, not yet addressed
 
-**The homepage restates the resting underline in four places.** `index.astro`
-writes `color-mix(in srgb, var(--accent) 45%, transparent)` on `.resume`,
-`.contacts a.as-text`, `.feature-text a` and the project-link rule, plus
-hover rules the base `a` rule in `global.css` already provides. `.resume` is
-a pure duplicate and can simply go; the other three are genuine variants
-that restate one property they could inherit. Found by the standards review
-on 4 Sep and left alone because that session was scoped to the blog. The
-blog-side copies of the same drift were deleted then.
-
 From a quantitative mobile audit at 390px. Ranked by what the reader
 loses:
 
@@ -292,10 +283,12 @@ and it was measured at 320 / 340 / 390 before shipping, per the rule below.
 `rotating[0]` is server-rendered, so `websites.` is now what a scraper and a
 link preview see.
 
-**Two review findings were fixed rather than filed.** The resting underline
-had three sources disagreeing with the documentation, and the box's
-`:active` wash fired on the tag chips, which do not go where the box goes.
-Both are written up in `DESIGN.md`.
+**Three review findings were fixed rather than filed.** The resting
+underline had three sources disagreeing with the documentation; the box's
+`:active` wash fired on the tag chips, which do not go where the box goes;
+and the homepage restated that same underline colour in four more places.
+All three are written up in `DESIGN.md`. The underline value is now written
+once, in the base `a` rule, and every link that wants it inherits it.
 
 **One thing deliberately not done:** he asked for the label as
 `select tags:`, with a colon. No `.legend` anywhere on the site carries one,

@@ -183,13 +183,21 @@ number, and the documentation agreed with none of the code. The base rule
 now reads 45% and both of those overrides are deleted. A component that
 wants the standard underline should inherit it and write nothing.
 
-**`index.astro` still restates the same 45% in four places** and is the
-remaining drift: `.resume` is a pure duplicate of the base rule and can go;
-`.contacts a.as-text`, `.feature-text a` and the project-link rule are real
-variants (their own offset, ink text, a 160ms transition) that restate the
-underline colour they could inherit. Left alone on 4 Sep because the session
-was scoped to the blog. Whoever next touches the homepage should collapse
-them.
+**`index.astro` restated the same 45% in four more places and no longer
+does.** `.resume` was a pure duplicate of the base rule, colour and hover
+both, and is gone entirely. `.contacts a.as-text`, `.feature-text a` and
+`.project h3 a` are real variants and keep what makes them one: their own
+underline offset, ink text, a 160ms transition. What they lost is the
+resting colour and the underline half of their hover, which the base rule
+was already giving them.
+
+Two `:focus-visible` blocks still name the accent, and correctly: the base
+rule covers `:hover` only, so those are the rule rather than a copy of it.
+
+**The value now appears once as a resting colour.** If a link needs the
+standard underline, inherit it. The one deliberate departure is the blog
+post title, which takes the accent at full strength because its text is ink
+and the line is doing all the marking.
 
 This replaced a 0%-to-100% gradient sweep that lived inside
 `@media (hover: hover)`, so a phone drew every underline and a laptop drew
