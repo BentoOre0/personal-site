@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '3.9',
+	rev: '4.2',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -59,13 +59,18 @@ export const IDENTITY = {
 	/* Rotates through these, one at a time. Add or remove freely;
 	   the timing adapts. Keep them all true. */
 	rotating: [
-		'AI Slop ಠಿ_ಠ...? ',
 		'websites. ',
-		'physical and digital ideas. ',
 		'robots [^3^]. ',
 		'rockets. ',
 		'automation solutions. ',
 		'fast algorithms. ',
+		'physical & digital systems. ',
+		/* Last, at the owner's request. The first term is the one that is
+		   server-rendered, so it is what a reader sees before the script
+		   runs, what a scraper reads and what sits in the frame of a
+		   screenshot. This one is a joke and used to hold that slot. It
+		   still runs, it just no longer answers for the rest. */
+		'AI Slop ಠಿ_ಠ...? ',
 	],
 	/* A contact is either a glyph (`icon`) or the literal string (`text`). */
 	links: [
@@ -603,7 +608,11 @@ export const PROJECTS: Project[] = [
 				value:
 					'SOLIDWORKS · Bambu Lab FDM in PA6-GF and PA6-CF · wet layup carbon fibre and fibreglass · lathe, mill and drill press at the PHAS machine shop · basic CNC training',
 			},
-			{ key: 'Year', value: '2025–present' },
+			/* A closed range, not an open one. The owner has left the team,
+			   so the row records a period that ended rather than work still
+			   running. The degree above it is still `2025–present` and
+			   still correct; this row is not. */
+			{ key: 'Year', value: '2025–2026' },
 		],
 		titleHref: 'https://github.com/BentoOre0/2025-2026-UBC-ROCKET-work',
 		figure: {

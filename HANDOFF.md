@@ -15,8 +15,10 @@ session logs and no longer read as a handoff.
 4 Sep. `npm run build` passes, **5 pages**.
 
 **Everything in this file is live.** The 3 Sep work went up with PR #6 and
-the whole of the 4 Sep work followed in that merge. There is no unmerged
-branch and nothing described below is waiting.
+the earlier 4 Sep work followed in that merge. The evening of 4 Sep, the
+blog-list and rotator work described under `## 4 Sep`, went up from
+`feat/fixedwordingubcrocket`. There is no unmerged branch and nothing
+described below is waiting.
 
 **Five pages, not twelve**, and that is the intended state rather than a
 regression: homepage, `/blog`, the one real post, its `about-me` tag
@@ -248,6 +250,50 @@ repoint it here.
 
 ## 4 Sep
 
+### Evening: the blog list, the tag bar, and the rotator
+
+On `feat/fixedwordingubcrocket`, pushed, not merged. All of it at the
+owner's direction, in the order he asked for it.
+
+**UBC Rocket's year is `2025–2026`, not `2025–present`.** He has left the
+team. The degree credential above it is still `2025–present` and is still
+correct; only the project row closed.
+
+**The blog list is now a set of outlined boxes.** It was a plain column of
+text whose only clickability cue was a row wash inside
+`@media (hover: hover)`, which a phone never draws, on the page whose entire
+job is getting a reader into a post. Each entry now sits in a `1px`
+`--rule-strong` outline and reads: black title with a full-strength red
+underline, one-line summary, tags, and a `Read` handle. `Read` is a sibling
+of the date rather than a child of the entry, so it shares the date's right
+edge and sits level with the tags; below 40rem the column collapses and both
+go flush left. `/blog` and every tag archive get all of it, since they share
+`PostList.astro`.
+
+**The tag bar says `SELECT TAGS` above the chips**, and that label is what
+names the `nav` for a screen reader. The chips moved into their own `div`,
+so the `@media (pointer: coarse)` gap rule in `global.css` that used to
+target `.filter` now targets `.chips`. If that bar is restructured again,
+check that rule.
+
+**The rotator lost its default joke.** `AI Slop` is last and
+`physical & digital systems.` is second to last, both at his request. That
+term replaced `physical and digital ideas.`; it is the same 27 characters,
+and it was measured at 320 / 340 / 390 before shipping, per the rule below.
+`rotating[0]` is server-rendered, so `websites.` is now what a scraper and a
+link preview see.
+
+**Three review findings were fixed rather than filed.** The resting
+underline had three sources disagreeing with the documentation; the box's
+`:active` wash fired on the tag chips, which do not go where the box goes;
+and the homepage restated that same underline colour in four more places.
+All three are written up in `DESIGN.md`. The underline value is now written
+once, in the base `a` rule, and every link that wants it inherits it.
+
+**One thing deliberately not done:** he asked for the label as
+`select tags:`, with a colon. No `.legend` anywhere on the site carries one,
+so it ships without. Trivial to add if he wants it.
+
 **Fig. 2's animated panel was replaced and P2 was renamed.** Both at the
 owner's direction. The title is now `Clifford: A Mutated Spot Micro`, was
 `Clifford Spot Micro: Robot Dog`.
@@ -476,7 +522,7 @@ one attribute. It also made a headless capture come back with an empty
 frame where the banner should be, which is worth knowing before someone
 reports it as a broken image.
 
-**A seventh rotator term, "physical and digital ideas.", placed after
+**A seventh rotator term, "physical & digital systems.", placed after
 "websites."** Asked for. It is the longest term the tagline has carried and
 it broke the height reserve on narrow phones, which is the bug that was
 fixed on 1 Sep and is easy to reintroduce.
@@ -730,6 +776,10 @@ Open findings nobody has acted on:
 The owner was asked about the two P0s the critique raised, the "AI Slop"
 default tagline term and "This website" holding the P1 slot, and **said both
 are deliberate. Do not re-raise them.**
+
+Updated 4 Sep: the term is still there and still deliberate, but he moved it
+to the end of `rotating`, so it is no longer the default. `rotating[0]` is
+what is server-rendered, and that is `websites.` now.
 
 ## What shipped on 2 Sep
 

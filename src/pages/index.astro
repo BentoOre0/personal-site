@@ -357,7 +357,7 @@ PROJECTS.forEach((p, i) => {
 	/* The reserve above is three lines, which is what every term needs while
 	   `max-width: 22ch` is the thing deciding the wrap. Below about 358px the
 	   viewport binds first, the measure narrows, and the longest term,
-	   "physical and digital ideas.", takes a fourth line where the other six
+	   "physical & digital systems.", takes a fourth line where the other six
 	   still take three. That is the height change the reserve exists to
 	   prevent, so the reserve grows to four lines exactly where it has to.
 
@@ -437,14 +437,6 @@ PROJECTS.forEach((p, i) => {
 		font-family: var(--font-geist-mono);
 		font-size: var(--t-xs);
 		letter-spacing: 0.02em;
-		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
-	}
-
-	@media (hover: hover) {
-		.resume:hover {
-			text-decoration-color: var(--accent);
-	
-		}
 	}
 
 	.contacts {
@@ -486,14 +478,6 @@ PROJECTS.forEach((p, i) => {
 		line-height: 1;
 		text-decoration: underline;
 		text-underline-offset: 0.25em;
-		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
-	}
-
-	@media (hover: hover) {
-		.contacts a.as-text:hover {
-			text-decoration-color: var(--accent);
-	
-		}
 	}
 
 	.stamp {
@@ -585,7 +569,6 @@ PROJECTS.forEach((p, i) => {
 	.feature-text a {
 		color: var(--ink);
 		text-decoration: underline;
-		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 		transition:
 			text-decoration-color 160ms ease-out,
 			color 160ms ease-out;
@@ -594,7 +577,6 @@ PROJECTS.forEach((p, i) => {
 	@media (hover: hover) {
 		.feature-text a:hover {
 			color: var(--accent);
-			text-decoration-color: var(--accent);
 		}
 	}
 
@@ -892,7 +874,6 @@ PROJECTS.forEach((p, i) => {
 	.project h3 a {
 		color: var(--ink);
 		text-decoration: underline;
-		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 		transition:
 			text-decoration-color 160ms ease-out,
 			color 160ms ease-out;
@@ -901,7 +882,6 @@ PROJECTS.forEach((p, i) => {
 	@media (hover: hover) {
 		.project h3 a:hover {
 			color: var(--accent);
-			text-decoration-color: var(--accent);
 		}
 	}
 

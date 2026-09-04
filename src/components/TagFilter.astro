@@ -20,7 +20,16 @@ const { tags, total, current = null } = Astro.props;
 
 {
 	tags.length > 0 && (
-		<nav class="filter" aria-label="Filter posts by tag">
+		<nav class="filter" aria-labelledby="filter-label">
+			{/* The bar was a row of chips with nothing to say what they were
+			    for. `All 1` and a tag name read as metadata about the list
+			    below them at least as easily as they read as a control you
+			    are meant to press, and the accent alone does not settle it.
+			    The label says what to do with them. It is also what the nav
+			    is named by, so a screen reader announces the same words the
+			    page shows rather than a second phrasing only it can hear. */}
+			<p class="filter-label legend" id="filter-label">Select tags</p>
+			<div class="chips">
 			<a
 				class:list={['chip', { 'is-on': current === null }]}
 				href="/blog"
@@ -37,15 +46,23 @@ const { tags, total, current = null } = Astro.props;
 					{tag} <span class="count">{n}</span>
 				</a>
 			))}
+			</div>
 		</nav>
 	)
 }
 
 <style>
 	.filter {
+		margin-bottom: var(--s-6);
+	}
+
+	.filter-label {
+		margin: 0 0 var(--s-2) 0;
+	}
+
+	.chips {
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--s-2);
-		margin-bottom: var(--s-6);
 	}
 </style>

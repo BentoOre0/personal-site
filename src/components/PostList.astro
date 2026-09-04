@@ -30,6 +30,17 @@ const { posts } = Astro.props;
 				<span class="date legend">
 					<FormattedDate date={post.data.pubDate} />
 				</span>
+				{/* A sibling of the date rather than the last thing in the
+				    entry, so the two share the right-hand column and one right
+				    edge. Inside the entry it aligned to the entry's own right
+				    edge, which stops short of the date's, and a handle that
+				    nearly lines up with something reads as a mistake. */}
+				<p class="read">
+					{/* No whitespace inside the anchor: it renders as a trailing
+					    space, which right alignment turns into a visible gap
+					    against the edge of the box. */}
+					<a href={`/blog/${post.id}/`} aria-label={`Read ${post.data.title}`}>Read</a>
+				</p>
 			</li>
 		))
 	}
@@ -42,16 +53,41 @@ const { posts } = Astro.props;
 		padding: 0;
 	}
 
+	/* Each entry is an outlined box, so the list reads as a set of separate
+	   things rather than one column of text that happens to have gaps in it.
+	   It is the boundary of the tap target, which is the whole box.
+
+	   `--rule-strong`, the grey the site already uses for a border that has
+	   to be seen. Ink was tried first and was too hard: a black box is a
+	   heavier mark than the title inside it, and four of them down a page
+	   would be the first thing you see on a sheet that is meant to read as
+	   paper. Dashed is spoken for, it means an unfilled figure slot, so the
+	   softening is in the colour and not the stroke. */
 	.index li {
 		position: relative;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) auto;
-		gap: var(--s-4);
+		/* The entry spans both rows, so the second one takes whatever height
+		   is left over and the handle sits at the top of it, directly under
+		   the date rather than floating in the middle of the box. */
+		grid-template-rows: auto 1fr;
+		column-gap: var(--s-4);
+		row-gap: var(--s-2);
 		align-items: baseline;
-		padding: var(--s-4) var(--s-2);
-		margin-inline: calc(-1 * var(--s-2));
+		padding: var(--s-4);
+		border: var(--hairline) solid var(--rule-strong);
 		border-radius: 2px;
 		transition: background-color 120ms ease-out;
+	}
+
+	.entry {
+		grid-column: 1;
+		grid-row: 1 / -1;
+		min-width: 0;
+	}
+
+	.index li + li {
+		margin-top: var(--s-4);
 	}
 
 	@media (hover: hover) {
@@ -60,14 +96,35 @@ const { posts } = Astro.props;
 		}
 	}
 
+	/* Outside the hover query on purpose, the same reasoning as the wordmark
+	   in the header: a tap must acknowledge itself, and a touch device has
+	   no hover to fall back on. The box is the target, so the box is what
+	   lights up, which is also how a reader learns that the whole box and
+	   not just the title takes the tap.
+
+	   Named anchors, not `:has(a:active)`. The tags are links too, and they
+	   go to a tag archive rather than to the post, so a bare descendant
+	   selector lit the whole box on the one tap that was not going where the
+	   box goes. Only the two anchors that lead to the post arm it. */
+	.index li:has(h2 a:active),
+	.index li:has(.read a:active) {
+		background: var(--wash);
+	}
+
 	.index h2 {
 		font-size: var(--t-md);
 		margin: 0;
 	}
 
+	/* Ink text, red underline, at full strength rather than the 45% every
+	   other link on the site rests at. The title is 20px and set bold, so it
+	   is the heaviest thing in the box; carrying it in the accent as well put
+	   a solid red bar across the top of every entry. The underline alone is
+	   enough to say it clicks, and it is the mark a phone can see, which the
+	   hover wash never was. Colour is still what hover adds. */
 	.index h2 a {
 		color: var(--ink);
-		text-decoration: none;
+		text-decoration-color: var(--accent);
 	}
 
 	@media (hover: hover) {
@@ -97,19 +154,53 @@ const { posts } = Astro.props;
 		max-width: 60ch;
 	}
 
+	/* Sized and set like `.project-links` on the homepage, so the two read as
+	   one control rather than two conventions. It sits above the row overlay
+	   for the same reason the tags do: it is its own target. */
+	.read {
+		grid-column: 2;
+		grid-row: 2;
+		/* Bottom of the column, so it comes out level with the tags, which are
+		   the last thing in the entry beside it. Sat directly under the date
+		   at first and read as a second line of metadata rather than a
+		   control; down here it is the last thing in the box in both columns
+		   at once, which is where a reader is by the time they want it. */
+		align-self: end;
+		position: relative;
+		z-index: 1;
+		font-size: var(--t-xs);
+		margin: 0;
+		/* One right edge with the date above it. The tags are left, so the two
+		   do not compete for the same corner. */
+		text-align: right;
+	}
+
 	.date {
+		grid-column: 2;
+		grid-row: 1;
 		text-align: right;
 		white-space: nowrap;
 	}
 
 	@media (max-width: 40rem) {
+		/* One column, so the second row is no longer a right-hand rail and the
+		   date and the handle simply follow the entry. Both go flush left with
+		   everything else. */
 		.index li {
 			grid-template-columns: minmax(0, 1fr);
-			gap: var(--s-2);
+			grid-template-rows: none;
+			row-gap: var(--s-3);
 		}
 
-		.date {
+		.entry,
+		.date,
+		.read {
 			grid-column: 1;
+			grid-row: auto;
+		}
+
+		.date,
+		.read {
 			text-align: left;
 		}
 	}
