@@ -433,10 +433,30 @@ PROJECTS.forEach((p, i) => {
 		flex-wrap: wrap;
 	}
 
+	/* These four rules restate the 45% underline colour and they are NOT
+	   redundant with the `a` rule in `global.css`. Three of them set
+	   `text-decoration: underline`, which is a shorthand: it resets
+	   `text-decoration-color` to `currentColor`. Astro scopes these
+	   selectors with a `[data-astro-cid-*]` attribute, so they outrank the
+	   bare `a` rule and the reset wins. Delete the longhand and the
+	   credential and project underlines turn ink, which is what happened on
+	   4 Sep and had to be reverted off production.
+
+	   `.resume` is the one that has no shorthand and would survive, but it
+	   keeps the line so all four read the same and none of them looks like
+	   the odd one worth deleting. */
 	.resume {
 		font-family: var(--font-geist-mono);
 		font-size: var(--t-xs);
 		letter-spacing: 0.02em;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+	}
+
+	@media (hover: hover) {
+		.resume:hover {
+			text-decoration-color: var(--accent);
+	
+		}
 	}
 
 	.contacts {
@@ -478,6 +498,14 @@ PROJECTS.forEach((p, i) => {
 		line-height: 1;
 		text-decoration: underline;
 		text-underline-offset: 0.25em;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+	}
+
+	@media (hover: hover) {
+		.contacts a.as-text:hover {
+			text-decoration-color: var(--accent);
+	
+		}
 	}
 
 	.stamp {
@@ -569,6 +597,7 @@ PROJECTS.forEach((p, i) => {
 	.feature-text a {
 		color: var(--ink);
 		text-decoration: underline;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 		transition:
 			text-decoration-color 160ms ease-out,
 			color 160ms ease-out;
@@ -577,6 +606,7 @@ PROJECTS.forEach((p, i) => {
 	@media (hover: hover) {
 		.feature-text a:hover {
 			color: var(--accent);
+			text-decoration-color: var(--accent);
 		}
 	}
 
@@ -874,6 +904,7 @@ PROJECTS.forEach((p, i) => {
 	.project h3 a {
 		color: var(--ink);
 		text-decoration: underline;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
 		transition:
 			text-decoration-color 160ms ease-out,
 			color 160ms ease-out;
@@ -882,6 +913,7 @@ PROJECTS.forEach((p, i) => {
 	@media (hover: hover) {
 		.project h3 a:hover {
 			color: var(--accent);
+			text-decoration-color: var(--accent);
 		}
 	}
 
