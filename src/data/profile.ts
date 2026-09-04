@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '1.0',
+	rev: '1.1',
 	status: 'PRELIMINARY',
 	updated: '2026-09-04',
 };
@@ -678,12 +678,22 @@ export const PROJECTS: Project[] = [
 		],
 		titleHref: 'https://github.com/BentoOre0/ColorSegmentationAlgoPercentageCoverage',
 		figure: {
+			/* The legend was painted out of the source PNG at the owner's
+			   request: it labelled the three clusters "White (background)",
+			   "Yellow (fresh)" and "Brown (browned)", and the picture makes
+			   the point without it. The clusters are drawn in their own
+			   colours, so the naming was redundant, and the labels were the
+			   one part of this figure that went illegible when it shrank.
+
+			   That also settles `wide` for this row. The legend's small type
+			   was the only argument ever made for it; there is no small type
+			   left. */
 			caption:
 				'The three colour classes the algorithm separates, drawn as clusters in colour space.',
 			plates: [
 				{
 					still: colourClusters,
-					alt: 'A dark three-dimensional plot of a colour space holding three separated clusters of dots, each ringed by an outline: grey labelled white for background, yellow labelled fresh, and brown labelled browned. Leader lines run from the yellow and brown clusters to a photograph of a spotted banana in the corner.',
+					alt: 'A dark three-dimensional plot of a colour space holding three separated clusters of dots, each ringed by an outline in its own colour: one white, one yellow, one brown. Leader lines run from all three clusters to a photograph of a spotted banana in the corner.',
 				},
 			],
 			ratio: '966 / 627',

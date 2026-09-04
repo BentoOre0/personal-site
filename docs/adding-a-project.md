@@ -447,6 +447,12 @@ every other row keeps and leaves the right half of the row empty. It also made
 the largest figure on the page belong to P7. Before reaching for `wide`, ask
 whether the row deserves the width, not just whether the labels are small.
 
+**That figure later lost its legend too**, painted out of the source PNG
+because the clusters are drawn in their own colours and the naming was
+redundant. So the one argument ever made for `wide` on this site no longer
+has anything to point at. If a diagram's labels are the only reason to go
+wide, **check first whether the diagram needs the labels.**
+
 ### If you want a dummy photo and want to see the size
 
 Give it `spec` instead of `plates`:

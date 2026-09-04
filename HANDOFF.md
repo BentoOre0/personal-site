@@ -345,6 +345,25 @@ for.
   the cluster nearest white as dish and background, report the ratio of the
   two left. Its stack gained computer vision and K-means clustering.
 
+**Fig. 7's legend is painted out of the source PNG.** It labelled the three
+clusters "White (background)", "Yellow (fresh)" and "Brown (browned)". Asked
+for directly: the clusters are drawn in their own colours and the picture
+carries the concept without naming them.
+
+Done in `src/assets/colour-clusters.png` itself, not in CSS: the box sat over
+plain ground in the top-right corner with no plot content behind it. The
+ground is not flat, it has a gentle 2D gradient, so a flat fill would have
+shown. The patch fits a plane to every background pixel in the image, then
+per row interpolates a correction between clean strips either side of the box
+and adds grain matched to the measured background noise, sd about 0.85. No
+seam at 1:1. The original is in git; the file also got 59KB smaller.
+
+**This settles `wide` for that row.** The legend's small type was the only
+argument ever made for a wide figure on this site, and there is no small type
+left. Recorded in `docs/adding-a-project.md`.
+
+The alt text was rewritten with it, since it described the labels.
+
 **The reference colours are deliberately not named in P7.** The owner's
 account of the pull step and the labels on the figure do not agree on the
 third colour, so "three reference colours" is what can be said without
