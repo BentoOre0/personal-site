@@ -341,8 +341,11 @@ had quietly stopped doing anything.
 
 The tagline is two rows: a fixed stem ("Engineering physics student
 building") above a typed line that cycles through the terms in
-`IDENTITY.rotating`. Each term types in at ~62ms per character, rests
-1.9s with the caret blinking, erases at ~34ms, beats, then the next.
+`IDENTITY.rotating`. Each term types in at ~44ms per character, rests
+1.9s with the caret blinking, erases at ~24ms, beats, then the next.
+The per-character speeds were 62 and 34 until 4 Sep; the two pauses have
+not moved, because the hold is what makes the term readable and the beat
+is what separates one term from the next.
 The caret is solid while characters move and blinks only at rest.
 
 Splitting stem from typed line does **not** prevent reflow; they share

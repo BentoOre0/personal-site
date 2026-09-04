@@ -238,8 +238,13 @@ PROJECTS.forEach((p, i) => {
 				const terms = JSON.parse(rotator.dataset.terms || '[]');
 				if (terms.length < 2) return;
 
-				const TYPE = 62;
-				const DELETE = 34;
+				/* Milliseconds per character. Typing and erasing were 62 and 34
+				   and both were asked to be quicker; the two pauses are
+				   deliberately unchanged, so the term still holds long enough
+				   to be read and the gap between terms still lands. Only the
+				   travel between those two states got shorter. */
+				const TYPE = 44;
+				const DELETE = 24;
 				const REST = 1900;
 				const BEAT = 420;
 
