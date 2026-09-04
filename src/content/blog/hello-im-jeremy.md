@@ -24,7 +24,7 @@ I learn best by immersing myself in a community where I can ask questions. I gen
 
 ## What are you actually good at?
 
-I think my strength is probably more in execution and forcing myself to learn things that seem completely unrelated to each other. I am not an olympiad gold medal purist.
+I think my strength is probably more in execution and forcing myself to learn things that seem completely unrelated to each other. I am not an Olympiad gold medal purist.
 
 ## How do you get into something completely new?
 
