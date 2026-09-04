@@ -36,8 +36,8 @@ it moves with the site:
 
 ```ts
 export const REVISION = {
-	rev: '1.5',
-	status: 'PRELIMINARY',
+	rev: '1.6',
+	status: 'DEPLOYED',
 	updated: '2026-09-04',
 };
 ```
@@ -49,8 +49,10 @@ export const REVISION = {
 - **Both go in the same commit as the change they describe**, not a tidying
   commit afterwards. A rev bumped on its own dates nothing.
 
-`status` is separate and does not move on its own. It reads `PRELIMINARY`
-until the owner decides the document is not preliminary any more.
+`status` is separate and does not move with the rev. It read `PRELIMINARY`
+while the page still carried placeholders and reads `DEPLOYED` now that it
+does not. It is a claim about the document, so put it back to `PRELIMINARY`
+if the page goes back to carrying `TBD`s.
 
 **Screenshot before you judge any visual change:**
 

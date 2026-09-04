@@ -84,10 +84,12 @@ files stay. **See Decisions.**
    shows Astro stock art. This is the highest-value unfilled item on the
    list: discovery here is almost entirely a pasted link, and the unfurl
    card is a first impression the page never gets to correct.
-2. `REVISION.status` still reads `PRELIMINARY`. That one is the owner's to
-   change. `REVISION.rev` and `REVISION.updated` are no longer stale: from
-   4 Sep they move on every commit, the rev by one tenth with 0.9 wrapping
-   to 1.0. See `docs/build-and-ship.md`.
+2. **`REVISION` is no longer stale, and this item is closed.** `rev` and
+   `updated` move on every commit from 4 Sep, the rev by one tenth with 0.9
+   wrapping to 1.0. `status` was `PRELIMINARY` and is now `DEPLOYED`, at the
+   owner's request: the credentials are confirmed, the résumé link is real,
+   no row prints a shot spec and no figure is an empty slot, so the
+   preliminary claim had stopped being true. See `docs/build-and-ship.md`.
 3. **The résumé link is filled**, a real Google Drive share link. Drive mints
    a new file id on every re-upload, so it will need repointing whenever the
    PDF is replaced.

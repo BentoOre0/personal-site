@@ -561,13 +561,18 @@ not built.
 
 ## Placeholder discipline
 
-The document is stamped `PRELIMINARY` with a revision number while
-content is incomplete, and unfilled values read `TBD`; both native to
-the format, so honesty costs the design nothing. All page content lives
-in `src/data/profile.ts`, with every placeholder marked. All five
-credentials on the page are now confirmed and sourced from the résumé
-of 25 Aug 2026; `IDENTITY.resume.href` is the one field still unfilled.
-Nothing on this site may be invented to fill a gap.
+The document carries a status stamp and a revision number, and unfilled
+values read `TBD`; both native to the format, so honesty costs the design
+nothing. It read `PRELIMINARY` while content was incomplete, which on a
+datasheet means the spec may still change. It reads `DEPLOYED` from 4 Sep,
+because that stopped being true: the credentials are confirmed and
+sourced, the résumé link is real, no row prints a shot spec and no project
+figure is an empty slot.
+
+**The stamp is a claim and has to stay one.** If the page goes back to
+carrying placeholders, it goes back to `PRELIMINARY`. All page content
+lives in `src/data/profile.ts`, with every placeholder marked. Nothing on
+this site may be invented to fill a gap.
 
 The blog was the one surface where that rule was broken, and not by
 the design: `src/content/blog/` holds five Astro demo posts whose bodies
