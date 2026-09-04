@@ -31,7 +31,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '3.3',
+	rev: '3.4',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -681,7 +681,7 @@ export const PROJECTS: Project[] = [
 	{
 		title: 'Baybayin script recognition: CNN vs. SVC',
 		summary:
-			"A computer vision study comparing convolutional neural networks against support vector classifiers at recognising Baybayin script under rotation and noise. CNNs proved more resilient to distortion; SVCs were more accurate on clean data, where the script's diacritics carry the distinction.",
+			"A computer vision study comparing convolutional neural networks against support vector classifiers at recognising Baybayin script under rotation and noise. The SVC won on clean images and on rotation; the CNN was more robust to noise.",
 		params: [
 			{ key: 'Role', value: 'Sole author · IB Extended Essay' },
 			/* The libraries, not the two model families: "CNN vs. SVC" is
