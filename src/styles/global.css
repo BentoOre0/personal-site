@@ -473,3 +473,103 @@ a.designator {
 		padding-left: 0;
 	}
 }
+
+/* --- The sheet has an edge on a very wide screen ----------------------
+   Above 100rem the 960px sheet stops reading as a sheet and starts
+   reading as a column of text stranded in white, because the paper and
+   the surface it lies on are the same colour and nothing says where one
+   stops. The world is a printed document, so the honest fix is the
+   document's own trim edge: two hairlines at the sheet's boundary, the
+   same single weight that divides everything else here.
+
+   They sit exactly on `--wide`, which is 24px outside the text on either
+   side, so they never cross a glyph. Fixed rather than absolute so they
+   run the height of the window and read as the edge of a page rather
+   than as a box drawn around the content. The header's own rule crosses
+   them, which is what a rule at the top of a printed page does.
+
+   Not below 100rem: at 1440 the margins are already narrow enough that
+   the page reads as a page, and the lines would only be decoration. */
+@media (min-width: 100rem) {
+	body::before,
+	body::after {
+		content: '';
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		width: var(--hairline);
+		background: var(--rule);
+		pointer-events: none;
+	}
+
+	body::before {
+		left: calc(50% - var(--wide) / 2);
+	}
+
+	body::after {
+		left: calc(50% + var(--wide) / 2);
+	}
+}
+
+/* --- A phone held sideways -------------------------------------------
+   Every vertical measure on this site was set for a portrait viewport
+   844px tall. Turned sideways the same phone is 390px tall, and the
+   title block alone is taller than that: 64px of lead, a 72px name over
+   two lines, a three-line tagline and a 287px sketch beside it. The
+   first screen of the site became the name and nothing else, on the one
+   page whose whole job is getting a reader to the credentials.
+
+   Height is the constraint here, not width, so this keys off height.
+   `orientation: landscape` keeps it away from a short desktop window,
+   where a narrow browser at 500px tall is still a pointer device on a
+   desk and wants the full composition. */
+@media (max-height: 26rem) and (orientation: landscape) {
+	.section {
+		padding-block: var(--s-4);
+	}
+}
+
+/* --- Windows High Contrast ------------------------------------------
+   `forced-colors: active` throws the palette away and repaints the page
+   from the reader's own system colours. Most of this site survives it
+   intact, because the hairline system is drawn with borders and borders
+   keep their colour forced to `CanvasText`. Three things did not.
+
+   Verified by emulating the mode, not by reasoning about it. */
+@media (forced-colors: active) {
+	/* **The loading screen is artwork.** Its ground is `--ink` and its
+	   line art is a white PNG, and forced colours repaint the ground to
+	   `Canvas` while leaving the image alone. In a dark high-contrast
+	   theme that happens to look correct. On High Contrast White the
+	   ground turns white and the white figure disappears into it.
+
+	   `forced-color-adjust: none` is the opt-out for exactly this case,
+	   content whose own colours carry the meaning. It is scoped to the
+	   overlay and nothing else on the site takes it. */
+	.loader {
+		forced-color-adjust: none;
+	}
+
+	/* The nav's forced-colours fix lives in Header.astro, not here. Astro
+	   scopes that component's selectors with an attribute, so a bare
+	   `nav a` in this file cannot outrank them however late it is. */
+
+	/* The current tag filter is marked by a solid accent fill and paper
+	   text, and both are overridden, so `All` rendered identically to
+	   every tag beside it and the one piece of state in the bar was
+	   gone. `Highlight` is the system's own idea of the same thing. */
+	.chip.is-on {
+		background: Highlight;
+		color: HighlightText;
+		border-color: Highlight;
+	}
+
+	/* Two marks that are drawn as backgrounds rather than borders, and a
+	   background is repainted to `Canvas`. The caret is the cursor on the
+	   typed line; the pair of rules are the sheet's edges above 100rem. */
+	.caret,
+	body::before,
+	body::after {
+		background: CanvasText;
+	}
+}

@@ -507,8 +507,9 @@ resolve; if they ever stop linking, delete them.
 
 Nothing moves without user input, a pinned rule and a hard constraint.
 Four documented exceptions carry autonomous motion, each at the owner's
-request: the typed tagline; the loading screen (`Loader.astro`), where an
-indicator that does not move is not an indicator; the closing note at the
+request: the typed tagline; the loading screen (`Loader.astro`), which is
+**a moment of joy, for beauty and appreciation**, in his words, and not a
+progress indicator; the closing note at the
 foot of `/blog` (`QuoteBar.astro`), one quote at a time on a 7s hold and a
 400ms cross-fade; and project figures (`Figure.astro`), which may hold an
 animation and may cycle between panels on an 8s hold.
@@ -521,11 +522,69 @@ asked for less motion is served the still and never downloads the
 animation at all. The loader runs three layers on separate
 clocks, the figure trots at 660ms, the notes bob at 900ms, the Z's
 jitter at 420ms on `steps()` so they snap rather than glide, and exits
-by sliding the whole sheet up, never by fading. Both are off entirely
-under `prefers-reduced-motion`, and the overlay carries a 6s CSS
-failsafe so a dead script cannot seal the page shut.
+by sliding the whole sheet up. The overlay carries a 6s CSS failsafe so
+a dead script cannot seal the page shut, and the script caps its own
+wait on `load` at 3600ms so a slow page cannot let that failsafe fire
+first: the failsafe hides the sheet outright, and a sheet already hidden
+cannot be seen to leave.
 The only transitions are 120ms ease-out color and underline changes on
 hover and focus. `prefers-reduced-motion` is honoured globally.
+
+### The loading screen is a beat, not a status
+
+The site is ready long before the 1400ms hold ends, so there is no
+progress to report and nothing to wait for. The overlay carried
+`role="status"` with `aria-live="polite"`, which announced "Loading" to a
+screen reader on every full page load and then went silent, describing a
+wait that was not happening. It is `aria-hidden` now. A reader who cannot
+see the drawing loses nothing by not being told it is there, and gets the
+page, which has been ready the whole time.
+
+The visible label reads `Loading...`, at the owner's request. The word
+stays even though the wait is decorative: it is what the drawing is
+captioned, not a claim about the network.
+
+### Reduced motion is less travel, not a jump
+
+**The loading screen fades out under `prefers-reduced-motion`; it does
+not simply cease to exist.** It used to carry `transition: none`, so the
+sheet went from covering the viewport to gone between two frames, which
+is a harder cut than the 480ms slide it was replacing. Reduced motion
+asks for less travel, and the reduced answer to sliding a full-screen
+opaque sheet is fading it over 240ms in place, not deleting it.
+
+This was found on a Windows laptop, where it looked like a bug: Chrome
+maps `prefers-reduced-motion` onto the system animation setting, which is
+off on a lot of Windows machines and which the power mode can turn off
+without the reader asking. The same page on a phone was fine, so the
+report read as a device fault. The setting only reaches the loader now
+through the fade; the trotting figure, the notes and the Z's are still
+off entirely, which is the part reduced motion was actually asking for.
+
+The blanket rule in `global.css` crushes every `transition-duration` on
+the page to 0.01ms under the same query, so the loader's own reduced
+rule carries `!important` to survive it. Anything else that wants to
+degrade to a fade rather than to a cut has to do the same.
+
+### The preference is read live, not sampled
+
+The typed tagline, the closing note and a cycling figure each checked
+`matchMedia('(prefers-reduced-motion: reduce)')` once, at page load, and
+never again. That treats the preference as a property of the device. It
+is a setting: a reader can change it, and on Windows the power mode can
+change it for them, while the page is open. Someone who turned motion
+off was being told to reload before this site would honour it.
+
+All three subscribe to the query's `change` event now and stop where
+they stand, and start again if it is turned back off. The tagline is the
+one with a state to restore: the timer is cleared, so the pending wait
+never resolves and the loop ends mid-word, and the line is then set back
+to the whole first term rather than left on a fragment.
+
+Each listener is dropped and re-attached on `astro:page-load`, next to
+the timer that was already being cleared there. With the ClientRouter in
+play an untracked listener accumulates one per navigation, each still
+holding elements that left with their page.
 
 ### Evidence folds, it is not spent
 
@@ -622,6 +681,144 @@ off `pointer`/`hover`, never a width breakpoint.
   under `@media (hover: none)`.
 - Below 30rem the `.spec` table stacks key over value. Two columns pin
   the key at 38% of the row and collapse the value to ~14 characters.
+
+## Held sideways
+
+Every vertical measure here was set against a portrait phone 844px tall.
+Turned sideways that same phone is 390px, and the homepage title block
+alone was taller than the viewport: 64px of lead, a 59px name over two
+lines, the three-line tagline, and a 287px sketch beside it. The whole
+first screen was the name, on the page whose one job is getting a reader
+down to the credentials.
+
+`@media (max-height: 26rem) and (orientation: landscape)` is the query,
+and both halves are load-bearing. Height is the constraint, so width
+must not be what is asked. `orientation` is what keeps a desktop window
+dragged short out of it: that is still a pointer on a desk and still
+wants the full composition.
+
+The name drops to `--t-xl`, which is the floor `--t-display`'s own clamp
+already reaches at narrow widths, so this narrows the range the step
+travels through rather than inventing a size outside the scale. The
+sketch, the section padding, the blog masthead's lead and a post's own
+masthead (`BlogPost.astro`) all step back with it. Nothing is hidden: the
+same content, at the same order, in a block that fits.
+
+**26rem, not 30rem.** A media query in `rem` is measured against the
+reader's root font size, so 30rem is 720px at the default 16px but 780px
+at 26px, and a 1366x768 laptop in landscape would then fall into the
+phone layout. 26rem is 416px at the default, which still clears a 390px
+landscape phone with room, and cannot reach a laptop at any plausible
+font size.
+
+## The sheet has an edge above 100rem
+
+Two hairlines at `--wide`'s boundary, fixed, running the height of the
+window. Below 100rem there is nothing to solve; above it the paper and
+the surface it lies on are both `--paper` and nothing says where one
+stops, so a 960px column of text sits in white with no explanation. The
+document's own trim edge is the answer the world already had. They land
+24px outside the text on either side, so they never cross a glyph, and
+the header's rule crosses them the way a rule at the top of a printed
+page does.
+
+## Print
+
+**A datasheet is a document that gets printed**, so this is the one
+adaptation the format asks for outright, and the site had none of it: a
+printout carried the nav bar, red underlines that went nowhere, every
+folded credential still folded, and headings orphaned at the foot of a
+page.
+
+The governing decision is that **paper cannot be clicked**. Every claim
+on this site is meant to be checkable, and on screen the accent is what
+says so. On paper that cue is a lie, so it is withdrawn: link text sets
+in ink with no underline, and the reference prints after it in mono at
+`--t-xs`, from `a[href^='http']::after`. A reader holding the printout can
+still reach the repository, which is what the colour was standing in for.
+`mailto:` links are skipped, their text already being the address, and so
+are in-page `§` anchors, which resolve to nothing on paper.
+
+Red survives on exactly two marks, the revision stamp and P1's
+designator, because neither was ever a link. A near-monochrome sheet
+with two red stamps is the document this world has been imitating.
+
+- **The scale goes to points**, 8/10/12/15/20/26, because 16px of screen
+  body is heavier than a printed document needs. The derived rules are
+  tints against a transparent ground, which a laser printer renders as
+  nothing, so they become solid greys. Still one weight.
+- **Folded evidence is unfolded by script**, on `beforeprint`, and put
+  back on `afterprint`. CSS cannot do it: a closed `<details>` hides its
+  content through the user agent's shadow tree, not through a property a
+  stylesheet can reach. Which ones were already open is recorded, so
+  printing does not silently rearrange the page still on screen.
+- **`.project` is deliberately not `break-inside: avoid`.** Holding a
+  whole row together sounds right and prints badly, since a row carrying
+  a figure is most of a sheet. A figure and its caption are one object
+  and stay whole; a project is a sequence of them and may break. `h3`
+  carries `break-after: avoid`, which is what actually stops a title
+  stranding itself at the foot of a page.
+- Navigation, the loading screen, the tag filter and the `Read` handle
+  are all ways of getting somewhere else, and there is nowhere else on
+  paper. The wordmark stays and becomes the document's title line.
+- The closing note's hidden quotes share one grid cell so the block
+  cannot move the page; on paper that is an inch of blank, so only the
+  showing one prints.
+- **Folded evidence also has a CSS path.** The unfolding is done by
+  script, and a printout is exactly where a reader may have JavaScript
+  off, so `details::details-content { content-visibility: visible }`
+  carries the same job where the browser supports it. The disclosure
+  marker is hidden only on `details[open]`, so a credential that stayed
+  folded still prints saying that something is folded.
+
+### The print styles are not in the bundle
+
+They live in `public/print.css`, linked `media="print"`. In the CSS
+bundle they were 5,855 bytes, **51% of a render-blocking stylesheet**
+that every visitor downloads and parses before first paint to serve a
+case almost none of them reach. Linked this way the file is fetched at
+low priority and blocks nothing.
+
+Two costs, both worth it and both easy to trip over:
+
+- It is not hashed, so it is cached by name.
+- **Astro links it before its own stylesheets**, so a tie on specificity
+  goes to the bundle. The three rules there that restate a base selector
+  are written to outrank it: `:root:root`, `html body`, `html .sheet`.
+  Do not simplify those back. Anything carrying `!important` was never at
+  risk, and a bare element selector can never beat one of Astro's scoped
+  component rules, which is why the header's print rule was deleted
+  rather than fixed: `Header.astro` already draws that border.
+
+## Windows High Contrast
+
+`forced-colors: active` throws the palette away and repaints from the
+reader's system colours. Most of this site survives intact, because the
+hairline system is drawn with **borders**, and borders keep their colour
+forced to `CanvasText`. Backgrounds do not: they are repainted to
+`Canvas`. That difference is the whole of what broke.
+
+- **The loading screen takes `forced-color-adjust: none`.** It is
+  artwork: an `--ink` ground with white line art on it. Forced colours
+  repaint the ground and leave the PNG alone, so on High Contrast White
+  the ground turns white and the white figure disappears into it. This
+  is the only element on the site that opts out, and it opts out because
+  its own colours carry the meaning.
+- **The current tag chip uses `Highlight` / `HighlightText`.** Its solid
+  accent fill and paper text were both overridden, so `All` rendered
+  identically to every tag beside it and the one piece of state in the
+  bar was gone.
+- **The nav marks the current page by border *style*, not colour**, and
+  that rule lives in `Header.astro`. A resting item carries
+  `border-bottom: 1px solid transparent` to reserve the space, and
+  `transparent` is repainted to `CanvasText`, so every item drew the
+  current-page underline. Style is not overridden the way colour is.
+- **The caret and the sheet edges take `CanvasText`**, being backgrounds
+  rather than borders, and would otherwise vanish.
+
+Verified by emulating the mode and reading computed values, not by
+reasoning about it. The dark emulation hides the loader defect
+completely, because there the forced ground happens to be black.
 
 ## Naming
 

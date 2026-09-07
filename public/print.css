@@ -1,0 +1,228 @@
+/*
+  Print styles for the datasheet. See DESIGN.md, section "Print".
+
+  **This file is deliberately not part of the Astro CSS bundle.** It was,
+  and at 5,855 bytes it was 51% of a render-blocking stylesheet that every
+  visitor downloads and parses before first paint, to serve a case almost
+  none of them reach. Linked with `media="print"` it is fetched at low
+  priority and blocks nothing.
+
+  The cost of living outside the bundle is that it is not hashed, so it is
+  cached by name, and that Astro links it BEFORE its own stylesheets. A
+  tie on specificity therefore goes to the bundle, not to this file, so
+  the three rules here that restate a base selector are written to outrank
+  it: `:root:root`, `html body`, `html .sheet`. Anything already carrying
+  `!important` was never at risk. Do not "simplify" those three back.
+*/
+/* --- Print ------------------------------------------------------------
+   The world is a component datasheet and a datasheet is a document that
+   gets printed, so this is the one adaptation the format actually asks
+   for. It had none: a printed page carried the nav bar, red underlines
+   that went nowhere, every folded credential still folded, and page
+   breaks that orphaned a heading from the row beneath it.
+
+   The governing decision is that **paper cannot be clicked**. Every
+   claim on this site is meant to be checkable, and on screen the accent
+   is what says so. On paper that cue is a lie, so it is withdrawn: link
+   text sets in ink with no underline, and the reference itself prints
+   after it in mono. A reader with the printout can still get to the
+   repository, which is the thing the colour was standing in for.
+
+   Red survives only where it was never a link to begin with: the
+   revision stamp and P1's designator. A near-monochrome sheet with two
+   red marks on it is the document this site has been imitating. */
+
+@page {
+	size: A4;
+	/* Wider at the foot: Chrome prints its own URL and page number into
+	   the bottom margin unless the reader turns it off, and this leaves
+	   room for it rather than fighting it. */
+	margin: 16mm 14mm 20mm;
+}
+
+@media print {
+	:root:root {
+		/* Points, not pixels. 16px of screen body is heavier than a
+		   printed document needs, and every step below is one the scale
+		   already has, rounded to the nearest half point. */
+		--t-xs: 8pt;
+		--t-base: 10pt;
+		--t-md: 12pt;
+		--t-lg: 15pt;
+		--t-xl: 20pt;
+		--t-display: 26pt;
+
+		/* The derived rules are tints of `--muted` against a transparent
+		   ground, which a laser printer renders as nothing at all. They
+		   become solid greys for paper. One weight still, only opaque. */
+		--rule: color-mix(in srgb, var(--muted) 52%, var(--paper));
+		--rule-strong: color-mix(in srgb, var(--muted) 85%, var(--paper));
+		--wash: transparent;
+		--accent-wash: transparent;
+	}
+
+	html body {
+		background: var(--paper);
+		font-size: var(--t-base);
+		line-height: 1.45;
+	}
+
+	/* `@page` owns the margin now, so the sheet stops reserving its own
+	   and takes the full measure of the paper. */
+	html .sheet {
+		max-width: none;
+		padding-inline: 0;
+	}
+
+	/* Screen furniture. Navigation, the loading screen, the tag filter
+	   and the back link are all ways of getting somewhere else, and there
+	   is nowhere else on a sheet of paper. */
+	header nav,
+	#loader,
+	.filter,
+	.back,
+	.read,
+	.caret {
+		display: none !important;
+	}
+
+	/* The wordmark stays and becomes the document's title line, which is
+	   what the top of a datasheet carries. The rule under it needs no
+	   declaration: Header.astro draws it, and a scoped selector there
+	   outranks anything this file can say about a bare element. */
+	.mark {
+		color: var(--ink) !important;
+	}
+
+	/* Paper cannot be clicked, so nothing on it is dressed as clickable. */
+	a {
+		color: var(--ink) !important;
+		text-decoration: none !important;
+	}
+
+	/* The reference prints instead. Absolute URLs only: a `mailto:` link
+	   already sets its own address as its text, an in-page `§` anchor
+	   resolves to nothing on paper, and a site-relative path is not
+	   something a reader can type. Mono because it is a literal value,
+	   which is the one job mono has here. */
+	a[href^='http']::after {
+		content: '<' attr(href) '>';
+		font-family: var(--font-geist-mono);
+		font-size: var(--t-xs);
+		color: var(--muted);
+		/* The gap is a margin, not a leading space in the `content`. An
+		   inline box trims whitespace at its own start, so the space set
+		   there was dropped and every reference printed welded to the last
+		   letter of the link: "University of British
+		   Columbia<https://www.engphys.ubc.ca/>".
+
+		   Plain inline, not `inline-block`. An atomic inline moves as one
+		   unbreakable object, so a repository URL longer than the column
+		   overhung the right margin instead of wrapping into it. Inline is
+		   also only safe because print has already taken every underline
+		   off `a`: it is the parent's decoration that an inline child
+		   cannot escape, and there is none left to inherit. */
+		margin-left: 0.35em;
+		word-break: break-all;
+	}
+
+	/* The two marks that were never links keep the accent. */
+	.stamp,
+	.project:first-child .project-body > .designator {
+		color: var(--accent) !important;
+	}
+
+	/* A heading never prints as the last thing on a page, and a row never
+	   splits across two. `.project` and `.entry` are the units that have
+	   to stay whole: a photograph on one page and its caption on the next
+	   is the figure failing at the one job it has. */
+	h1,
+	h2,
+	h3,
+	.section-head,
+	caption,
+	.legend {
+		break-after: avoid;
+	}
+
+	/* `.project` is deliberately absent. Holding a whole row together
+	   sounds right and prints badly: a row carrying a figure is most of a
+	   sheet, so any row that did not fit in what remained pushed a hand's
+	   width of blank to the next page, and the homepage ran to ten. The
+	   pieces that actually must not split are here instead, and `h3`'s
+	   `break-after` already stops a title stranding itself at the foot of
+	   a page. A figure and its caption are one object; a project is a
+	   sequence of them and may break between. */
+	.entry,
+	.features li,
+	figure,
+	.plate,
+	.spec tr,
+	blockquote {
+		break-inside: avoid;
+	}
+
+	p,
+	li {
+		orphans: 3;
+		widows: 3;
+	}
+
+	/* A figure is evidence, not a plate to fill the page with. Capped so
+	   a single photograph cannot take a sheet to itself and push the row
+	   it documents onto the next one. */
+	figure img,
+	.plate-image,
+	.panel img {
+		max-height: 8cm;
+		object-fit: contain;
+	}
+
+	/* The tagline reserves three lines for a rotation that does not
+	   happen on paper, where the first term is simply set and stays. */
+	.tagline {
+		min-height: 0 !important;
+	}
+
+	/* The sketch is the one warm mark on the page and it prints, but at
+	   the size it was given a 1440px viewport it takes a third of the
+	   first sheet. */
+	.emblem {
+		width: 34mm !important;
+	}
+
+	/* Folded evidence is opened by the print script, so the disclosure
+	   marker has nothing left to say. The quotations themselves are the
+	   reason to print the page at all. */
+	details[open] > summary::after,
+	details[open] > summary::marker {
+		content: '' !important;
+	}
+
+	details[open] > summary {
+		list-style: none;
+	}
+
+	/* The unfolding is done by script, and a printout is exactly where a
+	   reader may have JavaScript off. This is the CSS half of the same
+	   job: current Chrome will render a closed `<details>`'s content when
+	   its content-visibility is forced, and where it is not supported the
+	   marker above is still drawn, so a folded credential prints saying
+	   that something is folded rather than silently omitting it. */
+	details::details-content {
+		content-visibility: visible;
+	}
+
+	/* Every quote in the closing note shares one grid cell, so the block
+	   is as tall as the longest of them. On screen that is what stops the
+	   page moving; on paper it is an inch of blank. */
+	.quote:not(.is-on) {
+		display: none !important;
+	}
+
+	/* The chips on a post keep their outline: a tag is a literal value
+	   and the box is what says where the value ends. */
+	.chip {
+		border-color: var(--rule-strong) !important;
+	}
+}

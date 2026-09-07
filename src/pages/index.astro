@@ -314,6 +314,41 @@ PROJECTS.forEach((p, i) => {
 				document.addEventListener('loader:done', startOnce, { once: true });
 				setTimeout(startOnce, 3000);
 			});
+
+			/* The motion preference is read live, not sampled once.
+
+			   `start` checks it and returns, which was the whole of the
+			   handling, and that treats the setting as a fact about the
+			   device fixed at page load. It is a setting: on Windows it
+			   follows the system animation switch, which the reader can
+			   change and which the power mode can change on their behalf.
+			   Someone who turns motion off while looking at this page had
+			   to reload before the tagline would stop.
+
+			   `settle` is what "off" means here: the timer is cleared, so
+			   the pending `wait` never resolves and the loop ends where it
+			   stands, and the line is put back to the whole first term
+			   rather than left on whatever half-word it had reached. It
+			   runs before a restart too, so typing always resumes from a
+			   settled line instead of from a fragment.
+
+			   Registered at module scope, so it survives a client-side
+			   navigation and is never added twice. On a page with no
+			   rotator both functions find nothing and do nothing. */
+			const settle = () => {
+				clearTimeout(timer);
+				const rotator = document.querySelector('[data-rotator]');
+				const line = rotator && rotator.closest('.tagline');
+				if (!rotator || !line) return;
+				const terms = JSON.parse(rotator.dataset.terms || '[]');
+				if (terms.length) rotator.textContent = terms[0];
+				line.classList.remove('is-typing');
+			};
+
+			window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (event) => {
+				settle();
+				if (!event.matches) start();
+			});
 		</script>
 	</body>
 </html>
@@ -1077,6 +1112,43 @@ PROJECTS.forEach((p, i) => {
 		   and nowrap would push the page sideways. */
 		.stamp {
 			white-space: normal;
+		}
+	}
+
+	/* A phone held sideways is 390px tall, and the title block alone was
+	   taller than that: 64px of lead, a 59px name over two lines, the
+	   three-line tagline and a 287px sketch beside it. The whole first
+	   screen of the site was the name, on the one page whose job is
+	   getting a reader to the credentials underneath.
+
+	   The name drops to `--t-xl`, which is the floor `--t-display`'s own
+	   clamp already carries, so this narrows the range the step moves
+	   through rather than inventing a size outside the scale. The sketch
+	   takes the same treatment: still the largest thing in the block, no
+	   longer taller than the viewport holding it.
+
+	   Keyed to height and to `orientation`, never to width. A desktop
+	   window dragged short is still a pointer on a desk and still wants
+	   the full composition. */
+	@media (max-height: 26rem) and (orientation: landscape) {
+		.title {
+			padding-block: var(--s-4);
+		}
+
+		h1 {
+			font-size: var(--t-xl);
+		}
+
+		.tagline {
+			margin-top: var(--s-3);
+		}
+
+		.emblem {
+			width: clamp(120px, 20vw, 200px);
+		}
+
+		.foot {
+			margin-top: var(--s-4);
 		}
 	}
 </style>

@@ -2,6 +2,15 @@
 /*
   The loading screen. Ink ground, white line art, red music notes.
 
+  **It is a moment of joy, not a progress indicator**, in the owner's own
+  words, and the distinction decides how it is announced. The site is
+  ready long before the hold ends, so there is no status to report: it
+  carried `role="status"` with `aria-live="polite"`, which pushed
+  "Loading" at a screen reader on every full page load and then went
+  silent, describing a wait that was not happening. It is `aria-hidden`
+  now. A reader who cannot see the drawing loses nothing by not being
+  told about it, and gets the page, which is already there, instead.
+
   An all-red ground was tried and rejected: the accent marks disappear
   into it. Ink keeps the Z's and the music notes as the only colour on
   the screen. Three layers, each on its own clock, the figure trots,
@@ -14,7 +23,7 @@
 */
 ---
 
-<div id="loader" class="loader" role="status" aria-live="polite">
+<div id="loader" class="loader" aria-hidden="true">
 	<div class="stage">
 		<img
 			class="art body"
@@ -28,7 +37,7 @@
 		<img class="art notes" src="/loader/jeremote-notes.png" width="485" height="568" alt="" />
 		<img class="art zzz" src="/loader/jeremote-zzz.png" width="485" height="568" alt="" />
 	</div>
-	<p class="label">Loading</p>
+	<p class="label">Loading...</p>
 </div>
 
 <noscript>
@@ -93,9 +102,11 @@
 	}
 
 	/* Used when a client-side navigation swaps in fresh markup: the
-	   overlay must vanish without replaying. */
+	   overlay must vanish without replaying. `!important` because the
+	   reduced-motion block below carries it too, and this rule has to win
+	   there as well: an instant dismissal is instant in every mode. */
 	.loader.is-instant {
-		transition: none;
+		transition: none !important;
 	}
 
 	.stage {
@@ -193,8 +204,33 @@
 		.zzz {
 			animation: none;
 		}
+		/* The sheet still has to leave, and it must not leave between two
+		   frames. This used to be `transition: none`, so a reader with
+		   reduced motion on got a full-viewport opaque overlay that stood
+		   still and then blinked out of existence, which is a harder cut
+		   than the slide it replaced. Reduced motion asks for less travel,
+		   not for a jump; the reduced answer to sliding a sheet is fading
+		   it, so that is what this does.
+
+		   **Windows is where this shows up.** Chrome maps
+		   `prefers-reduced-motion` onto the system animation setting, and
+		   on Windows that setting is off on plenty of machines and can be
+		   turned off by the power mode besides, which is why the exit
+		   looked broken there and fine on a phone.
+
+		   `!important` is aimed at the blanket rule in `global.css`, which
+		   crushes every `transition-duration` on the page to 0.01ms under
+		   the same query and would otherwise take this one with it. */
 		.loader {
-			transition: none;
+			transition:
+				opacity 240ms linear,
+				visibility 0s linear 240ms !important;
+		}
+		/* Fade in place. The slide is the thing being replaced, so the
+		   transform must not also run. */
+		.loader.is-done {
+			opacity: 0;
+			transform: none;
 		}
 	}
 </style>
@@ -203,6 +239,16 @@
 	// Minimum time on screen for a full load or a refresh. The site itself
 	// is ready in a fraction of this, so it is a deliberate hold, not a wait.
 	const HOLD = 1400;
+	/* The CSS failsafe hides the sheet outright at 6s. Waiting on `load`
+	   with no ceiling can run past that on a cold, slow machine, and then
+	   the overlay is already gone by the time the slide is asked for: the
+	   loading screen cuts out instead of leaving. Stop waiting well before
+	   the failsafe can win. */
+	const MAX_WAIT = 3600;
+	/* A hidden tab does not run rAF at all, so the two frames waited for
+	   below never arrive and the dismissal stalls until the tab is looked
+	   at, by which time the failsafe has fired. Fall through on a timer. */
+	const RAF_FALLBACK_MS = 250;
 
 	const el = () => document.getElementById('loader');
 	let swapped = false;
@@ -225,12 +271,15 @@
 		   spends that cost on frame one of the animation, which is exactly
 		   where a stutter is most visible. Waiting two frames lets the paint
 		   settle and starts the slide on a clean boundary. */
-		requestAnimationFrame(() =>
-			requestAnimationFrame(() => {
-				loader.classList.add('is-done');
-				announce();
-			}),
-		);
+		let gone = false;
+		const go = () => {
+			if (gone) return;
+			gone = true;
+			loader.classList.add('is-done');
+			announce();
+		};
+		requestAnimationFrame(() => requestAnimationFrame(go));
+		setTimeout(go, RAF_FALLBACK_MS);
 	};
 
 	// A client-side navigation brings in fresh markup with the overlay
@@ -250,10 +299,20 @@
 			return;
 		}
 		const start = performance.now();
-		const finish = () =>
+		let waited = false;
+		const finish = () => {
+			if (waited) return;
+			waited = true;
 			setTimeout(() => dismiss(loader), Math.max(0, HOLD - (performance.now() - start)));
+		};
 		if (document.readyState === 'complete') finish();
-		else window.addEventListener('load', finish, { once: true });
+		else {
+			window.addEventListener('load', finish, { once: true });
+			// `load` waits on every eager image on the page. The hold is a
+			// deliberate 1400ms, not a progress bar, so a slow one must not
+			// be allowed to push the exit past the failsafe.
+			setTimeout(finish, MAX_WAIT);
+		}
 	});
 
 	// The wordmark reloads the page immediately. It deliberately bypasses

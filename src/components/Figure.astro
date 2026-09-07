@@ -204,20 +204,26 @@ const letter = (i: number) => String.fromCharCode(97 + i);
 	   that is only emptied on the next navigation just accumulates dead ids
 	   for as long as the page is left open. */
 	let timers: ReturnType<typeof setTimeout>[] = [];
+	/* Drops the previous page's motion-preference listener, for the reason
+	   the timers are cleared: one per navigation otherwise, each still
+	   holding panels that left with their page. */
+	let detach: (() => void) | undefined;
 
 	const HOLD_MS = 8000;
 
 	document.addEventListener('astro:page-load', () => {
 		timers.forEach(clearTimeout);
 		timers = [];
+		detach?.();
+		detach = undefined;
 
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const starters: (() => void)[] = [];
 
 		document.querySelectorAll('[data-cycle]').forEach((stack) => {
 			const panels = Array.from(stack.querySelectorAll('.panel'));
 			if (panels.length < 2) return;
 
-			const slot = timers.length;
+			const slot = starters.length;
 			let i = 0;
 			const step = () => {
 				if (!stack.isConnected) return;
@@ -227,7 +233,25 @@ const letter = (i: number) => String.fromCharCode(97 + i);
 				timers[slot] = setTimeout(step, HOLD_MS);
 			};
 
-			timers[slot] = setTimeout(step, HOLD_MS);
+			starters.push(() => (timers[slot] = setTimeout(step, HOLD_MS)));
 		});
+
+		if (starters.length === 0) return;
+
+		/* Read live rather than sampled once at page load. The preference
+		   is a setting, not a property of the device, and on Windows the
+		   power mode can flip it without the reader touching anything. A
+		   figure that keeps cycling after motion was turned off is the
+		   exact thing the preference exists to stop. */
+		const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const run = () => {
+			timers.forEach(clearTimeout);
+			if (still.matches) return;
+			starters.forEach((begin) => begin());
+		};
+
+		still.addEventListener('change', run);
+		detach = () => still.removeEventListener('change', run);
+		run();
 	});
 </script>
