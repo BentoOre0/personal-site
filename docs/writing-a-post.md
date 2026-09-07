@@ -92,8 +92,6 @@ once each is noise.
 
 ## Images
 
-Unlike project figures, **blog images work today.**
-
 1. Put the image in `src/assets/`.
 2. Point `heroImage` at it with a path relative to your post file:
 
