@@ -120,22 +120,23 @@ import { QUOTES } from '../data/profile';
 	   old page's timer keeps running and cycles a bar that is gone. The
 	   typed tagline had the same problem and is fixed the same way. */
 	let timer: ReturnType<typeof setTimeout> | undefined;
+	/* Drops the previous page's motion-preference listener. Without it the
+	   listeners accumulate one per client-side navigation, and every one of
+	   them still holds a reference to a `.quote` that left with its page. */
+	let detach: (() => void) | undefined;
 
 	const HOLD_MS = 7000;
 
 	document.addEventListener('astro:page-load', () => {
 		clearTimeout(timer);
+		detach?.();
+		detach = undefined;
 
 		const stack = document.querySelector('[data-quotes]');
 		if (!stack) return;
 
 		const quotes = Array.from(stack.querySelectorAll('.quote'));
 		if (quotes.length < 2) return;
-
-		/* Autonomous motion is off entirely here, not merely slowed. The
-		   first quote is already showing, so this degrades to a static
-		   note rather than to a blank one. */
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
 		let i = 0;
 		const step = () => {
@@ -146,6 +147,27 @@ import { QUOTES } from '../data/profile';
 			timer = setTimeout(step, HOLD_MS);
 		};
 
-		timer = setTimeout(step, HOLD_MS);
+		/* Autonomous motion is off entirely here, not merely slowed. The
+		   first quote is already showing, so this degrades to a static
+		   note rather than to a blank one.
+
+		   **The preference is read live, not once.** It was sampled at page
+		   load and never looked at again, which assumes the setting is a
+		   property of the device. It is not: on Windows it tracks the
+		   system animation setting, which a reader can change, and which
+		   the power mode can change for them without their asking. A reader
+		   who turns motion off on a page that is already open was being
+		   told to reload before the site would listen. Turning it back on
+		   restarts the cycle, so the switch reads both ways. */
+		const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const run = () => {
+			clearTimeout(timer);
+			if (still.matches) return;
+			timer = setTimeout(step, HOLD_MS);
+		};
+
+		still.addEventListener('change', run);
+		detach = () => still.removeEventListener('change', run);
+		run();
 	});
 </script>

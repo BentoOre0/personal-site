@@ -94,4 +94,81 @@ const isNotes = path.startsWith('/blog');
 			gap: var(--s-2);
 		}
 	}
+
+	/* Windows High Contrast repaints `transparent` borders to
+	   `CanvasText`. A resting nav item carries
+	   `border-bottom: 1px solid transparent` to reserve the space, so in
+	   that mode every item drew the underline that marks the current
+	   page and `aria-current` stopped meaning anything.
+
+	   Border *style* is not overridden the way colour is, so the state is
+	   carried by style here. This has to live in this component: Astro
+	   scopes these selectors with an attribute, and a bare `nav a` in
+	   `global.css` cannot outrank them however late it is loaded. The
+	   space is still reserved, because `none` and `solid` at the same
+	   width do not change the box. */
+	@media (forced-colors: active) {
+		nav a {
+			border-bottom-style: none;
+		}
+
+		nav a[aria-current='page'] {
+			border-bottom-style: solid;
+		}
+	}
+
+	/* On paper the wordmark is the document's title line rather than a
+	   link home, so it sets on its own and the nav that stacked under it
+	   at 30rem is gone. */
+	@media print {
+		.bar {
+			display: block;
+			padding-block: 0 var(--s-2);
+		}
+	}
 </style>
+
+<script>
+	/* Folded evidence has to print.
+
+	   A credential's supporting quotations live in a closed `<details>`,
+	   which is the right proportion on screen and the wrong one on paper:
+	   a printout cannot be clicked, so a folded quotation is not folded,
+	   it is missing. Those passages are the strongest verifiable material
+	   on the page and the likeliest reason to print it at all.
+
+	   CSS cannot do this. A closed `<details>` hides its content through
+	   the user agent's own shadow tree rather than through a property a
+	   stylesheet can reach, so the only reliable opener is the element's
+	   `open` attribute. Which ones were already open is recorded and put
+	   back afterwards, so printing does not silently rearrange the page
+	   the reader is still looking at.
+
+	   `beforeprint` covers the print dialog and Save as PDF in every
+	   engine that fires it; the matchMedia branch is Safari, which has
+	   historically fired the media query and not the events. Both paths
+	   run the same two functions and are safe to run twice. */
+	const opened = new WeakSet<HTMLDetailsElement>();
+
+	const unfold = () => {
+		document.querySelectorAll('details').forEach((d) => {
+			if (d.open) return;
+			opened.add(d);
+			d.open = true;
+		});
+	};
+
+	const refold = () => {
+		document.querySelectorAll('details').forEach((d) => {
+			if (!opened.has(d)) return;
+			opened.delete(d);
+			d.open = false;
+		});
+	};
+
+	window.addEventListener('beforeprint', unfold);
+	window.addEventListener('afterprint', refold);
+
+	const printing = window.matchMedia('print');
+	printing.addEventListener('change', (event) => (event.matches ? unfold() : refold()));
+</script>

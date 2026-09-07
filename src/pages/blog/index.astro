@@ -108,4 +108,19 @@ const tags = getTagCounts(posts);
 			width: 72px;
 		}
 	}
+
+	/* Sideways the masthead is competing with the list it introduces for
+	   a 390px viewport. The drawing keeps the size the narrow-width rule
+	   already gives it; what has to go is the 112px of lead above and
+	   below, which is generous on a tall screen and most of the screen on
+	   a short one. */
+	@media (max-height: 26rem) and (orientation: landscape) {
+		.head {
+			padding-block: var(--s-4);
+		}
+
+		.avatar {
+			width: 72px;
+		}
+	}
 </style>

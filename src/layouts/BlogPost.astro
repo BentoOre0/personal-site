@@ -248,4 +248,15 @@ const { title, description, pubDate, updatedDate, heroImage, tags, noindex } = A
 			padding-block: var(--s-6) var(--s-4);
 		}
 	}
+
+	/* Held sideways a post opened on its masthead and nothing else: the
+	   back link, the title, the description, the date pair and the tags
+	   are together taller than a 390px viewport. The lead is what goes,
+	   the same trade the homepage title block and the blog masthead make
+	   at this height. */
+	@media (max-height: 26rem) and (orientation: landscape) {
+		.masthead {
+			padding-block: var(--s-4);
+		}
+	}
 </style>
