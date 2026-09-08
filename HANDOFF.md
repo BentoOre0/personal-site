@@ -11,8 +11,9 @@ session logs and no longer read as a handoff.
 ## Where things stand
 
 **Live at https://jeremyaidanhernandezyu.vercel.app**, deployed from
-`master`, currently `38fc509`, which merged `feat/newlayoutandmedia` on
-4 Sep. `npm run build` passes, **5 pages**.
+`master`. `npm run build` passes, **5 pages**. This line used to pin a
+commit sha; it was wrong within two commits every time, so it names the
+branch now and the rev block at the foot of the site dates the deploy.
 
 **Everything in this file is live.** The 3 Sep work went up with PR #6 and
 the earlier 4 Sep work followed in that merge. The evening of 4 Sep, the
@@ -77,8 +78,11 @@ them was assumed. The TREK note describes the award rather than him, and
 links UBC's own page for it, so the "top 5%" is checkable. It reads "Cash
 award" as of 4 Sep, because "Awarded 2026" read as a title conferred and
 the thing is money. **The amount is deliberately not on the page**, at the
-owner's request; UBC's page states it and the link goes there. **The résumé
-is now behind the site by two credentials.**
+owner's request; UBC's page states it and the link goes there. That was true
+of the 25 Aug résumé, which was behind the site by these two credentials.
+**As of 8 Sep it is the other way round:** the linked résumé now carries
+both, plus a Student Council role and a reworked awards list the page does
+not have. See `## 8 Sep`.
 
 **Not real, and no longer served:** the five Astro demo posts in
 `src/content/blog/` are Lorem ipsum with invented tags. They are
@@ -247,6 +251,31 @@ them. The rule is in `CLAUDE.md` under Scope.
 
 Links pointing at other repositories can move without warning. If one breaks,
 repoint it here.
+
+## 8 Sep
+
+**One content change: `IDENTITY.resume.href` now points at the résumé of
+8 Sep 2026.** Drive mints a new file id on every upload, so the old id is
+dead; if the link 404s again, that is why. Verified before shipping that the
+new URL returns 200 with no "Request access" wall, which is the failure that
+actually matters here, a recruiter hitting a permissions screen is worse than
+no link at all. `REVISION.rev` 4.4 to 4.5.
+
+**The linked PDF is deliberately ahead of the site.** That résumé carries a
+Student Council "Head of Academics" role and a reworked awards list (the IOI
+camp split out from the NOI entry, TREK moved out of Education, the school
+science competition dropped). The owner asked for those to stay on the résumé
+only, so **do not backfill them into `profile.ts`.** Noted in `PRODUCT.md`
+and at the top of `profile.ts` as well, because that file's own header claims
+everything in it comes from the 25 Aug résumé and that is now half true.
+
+**Version control cleanup in the same commit.** `.gitignore` was naming
+vendored agent skills one directory at a time and had fallen 37 behind, so
+`.claude/skills/*` is ignored wholesale with `!.claude/skills/design/`
+re-admitting ours, and `.agents/` (824KB, the same skills mirrored by the
+runtime) is ignored too. `skills-lock.json` is committed and stays tracked:
+it is the manifest those bodies are reinstalled from, and it holds no
+machine-specific paths.
 
 ## 4 Sep
 

@@ -25,10 +25,13 @@ pnpm-debug.log*
 
 # local agent settings
 .claude/settings.local.json
-# vendored agent skills (reinstallable; 3.5MB). The project's own
-# design rules under .claude/skills/design/ ARE tracked.
-.claude/skills/impeccable/
-.claude/skills/grill-me/
+# vendored agent skills: reinstallable from skills-lock.json, so the bodies
+# are not worth versioning. Ignore all of them and re-admit the project's
+# own design rules, which are ours and ARE tracked.
+.claude/skills/*
+!.claude/skills/design/
+# same skills, mirrored by the agent runtime
+.agents/
 
 # impeccable working state (live/ config is kept as project config)
 .impeccable/config.local.json
