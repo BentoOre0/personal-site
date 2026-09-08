@@ -18,8 +18,10 @@ branch now and the rev block at the foot of the site dates the deploy.
 **Everything in this file is live.** The 3 Sep work went up with PR #6 and
 the earlier 4 Sep work followed in that merge. The evening of 4 Sep, the
 blog-list and rotator work described under `## 4 Sep`, went up from
-`feat/fixedwordingubcrocket`. There is no unmerged branch and nothing
-described below is waiting.
+`feat/fixedwordingubcrocket`. There is no unmerged branch. One thing *is*
+waiting, and it is the only thing: the résumé PDF the site links is behind
+the owner's `.tex` again and needs repointing once he reuploads. See
+`## 8 Sep`.
 
 **Five pages, not twelve**, and that is the intended state rather than a
 regression: homepage, `/blog`, the one real post, its `about-me` tag
@@ -158,6 +160,14 @@ the page and the only one with nothing to look at.
 
 ## Gotchas that cost real time
 
+- **Nothing here can compile LaTeX, so résumé page-fit is guesswork.**
+  Page fit was estimated by stripping macros and dividing by an assumed
+  characters-per-line, and the assumption (128 for a heading row) was too
+  generous: a 119-character heading overflowed into its date column on the
+  owner's compile while a 111-character one did not. **True capacity is
+  roughly 112 to 118**, and bold text is wider still. Treat any "it fits on
+  one page" claim from this machine as an estimate with real error bars, say
+  so plainly, and let the owner's compile be the arbiter.
 - **The content index lives at `node_modules/.astro/data-store.json`,
   not `.astro/`.** Clearing it while a dev server runs makes every post
   404 while the files sit untouched on disk. It looks exactly like
@@ -276,6 +286,55 @@ re-admitting ours, and `.agents/` (824KB, the same skills mirrored by the
 runtime) is ignored too. `skills-lock.json` is committed and stays tracked:
 it is the manifest those bodies are reinstalled from, and it holds no
 machine-specific paths.
+
+### The résumé link is stale again, and that is the one open item
+
+`IDENTITY.resume.href` points at the PDF uploaded on 8 Sep. **The `.tex` has
+moved on since that upload**, so the linked PDF is now behind the document
+again. The owner is recompiling and reuploading; when he sends the new Drive
+link, repoint the href, bump `REVISION.rev` (4.5 at the time of writing),
+`npm run build`, and push. Drive mints a new file id every upload, so this
+will recur on every future revision and the fix is always the same.
+
+What changed after that upload: the repository links on the Clifford and UBC
+Rocket rows now read **Docs** rather than Code, because both repositories
+lead with build write-ups, CAD and media rather than source, and the
+Baybayin project heading was shortened (it was colliding with its own date
+column).
+
+### The résumé source lives outside this repository
+
+`~/Downloads/jeremy_yu_resume.tex`, with `.tex.bak` (the pre-session version)
+and `.tex.2page` (a longer snapshot) beside it. It is a Jake Gutierrez
+template compiled on Overleaf. **There is no LaTeX toolchain on this
+machine**, so nothing here can compile or page-count it; the owner does that.
+
+It is worth reading when the site needs a fact, because it is now the fuller
+document: it carries the Student Council role, the reworked awards, hard
+numbers pulled from the project READMEs on GitHub (0.806 against 0.717 on
+Baybayin, 146 cm and Mach 1.03 on the Big Mach), and an AI Tooling skills
+row. The site deliberately carries none of that. **Reading it to check a
+fact is fine. Backfilling it into `profile.ts` is not**, unless asked.
+
+### A QR code to the site exists, and is not in this repository
+
+`~/Downloads/jeremy-site-qr.png`, 1170x1170, encoding
+`https://jeremyaidanhernandezyu.vercel.app`. Drawn in `--ink` `#101418` on
+`--paper` rather than pure black, so it matches the page it opens, with
+`src/assets/avatar.png` composited in the middle.
+
+It was not eyeballed. It is error-correction H, and the logo size was chosen
+by decoding the result back with OpenCV across 27 combinations of blur,
+rotation and downscale: 30% of width passed 81%, 28% passed 85%, and 25%
+passed 89%, which is the same as every smaller size, so 25% is the plateau
+and is what shipped. A bare code passes 100%, so **any centre logo costs
+about a tenth of the robustness**; if it is ever wanted for something printed
+small, generate a logo-free one instead. The script is in the session
+scratchpad; regenerating needs `segno` (pure Python) and, for the
+verification only, `opencv-python-headless`.
+
+It lives in `~/Downloads` because the owner wanted something to share, not a
+page asset. Nothing on the site references it.
 
 ## 4 Sep
 
