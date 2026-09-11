@@ -15,13 +15,16 @@ session logs and no longer read as a handoff.
 commit sha; it was wrong within two commits every time, so it names the
 branch now and the rev block at the foot of the site dates the deploy.
 
-**Everything in this file is live.** The 3 Sep work went up with PR #6 and
-the earlier 4 Sep work followed in that merge. The evening of 4 Sep, the
-blog-list and rotator work described under `## 4 Sep`, went up from
-`feat/fixedwordingubcrocket`. There is no unmerged branch. One thing *is*
-waiting, and it is the only thing: the résumé PDF the site links is behind
-the owner's `.tex` again and needs repointing once he reuploads. See
-`## 8 Sep`.
+**Everything in this file is live except the 11 Sep work.** The 3 Sep work
+went up with PR #6 and the earlier 4 Sep work followed in that merge. The
+evening of 4 Sep, the blog-list and rotator work described under `## 4 Sep`,
+went up from `feat/fixedwordingubcrocket`.
+
+**One branch is unmerged: `feat/about-note`**, the personal note and the
+hardening that came with it. It is committed, built and seen on localhost,
+and it has not been pushed or merged. See `## 11 Sep`. The other thing
+waiting is the résumé PDF the site links, which is behind the owner's
+`.tex` again and needs repointing once he reuploads. See `## 8 Sep`.
 
 **Five pages, not twelve**, and that is the intended state rather than a
 regression: homepage, `/blog`, the one real post, its `about-me` tag
@@ -34,7 +37,8 @@ the four hidden demo URLs are 404, and `rss.xml` carries one item.
 
 The site is a **component datasheet**: title block, credentials as a
 features list, a details table, projects as numbered figures, a revision
-block. Homepage is **§1 Credentials · §2 Details · §3 Projects**. The
+block. Homepage is **§1 Credentials · §2 Details · §3 Projects**, with an
+unnumbered personal note between the title block and §1 as of 11 Sep. The
 blog is its own route at `/blog`, with static tag archives and a 404.
 
 A **loading screen** (`Loader.astro`) plays for 1.4s on every full page
@@ -253,6 +257,36 @@ loses:
 8. **`/404` is the best-composed mobile page on the site**, almost
    exactly one viewport tall. Worth studying as a target for the others.
 
+From a technical audit on 11 Sep, scored 16/20. Numbers are measured, not
+estimated:
+
+9. **`--muted` on `--wash` is 4.27:1**, an AA failure at 14px. Both the
+   credential rows and the details table take that wash on hover, so the
+   supporting line under every credential is legal at rest and illegal
+   while pointed at. The palette has no headroom left: `--muted` and
+   `--accent` are both tuned to exactly 4.65:1 on white, so a tinted
+   ground breaks them. Darkening `--muted` once fixes every instance.
+   **This is the highest-value unfixed thing on the site.**
+10. **Two figure variants are heavy**: `ubc-rocket-team` at 480KB and
+    `anth-ropic` at 354KB, 1.13MB worst case across all figures. Lazy and
+    below the fold, so first paint is untouched, but a phone scrolling §3
+    pays for them. Re-encoding the three photographs at a lower webp
+    quality is the whole fix.
+11. **The blanket reduced-motion rule crushes non-motion feedback.**
+    `*, *::before, *::after { transition-duration: 0.01ms !important }`
+    takes the 120ms colour and underline transitions with it. `Loader.astro`
+    already needed `!important` to escape it, which is the tell. Scope it
+    to animation and transform.
+12. **Rest-state link underlines compute to 2.15:1.** On credential and
+    project titles, which are ink, that underline is the only mark saying
+    the text is a link. Legal under 1.4.1, weak for a low-vision reader,
+    and clicking through to verify is the conversion this page is for.
+
+What the audit found clean, so nobody re-checks it: heading order, landmarks,
+alt text, touch-target sizes (the contact glyphs are 32px targets), zero
+hard-coded colours outside `global.css`, fonts local and preloaded, 320px
+free of horizontal scroll, and CLS actively engineered out in two places.
+
 ## Scope
 
 **This repo only.** The owner's other repositories are handled separately and
@@ -261,6 +295,82 @@ them. The rule is in `CLAUDE.md` under Scope.
 
 Links pointing at other repositories can move without warning. If one breaks,
 repoint it here.
+
+## 11 Sep
+
+**The homepage gained a personal note**, an unnumbered rounded block
+between the title block and §1, carrying three sentences in the owner's
+voice, the drawing from the top of his post, and a handle reading "More
+about me" through to `/blog/hello-im-jeremy/`. `REVISION.rev` 4.5 to 4.6.
+
+The content lives in `ABOUT` in `profile.ts`; the visual decisions are
+written up in `DESIGN.md` under **The personal note is the one soft
+object**, which is where to look before changing it. The short version of
+what not to relitigate:
+
+- **It is not a numbered section.** It was built as §1 first, which
+  renumbered Credentials to §2 and made four sentences of hello the
+  document's opening specification. It was pulled back to a note on the
+  owner's own instinct, which was right.
+- **Its drawing is not captioned `Fig. 1`**, even though that is exactly
+  what it is on the post. On this page Fig. N belongs to PN.
+- **The dashed stroke is the owner's call and collides with the system**,
+  which reserves dashed for an empty slot. Recorded in `DESIGN.md` rather
+  than resolved.
+- **The quotation marks came off and the `<blockquote>` with them.** This
+  is the one worth understanding. The text was set as a quotation for two
+  revisions, and it is not verbatim: it joins two of his answers with a
+  conjunction that is not in his post. A code review caught the gap
+  between the marks and the strings. The owner's fix was to drop the
+  marks, not the phrasing, which is the right call, and it is now prose
+  condensed from the post rather than a quotation of it. Do not put the
+  marks back without re-cutting every string to verbatim.
+
+**One content change beyond the note**, at the owner's request: the post
+and the note now both read "studying **Engineering Physics** in Vancouver,
+Canada" rather than "studying engineering". Byte-identical in both places,
+which is the point; the note is condensed from the post and drifting from
+it is the failure mode.
+
+**A responsive fix, found by measuring rather than by looking.** The
+drawing was a fixed 200px beside the text, so between 40rem and 50rem it
+held its size and took the room out of the words: at 660px the quote ran
+about 41 characters a line. It is `clamp(132px, 20vw, 200px)` now, the way
+the title block's emblem already was, and it gives way first. The floor is
+the emblem's own phone width so the two marks bottom out together.
+
+**A latent bug that fix exposed.** Astro emits real `width` and `height`
+attributes and the browser applies them as presentational hints, so the
+box had a definite width *and* height and `aspect-ratio` was being ignored
+outright. It came out right at the widest size by coincidence; as the box
+narrowed against a fixed 150px height the crop tightened with it and cut
+the drawing through the red diamonds. `height: auto` releases it. **If an
+`aspect-ratio` on an `<Image>` ever looks ignored, this is why.**
+
+**Hardening, three things.** A `.skip` link to `#content`, with that id now
+on every `<main>` on the site, hidden in print, at `z-index: 300` so it
+clears the loading sheet. `forced-colors: active` was erasing every
+hand-drawn image on the site, the emblem and the blog avatar included:
+they are black ink on white composited with `multiply`, and against a
+forced black ground they multiplied to black and vanished. And the note
+is guarded on its own content, so emptying `ABOUT.paragraphs` removes the
+block rather than leaving a dashed box with nothing in it.
+
+**`.line-art` is a new primitive in `global.css`**, and it exists because
+the same rule had been written three times, with the forced-colors
+correction written twice, before anyone noticed it was one rule. Every
+hand-drawn image takes it.
+
+**The note's measure went back onto the documented scale**, 60ch and the
+inherited 1.6, from 58ch and 1.65. Those were a third measure and a second
+line height the system does not have. The difference on screen is one
+word; the difference in the stylesheet is a rule somebody has to maintain.
+
+Verified at 320, 390, 641, 768, 834, 1024, 1280 and 1440, plus a stress
+pass with a 95-character unbroken URL, CJK, emoji and an RTL fragment
+pushed through `ABOUT` and then reverted: the box grows, the URL breaks,
+the Hebrew sets right-to-left inside the left-to-right paragraph, nothing
+overflows.
 
 ## 8 Sep
 

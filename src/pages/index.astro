@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import helloBanner from '../assets/hello-banner.png';
 import discipline from '../assets/discipline-crop2.png';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -9,7 +10,7 @@ import Icon from '../components/Icon.astro';
 import PersonLd from '../components/PersonLd.astro';
 import SectionHead from '../components/SectionHead.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profile';
+import { ABOUT, CREDENTIALS, IDENTITY, PROJECTS, REVISION, SPECS } from '../data/profile';
 
 /* The homepage's sections, in the order they appear. §N is derived from this
    list, so inserting a section renumbers everything after it automatically.
@@ -58,7 +59,7 @@ PROJECTS.forEach((p, i) => {
 	<body>
 		<Header />
 
-		<main>
+		<main id="content">
 			<!-- Title block -->
 			<section class="sheet title" aria-labelledby="name">
 				<div class="title-grid">
@@ -73,7 +74,7 @@ PROJECTS.forEach((p, i) => {
 						</p>
 					</div>
 					<Image
-						class="emblem"
+						class="emblem line-art"
 						src={discipline}
 						width={1102}
 						sizes="(max-width: 40rem) 132px, (max-width: 68rem) 34vw, 380px"
@@ -111,6 +112,35 @@ PROJECTS.forEach((p, i) => {
 				</div>
 
 			</section>
+
+			{/* The personal note. Condensed from his own post, not a section.
+
+			    Guarded on its own content. Empty the `paragraphs` array and
+			    the whole block leaves, rather than leaving a dashed box with
+			    nothing in it: an empty outline says "a slot with nothing in
+			    it yet", and this is the one block on the page that is never
+			    a placeholder. The link is guarded separately, so the note can
+			    stand on its own if the post it draws on is ever unpublished. */}
+			{ABOUT.paragraphs.length > 0 && (
+			<aside class="sheet hello" aria-label="About Jeremy">
+				<div class="bubble">
+					<Image
+						class="face line-art"
+						src={helloBanner}
+						width={300}
+						densities={[1, 2]}
+						alt=""
+						aria-hidden="true"
+					/>
+					<div class="bubble-body">
+						{ABOUT.paragraphs.map((text) => <p>{text}</p>)}
+						{ABOUT.link?.href && (
+							<a class="hello-more" href={ABOUT.link.href}>{ABOUT.link.label}</a>
+						)}
+					</div>
+				</div>
+			</aside>
+			)}
 
 			<!-- Features: the credential list -->
 			<section class="sheet section" aria-labelledby="features">
@@ -448,8 +478,6 @@ PROJECTS.forEach((p, i) => {
 		height: auto;
 		flex: none;
 		align-self: flex-start;
-		/* The sketch is drawn on white, so it sits on the paper without a frame. */
-		mix-blend-mode: multiply;
 	}
 
 	.foot {
@@ -556,6 +584,198 @@ PROJECTS.forEach((p, i) => {
 	@media (prefers-reduced-motion: reduce) {
 		.caret {
 			animation: none;
+		}
+	}
+
+	/* --- The personal note ---
+
+	   Everything else on this page is a list, a table or a caption. This is
+	   the only place the reader is spoken to, and the only words on the
+	   homepage that are not a specified fact, so it is the one object on the
+	   sheet with soft corners. That is the whole reason for the shape: a page
+	   of square boxes makes one rounded one read as the human aside, without
+	   a label having to say so.
+
+	   Not numbered, and deliberately not. It was built as §1 first, which
+	   renumbered Credentials to §2 and made four sentences of hello the
+	   document's opening specification. A note is what it is.
+
+	   **Set as plain prose, not as a quotation, and that is deliberate.** It
+	   was a blockquote inside quote marks for two revisions, on the grounds
+	   that the site already has a grammar for somebody's own words: the
+	   credential sources in §1 are blockquotes, and so is the closing note
+	   on /blog. The marks were withdrawn at the owner's request, and a
+	   review had just caught why they could not stay: quotation marks claim
+	   the words between them are exact, and these are condensed from the
+	   post rather than lifted from it, joining two of his answers into one
+	   sentence. Prose that is his in substance can be edited for length.
+	   Prose inside quote marks cannot. Do not put the marks back without
+	   re-cutting the strings so that every one of them is verbatim.
+
+	   The handle under it reads "More about me" rather than naming the post.
+	   A recruiter skimming wants to know where the click goes. */
+	.hello {
+		padding-block: 0;
+	}
+
+	/* Unfilled, on the paper, outlined rather than shaded.
+
+	   `--rule-strong` is the grey the site already uses for a border that has
+	   to carry a box on its own, which is what the post cards on /blog take.
+	   The plain `--rule` hairline is for a division inside something, and at
+	   this size it went vague.
+
+	   **The stroke is dashed at the owner's request, and dashed has a meaning
+	   on this site.** DESIGN.md reserves it for a slot with nothing in it
+	   yet: the unshot figure plates used it, and the empty state on /blog
+	   still does. Nothing on the homepage is dashed today, so there is
+	   nothing here for it to be confused with, but the note is the one block
+	   on the page that is *not* a placeholder and it is now wearing the
+	   placeholder's stroke. Solid is one word away if it reads wrong. */
+	/* The band runs the full sheet, like the section rules, the spec table
+	   and every project row. A filled box has visible edges, and at the text
+	   measure its right edge landed at 720px, which is a line nothing else on
+	   the page shares. Edges that nearly agree read as a mistake.
+
+	   The words stay at their own measure inside it, so the width of the box
+	   and the width of the line are two separate decisions. */
+	.bubble {
+		display: flex;
+		/* Anchored to the first line, not centred on the block. Centring
+		   only looks right while the text happens to be about as tall as
+		   the drawing, which is true of today's four sentences and of
+		   nothing else: stress-tested against a paragraph three times that
+		   length, the drawing floated halfway down a column of text with
+		   nothing beside its own top. Anchoring survives the content
+		   changing under it. */
+		align-items: flex-start;
+		gap: var(--s-5);
+		padding: var(--s-5);
+		border: var(--hairline) dashed var(--rule-strong);
+		/* 10px, against the 2px every other box on the site uses. A table
+		   cell is small and a 2px round is all it can carry; this is a
+		   panel, and the radius is what makes it read as a bubble rather
+		   than as another spec box. It is the only one on the page. */
+		border-radius: 10px;
+	}
+
+	.bubble-body {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	/* The drawing from the top of the post this note is drawn from, where it
+	   is that post's Fig. 1. The words and the picture come from the same
+	   place, and a reader who follows the link meets the drawing again at
+	   full width.
+
+	   **It is not captioned Fig. 1 here, and must not be.** On this page the
+	   figure numbers belong to the project rows, where Fig. N is the figure
+	   in PN. A second Fig. 1 in the first screen would point at two different
+	   pictures. It is a picture in a note, not a numbered figure.
+
+	   It sits in horizontal space the text was leaving empty, which is also
+	   why it goes away below 40rem: a phone has no spare width, and the
+	   credentials are what the next scroll is for. Decorative, so it is out
+	   of the accessibility tree; the words beside it already say whose voice
+	   this is. */
+	/* Cropped, not just scaled down. The artwork is a 2:1 banner drawn for
+	   the full-width slot at the top of a post, so about a fifth of its width
+	   at each side is empty paper. Dropped into a note at that ratio the
+	   drawing came out small and adrift in the middle of its own margins.
+
+	   `cover` against a 4:3 box shows the middle two thirds, which is the
+	   drawing plus a little air and clips none of it: the subject is centred
+	   in the file with matching margins on all four sides, so a centred crop
+	   is the correct one and no `object-position` is needed. The file is
+	   untouched; only this page's view of it is.
+
+	   What is left of its margins costs nothing, because `.line-art` takes
+	   the white ground out: with no edge to see, they read as air rather
+	   than as a box that does not fit. */
+	.face {
+		flex: 0 0 auto;
+		/* Fluid, the way the title block's emblem is fluid, and for the same
+		   reason: a fixed width beside text sets the text's measure from
+		   whatever is left over.
+
+		   At 200px flat the drawing held its size all the way down to the
+		   40rem cliff and took the room out of the words instead of out of
+		   itself. At 660px the lines were running about 41 characters and
+		   the block went tall and narrow. It now gives way first, and the
+		   text holds 50 characters or more at every width where the
+		   drawing is shown at all.
+
+		   The floor is 132px, which is the width the emblem takes on a
+		   phone, so the two hand-drawn marks bottom out at the same size
+		   rather than at two arbitrary ones. 20vw reaches the 200px ceiling
+		   at a 1000px viewport. */
+		width: clamp(132px, 20vw, 200px);
+		/* `height: auto` is load-bearing, not tidiness. Astro emits real
+		   `width` and `height` attributes, which the browser applies as
+		   presentational hints, so the box had a definite width *and* a
+		   definite height and `aspect-ratio` was being ignored outright.
+		   The ratio came out right at the widest size by coincidence, and
+		   as the box narrowed against a fixed 150px height the crop
+		   tightened with it: at 641px the drawing was cut through the red
+		   diamonds. Releasing the height lets the ratio govern, so the crop
+		   is the same two thirds at every width. */
+		height: auto;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+	}
+
+	@media (max-width: 40rem) {
+		.face {
+			display: none;
+		}
+	}
+
+	.bubble p {
+		/* 60ch, the measure DESIGN.md sets for a summary, rather than the
+		   68ch it sets for body text. This is read at a glance, standing
+		   between the name and the credentials, so it takes the shorter of
+		   the two documented measures. It was 58ch and 1.65 for three
+		   revisions, which were a third measure and a second line height
+		   that the system does not have. The difference on screen is one
+		   word; the difference in the stylesheet is a rule somebody has to
+		   maintain. */
+		max-width: 60ch;
+		text-wrap: pretty;
+	}
+
+	.bubble p:last-of-type {
+		margin-bottom: 0;
+	}
+
+	/* Mono at 14px, the treatment every literal handle on the sheet takes,
+	   accent like the résumé link and the email address beside it.
+
+	   It was ink for one revision, because the accent is darkened exactly
+	   enough to clear 4.5:1 on white and nothing more, so on the grey fill
+	   this panel used to carry it measured 4.27:1 and stopped being legal at
+	   14px. The fill is gone, the ground is paper again, and the red is back
+	   inside its margin. **If a fill ever returns here, this has to go back
+	   to ink**, the way the credential links below already handle the same
+	   grey on hover. */
+	.hello-more {
+		display: inline-block;
+		margin-top: var(--s-4);
+		font-family: var(--font-geist-mono);
+		font-size: var(--t-xs);
+		letter-spacing: 0.02em;
+		text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+	}
+
+	@media (hover: hover) {
+		.hello-more:hover {
+			text-decoration-color: var(--accent);
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.bubble {
+			padding: var(--s-4);
 		}
 	}
 

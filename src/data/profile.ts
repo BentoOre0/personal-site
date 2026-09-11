@@ -37,14 +37,14 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '4.5',
+	rev: '4.6',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
 	   no project figure is an empty slot. `DEPLOYED` at the owner's
 	   request. */
 	status: 'DEPLOYED',
-	updated: '2026-09-08',
+	updated: '2026-09-11',
 };
 
 export const IDENTITY = {
@@ -98,6 +98,37 @@ export const IDENTITY = {
 	   a glyph. Filled: a Google Drive share link. Replace the href when the
 	   document is re-uploaded; Drive mints a new file id each time. */
 	resume: { label: 'Résumé', href: 'https://drive.google.com/file/d/1-b-WxU5yuHZsnOE16eZOoUYtBh-Y_IJ4/view?usp=sharing' },
+};
+
+/*
+  The personal note that sits above the credentials, and the link through
+  to the post it is drawn from.
+
+  **Condensed from the post, not quoted from it.** These strings were set
+  inside quote marks for two revisions and are not any more, which is what
+  lets them be condensed at all: the opening sentence drops the rest of his
+  name, since the h1 a few lines above already prints it in full, and the
+  second paragraph joins two of his answers, "What do you work on?" and
+  "How do you learn?", into one sentence with a conjunction that is not in
+  the post. That join is exactly what quotation marks would have been
+  lying about.
+
+  What has not changed is where the material comes from. Every idea and
+  almost every word here is his, out of `hello-im-jeremy.md`. Nothing was
+  written for him and nothing new may be: shorten, join and trim his
+  sentences, never compose one. If the post changes and this drifts from
+  it, re-cut this from the post rather than editing it here on its own.
+  The point of the block is that a reader who follows the link finds the
+  same voice saying more.
+*/
+export const ABOUT = {
+	paragraphs: [
+		'Hi! My name is Jeremy. I have lived in the Philippines all my life, and I am now studying Engineering Physics in Vancouver, Canada.',
+		'My background spans algorithms, digital and physical builds, and I am still trying to find my niche. I learn best by immersing myself in a community where I can ask questions.',
+	],
+	/* The post this is cut from. Its tag archive is /blog/tags/about-me/,
+	   which is one click further on and lists only this post today. */
+	link: { label: 'More about me', href: '/blog/hello-im-jeremy/' },
 };
 
 /*

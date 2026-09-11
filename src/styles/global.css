@@ -151,6 +151,31 @@ a {
 	line-height: 1.4;
 }
 
+/* Hand-drawn line art. Every drawing on this site is ink on white paper,
+   scanned, so each one arrives as an opaque white rectangle. `multiply`
+   drops the paper and keeps the ink, which is how they sit on the sheet
+   without a frame.
+
+   It lived three times over, once each on the homepage emblem, the note's
+   drawing and the /blog masthead avatar, and the forced-colors correction
+   below had to be written twice before it was noticed that the rule was
+   the same rule. One declaration now; the three keep their own sizing.
+
+   **The correction matters.** Windows High Contrast forces the page's
+   ground colour and leaves images alone, so on the dark scheme black line
+   art multiplied against a black backdrop disappears completely. Normal
+   blending puts the drawing's own white paper back: a visible rectangle,
+   which is a smaller loss than the whole drawing. */
+.line-art {
+	mix-blend-mode: multiply;
+}
+
+@media (forced-colors: active) {
+	.line-art {
+		mix-blend-mode: normal;
+	}
+}
+
 /* Reference designators: P1, AN-002. Never decorative; each one
    is a handle the document refers to. */
 .designator {

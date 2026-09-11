@@ -27,9 +27,9 @@ const tags = getTagCounts(posts);
 	</head>
 	<body>
 		<Header />
-		<main class="sheet">
+		<main id="content" class="sheet">
 			<div class="head">
-				<Image class="avatar" src={avatar} width={192} densities={[1, 2]} loading="eager" alt="" />
+				<Image class="avatar line-art" src={avatar} width={192} densities={[1, 2]} loading="eager" alt="" />
 				<div class="head-text">
 					<h1>Blog</h1>
 					<p class="lede">Notes on things built, measured, and got working.</p>
@@ -79,8 +79,6 @@ const tags = getTagCounts(posts);
 		width: 96px;
 		height: auto;
 		flex: none;
-		/* Drawn on white, so it sits on the paper without a frame. */
-		mix-blend-mode: multiply;
 	}
 
 	.head-text {

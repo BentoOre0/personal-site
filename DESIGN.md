@@ -494,6 +494,55 @@ everything still shares one edge.
 kickers above them. They are cross-reference handles that actually
 resolve; if they ever stop linking, delete them.
 
+### The personal note is the one soft object
+
+A rounded, outlined block sits between the title block and §1, carrying
+three or four sentences in the owner's own voice and a handle through to
+the post they are condensed from. It is the only place on the site the
+reader is addressed rather than shown a fact, and the only running prose
+on the homepage: everything else is a list, a table, or a caption.
+
+**It is not a numbered section, and it must not become one.** It was built
+as §1 first, which renumbered Credentials to §2 and made four sentences of
+hello the document's opening specification. A note is what it is.
+
+Three things about it break the rules above, all three at the owner's
+request, and they are written down here so the system says what the site
+does:
+
+- **Corners at 10px**, against the 1–2px every other box takes. A table
+  cell is small and a 2px round is all it can carry. This is a panel, and
+  the radius is what makes it read as an aside rather than as another spec
+  box. It is the only one on the site; a second would end the distinction.
+- **A dashed stroke**, which `## Placeholder discipline` below reserves for
+  a slot with nothing in it yet. The note is the one block on the page that
+  is never a placeholder, so the two meanings do collide. Nothing else on
+  the homepage is dashed, so there is nothing local to confuse it with, but
+  the conflict is real and is recorded rather than resolved. Solid
+  `--rule-strong` is the fallback if it ever reads wrong.
+- **A fill, then no fill.** It carried `--wash` for two revisions. The grey
+  is why the handle under it was briefly ink instead of accent: the accent
+  is darkened exactly enough to clear 4.5:1 on white and no more, so on the
+  wash it measures 4.27:1 and stops being legal at 14px. The fill is gone
+  and the accent is back. **If a fill ever returns, that link goes back to
+  ink**, the way the credential links already handle the same grey on hover.
+
+The words inside it are **condensed from the post, not quoted from it**.
+They were set in quotation marks for two revisions and are not any more,
+which is what lets them be condensed at all: the block joins two of the
+owner's answers into one sentence with a conjunction that is not in his
+post, and that join is exactly what the marks would have been lying about.
+Do not put the marks back without re-cutting every string to verbatim.
+
+Its drawing is the post's own `Fig. 1`, cropped to the middle two thirds
+because the file is a 2:1 banner with a fifth of its width empty at each
+side. **It is not captioned `Fig. 1` here and must not be**: on this page
+the figure numbers belong to the project rows, where Fig. N is the figure
+in PN, and a second Fig. 1 in the first screen would point at two
+different pictures. Below 40rem the drawing leaves entirely, because a
+phone has no spare width and the credentials are what the next scroll is
+for.
+
 ## Components
 
 - `.legend`, tracked uppercase 14px label naming a field, column, or figure.
@@ -502,6 +551,17 @@ resolve; if they ever stop linking, delete them.
   row headers in muted.
 - `.sheet` / `.column`, the 960 and 720 measures.
 - `.plate`, an unshot figure slot printing its own shot spec.
+- `.line-art`, the treatment every hand-drawn image takes: `multiply`, so
+  the scanned white paper drops out and the ink sits on the sheet without
+  a frame, plus the `forced-colors` correction that releases it. Three
+  drawings carry it: the title block emblem, the note's drawing, and the
+  `/blog` masthead avatar. It was written three times over before it was
+  noticed that it was one rule.
+- `.skip`, the keyboard reader's way past the nav. Off-screen until
+  focused, never `display: none`, which would take it out of the tab order
+  and make the one link that exists to be reachable unreachable. It targets
+  `#content`, which every `<main>` on the site carries; **a new page with a
+  `<main>` needs that id too.**
 
 ## Motion
 
@@ -797,6 +857,14 @@ reader's system colours. Most of this site survives intact, because the
 hairline system is drawn with **borders**, and borders keep their colour
 forced to `CanvasText`. Backgrounds do not: they are repainted to
 `Canvas`. That difference is the whole of what broke.
+
+**Images are the third case, and they are left alone entirely.** That is
+what made the drawings disappear: every one of them is black ink scanned
+on white paper and composited with `multiply`, so against a forced black
+ground the art multiplied to black and vanished. `.line-art` releases the
+blend under this query, which puts each drawing's own white paper back. A
+white rectangle is not what the blend was for, but it is a smaller loss
+than the drawing.
 
 - **The loading screen takes `forced-color-adjust: none`.** It is
   artwork: an `--ink` ground with white line art on it. Forced colours
