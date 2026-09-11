@@ -82,6 +82,14 @@
 	.filter,
 	.back,
 	.read,
+	/* Off-screen on a page that has no off-screen. */
+	.skip,
+	/* The note's handle through to the post. It is a site-relative path,
+	   and this file prints a reference only for absolute ones, on the
+	   grounds that a relative path is not something a reader can type. So
+	   on paper "More about me" would be a phrase pointing at nothing. The
+	   quote above it reads perfectly well on its own. */
+	.hello-more,
 	.caret {
 		display: none !important;
 	}

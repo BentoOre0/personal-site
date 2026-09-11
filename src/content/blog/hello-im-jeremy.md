@@ -8,7 +8,7 @@ heroImage: '../../assets/hello-banner.png'
 
 Hi! My name is Jeremy Aidan Hernandez Yu!
 
-I have lived in the Philippines all my life, and I am now studying engineering in Vancouver, Canada.
+I have lived in the Philippines all my life, and I am now studying Engineering Physics in Vancouver, Canada.
 
 ## Why build a personal website?
 

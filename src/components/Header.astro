@@ -8,6 +8,7 @@ const isNotes = path.startsWith('/blog');
 ---
 
 <header>
+	<a class="skip" href="#content">Skip to content</a>
 	<div class="sheet bar">
 		<a class="mark" href="/">{IDENTITY.name}</a>
 		<nav aria-label="Sections">
@@ -22,6 +23,54 @@ const isNotes = path.startsWith('/blog');
 <style>
 	header {
 		border-bottom: var(--hairline) solid var(--rule);
+	}
+
+	/* The keyboard reader's way past the nav. Off-screen until focused,
+	   which is the point: it is the only control on the site that exists
+	   for one input method and has to stay invisible to the others.
+
+	   Not `display: none`, which would take it out of the tab order and
+	   leave the link that is supposed to be reachable unreachable. Moved
+	   out of the viewport instead, and moved back on focus.
+
+	   Set like every other handle on the sheet, mono at 14px, and given a
+	   hairline box so it reads as a thing that just appeared rather than
+	   as text loose on the paper. `#content` is on the `<main>` of every
+	   page this header serves; if a new page adds a `<main>`, it needs the
+	   id too.
+
+	   `z-index: 300` clears the loading sheet, which covers the viewport
+	   at 200 while the page underneath is already interactive. Without it
+	   a reader who tabs during the hold would focus a link drawn behind an
+	   opaque panel. */
+	.skip {
+		position: absolute;
+		left: var(--s-3);
+		top: var(--s-3);
+		z-index: 300;
+		transform: translateY(calc(-100% - var(--s-5)));
+		padding: var(--s-2) var(--s-3);
+		background: var(--paper);
+		border: var(--hairline) solid var(--rule-strong);
+		border-radius: 2px;
+		font-family: var(--font-geist-mono);
+		font-size: var(--t-xs);
+		letter-spacing: 0.02em;
+		text-decoration: none;
+		transition: transform 120ms ease-out;
+	}
+
+	.skip:focus-visible {
+		transform: translateY(0);
+	}
+
+	/* It still has to arrive, just without the travel. The blanket rule in
+	   `global.css` already crushes this to 0.01ms; this says so locally so
+	   the intent survives that rule being scoped later. */
+	@media (prefers-reduced-motion: reduce) {
+		.skip {
+			transition: none;
+		}
 	}
 
 	.bar {
