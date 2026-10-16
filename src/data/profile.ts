@@ -5,7 +5,7 @@
   Nothing here may be invented.
 
   `IDENTITY.resume.href` is deliberately ahead of that: it points at the
-  résumé of 8 Sep 2026, which carries a Student Council role and a reworked
+  owner's latest résumé PDF (repointed 16 Oct 2026), which carries a Student Council role and a reworked
   awards list that are **not** on this page. That is the owner's decision,
   not an oversight, so do not backfill them from the PDF. Re-source this
   file only when he says to.
@@ -37,14 +37,14 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '4.6',
+	rev: '4.7',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
 	   no project figure is an empty slot. `DEPLOYED` at the owner's
 	   request. */
 	status: 'DEPLOYED',
-	updated: '2026-09-11',
+	updated: '2026-10-16',
 };
 
 export const IDENTITY = {
@@ -97,7 +97,7 @@ export const IDENTITY = {
 	/* The highest-intent click on the page, so it gets a word rather than
 	   a glyph. Filled: a Google Drive share link. Replace the href when the
 	   document is re-uploaded; Drive mints a new file id each time. */
-	resume: { label: 'Résumé', href: 'https://drive.google.com/file/d/1-b-WxU5yuHZsnOE16eZOoUYtBh-Y_IJ4/view?usp=sharing' },
+	resume: { label: 'Résumé', href: 'https://drive.google.com/file/d/1Rb2IMJt6bPPe-oIFtiLLv9QCwMm7BCo3/view?usp=sharing' },
 };
 
 /*
