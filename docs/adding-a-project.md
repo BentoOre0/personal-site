@@ -185,6 +185,7 @@ And inside a plate:
 | `alt` | **Required.** One caption cannot describe several panels. |
 | `motion` | Optional. A URL into `public/` for an animated file. See below. |
 | `label` | Optional. A line under this panel, prefixed `Fig. 5(a)`. |
+| `hold` | Optional. Seconds this panel stays up in a `cycle` window, instead of 8. |
 
 Astro handles the rest: WebP, emitted at several widths with a `srcset` so a
 phone never downloads a desktop-sized file, and lazy-loaded.
@@ -228,7 +229,7 @@ neither.
 | | What moves | Set by | Runs on |
 |---|---|---|---|
 | **An animated panel** | the picture itself | `motion` on a plate | nothing; the browser plays the file |
-| **A cycling window** | which panel is showing | `cycle: true` on the figure | a small script, 8s hold, 500ms fade |
+| **A cycling window** | which panel is showing | `cycle: true` on the figure | a small script, 8s hold (or a plate's `hold`), 500ms fade |
 
 **Fig. 2 (Clifford) uses both at once.** Panel (a) is an animated WebP of a
 camera circling the robot, panel (b) is a still bench photograph, and the figure
@@ -478,8 +479,8 @@ can sit side by side in the list with no problem.
 Figure numbers, like designators, count themselves, and **a figure carries the
 number of the row it sits in**: `Fig. 4` is in P4. You never write one by hand.
 
-So the sequence has gaps wherever a project has no figure. P3 and P8 have none,
-so the page runs `Fig. 1, 2, 4, 5, 6, 7`. That is deliberate. It used to be a
+So the sequence has gaps wherever a project has no figure. P4 and P9 have none,
+so the page runs `Fig. 1, 2, 3, 5, 6, 7, 8`. That is deliberate. It used to be a
 separate count that skipped the gaps and stayed contiguous, which meant P4 was
 labelled `Fig. 3` and P7 was labelled `Fig. 6`, drifting one further apart with
 every figure-less row inserted above. A gap explains itself, because the row

@@ -12,7 +12,8 @@
   - **One panel.** A plain figure.
   - **A collage** (`plates` of two or more). Side by side where there is
     room, stacked where there is not.
-  - **A window** (`cycle`). One panel at a time, swapping every 8s.
+  - **A window** (`cycle`). One panel at a time, swapping every 8s, or
+    after a plate's own `hold` where one is set.
 
   On the window: every panel sits in the same grid cell, so the figure is
   as tall as the tallest and swapping cannot move the page. The first panel
@@ -44,7 +45,7 @@ const letter = (i: number) => String.fromCharCode(97 + i);
 		plates.length > 0 ? (
 			<div class:list={['plates', { collage: many && !figure.cycle, cycle: figure.cycle }]} data-cycle={figure.cycle ? '' : undefined}>
 				{plates.map((plate, i) => (
-					<div class:list={['panel', { 'is-on': i === 0 }]}>
+					<div class:list={['panel', { 'is-on': i === 0 }]} data-hold={plate.hold ? plate.hold * 1000 : undefined}>
 						<picture>
 							{/* Chosen by the browser, with no script. The animation
 								goes only to a reader who has not asked for less
@@ -210,6 +211,11 @@ const letter = (i: number) => String.fromCharCode(97 + i);
 	let detach: (() => void) | undefined;
 
 	const HOLD_MS = 8000;
+	/* A plate may set its own `hold`, in seconds in profile.ts and in ms by
+	   the time it reaches the DOM. Anything unset or unreadable gets the
+	   default, so a typo slows nothing to zero. */
+	const holdOf = (panel: Element) =>
+		Number((panel as HTMLElement).dataset.hold) || HOLD_MS;
 
 	document.addEventListener('astro:page-load', () => {
 		timers.forEach(clearTimeout);
@@ -230,10 +236,10 @@ const letter = (i: number) => String.fromCharCode(97 + i);
 				panels[i].classList.remove('is-on');
 				i = (i + 1) % panels.length;
 				panels[i].classList.add('is-on');
-				timers[slot] = setTimeout(step, HOLD_MS);
+				timers[slot] = setTimeout(step, holdOf(panels[i]));
 			};
 
-			starters.push(() => (timers[slot] = setTimeout(step, HOLD_MS)));
+			starters.push(() => (timers[slot] = setTimeout(step, holdOf(panels[0]))));
 		});
 
 		if (starters.length === 0) return;

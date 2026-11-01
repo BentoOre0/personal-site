@@ -20,11 +20,12 @@ went up with PR #6 and the earlier 4 Sep work followed in that merge. The
 evening of 4 Sep, the blog-list and rotator work described under `## 4 Sep`,
 went up from `feat/fixedwordingubcrocket`.
 
-**One branch is unmerged: `feat/about-note`**, the personal note and the
-hardening that came with it. It is committed, built and seen on localhost,
-and it has not been pushed or merged. See `## 11 Sep`. The other thing
-waiting is the résumé PDF the site links, which is behind the owner's
-`.tex` again and needs repointing once he reuploads. See `## 8 Sep`.
+**Two branches are unmerged, one on top of the other.** `feat/about-note`
+carries the personal note and its hardening (`## 11 Sep`) and the résumé
+link repointed at the 16 Oct PDF. `feat/bellhop` branches from it and adds
+the 1 Nov work (`## 1 Nov`). Both are pushed, neither is on `master`, so
+merging `feat/bellhop` ships both. The résumé link will need repointing
+again whenever the PDF is reuploaded; see `## 8 Sep`.
 
 **Five pages, not twelve**, and that is the intended state rather than a
 regression: homepage, `/blog`, the one real post, its `about-me` tag
@@ -295,6 +296,43 @@ them. The rule is in `CLAUDE.md` under Scope.
 
 Links pointing at other repositories can move without warning. If one breaks,
 repoint it here.
+
+## 1 Nov
+
+On `feat/bellhop`, all at the owner's direction, seen on localhost as it
+went. `REVISION.rev` 4.7 to 4.8.
+
+**Bellhop is P1**, his Cal Hacks 13.0 robot, and the first three rows are
+his order: Bellhop, Clifford, this website. The repository is
+`yashpatolia/bellhop`, a teammate's, so the title points at someone else's
+account; `Fork` is his own copy. Every word is sourced from that repo's
+README and from his hardware build log, and the comment above the entry
+says which line came from where. Three things not to undo:
+
+- **"Built to answer the call bell", not "answers".** The README says the
+  pieces never ran as one robot by the deadline.
+- **"Helped" stays** on the navigation, the turn controller and the state
+  machine. It is the README's verb and his.
+- **Devpost and Build log links were removed** on purpose ("its kinda
+  shite"), and the sketch's label dropped "made with Claude". The README
+  still carries that credit.
+
+**The figure is a window, and a collage was tried and reverted.** Two
+plates stacked in the figure column made it about 300px taller than the
+text and left empty sheet under the links. What answered "keep the sketch
+up" instead is a new optional **`hold`** on a `Plate`, in seconds, read by
+the cycle script in `Figure.astro`; the sketch holds 15s against the 8s
+default. Clifford and GravSim are untouched.
+
+The GIF went into `public/bellhop/hero.webp` the documented way: cropped
+440x411 to the sketch's 384:359 ratio, 65 frames, 4.0MB to 501KB. The SVG
+is imported from `src/assets/` and Astro passes it through unprocessed.
+
+**One credential added: ICPC, UBC Division 1 team**, from the owner
+directly. "Pacific Northwest Regional" is inferred, not told; it is the
+November regional UBC sits in. The date, 14 November 2026, is from the
+regional's homepage. Its Contest Details page still shows 2025's date.
+**After the contest the note should become the result.**
 
 ## 11 Sep
 
