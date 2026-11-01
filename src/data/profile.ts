@@ -21,7 +21,7 @@ import type { ImageMetadata } from 'astro';
 import anthRopic from '../assets/anth-ropic.png';
 import baybayinGlyph from '../assets/baybayin-glyph.png';
 import bellhopHeroStill from '../assets/bellhop-hero-still.jpg';
-import bellhopSketch from '../assets/bellhop-sketch.svg';
+import bellhopSketch from '../assets/bellhop-sketch.png';
 import cliffordBench from '../assets/clifford-bench.jpg';
 import cliffordWalkStill from '../assets/clifford-walk-still.jpg';
 import colourClusters from '../assets/colour-clusters.png';
@@ -39,7 +39,7 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '4.8',
+	rev: '4.9',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
@@ -556,6 +556,13 @@ export const PROJECTS: Project[] = [
 			   clip is (a) because it is the real machine, and because (a) is
 			   what a reader under reduced motion or without JavaScript gets
 			   as the whole figure; Clifford's row makes the same choice.
+
+			   The sketch ships as a PNG, not the SVG it was drawn as. The
+			   SVG rendered wrongly on the deployed site, by the owner's
+			   report on 1 Nov, so it was rasterised in Chrome at 3x, 1152 by
+			   1077, with the corners outside the card left transparent.
+			   Re-render from the SVG in the Bellhop repository if it ever
+			   needs redoing; do not go back to importing the SVG.
 
 			   `ratio` is the sketch's own viewBox, 384 by 359. Its cream
 			   page has only 6 units of margin, so a square slot would have

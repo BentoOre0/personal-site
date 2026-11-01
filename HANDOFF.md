@@ -326,7 +326,11 @@ default. Clifford and GravSim are untouched.
 
 The GIF went into `public/bellhop/hero.webp` the documented way: cropped
 440x411 to the sketch's 384:359 ratio, 65 frames, 4.0MB to 501KB. The SVG
-is imported from `src/assets/` and Astro passes it through unprocessed.
+shipped as an SVG and **rendered wrongly once deployed**, by the owner's
+report, so it is now `src/assets/bellhop-sketch.png`, rasterised from the
+SVG in Chrome at 3x (1152x1077, transparent outside the card). The SVG
+looked right on localhost, so a localhost check would not have caught it.
+`REVISION.rev` 4.8 to 4.9 for the swap.
 
 **One credential added: ICPC, UBC Division 1 team**, from the owner
 directly. "Pacific Northwest Regional" is inferred, not told; it is the
