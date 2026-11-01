@@ -113,8 +113,8 @@ Reorder the data and the numbers follow. This matters because the alternative,
 typing them in, fails silently: the build passes, the page looks fine, and you
 have two `§3`s, or a caption pointing at the picture above it.
 
-A figure number matching its row is also why the sequence has gaps. P3 and P8
-carry no figure, so there is no `Fig. 3` and no `Fig. 8`. That is correct: a
+A figure number matching its row is also why the sequence has gaps. P4 and P9
+carry no figure, so there is no `Fig. 4` and no `Fig. 9`. That is correct: a
 missing number says "that row has no picture", which is visible one row up. It
 used to be a separate running count with no gaps, and the cost was that P4 read
 `Fig. 3` and P7 read `Fig. 6`, drifting further apart with every figure-less

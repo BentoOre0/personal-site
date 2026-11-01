@@ -20,6 +20,8 @@ import type { ImageMetadata } from 'astro';
    imported name in a project's `figure.src`. */
 import anthRopic from '../assets/anth-ropic.png';
 import baybayinGlyph from '../assets/baybayin-glyph.png';
+import bellhopHeroStill from '../assets/bellhop-hero-still.jpg';
+import bellhopSketch from '../assets/bellhop-sketch.svg';
 import cliffordBench from '../assets/clifford-bench.jpg';
 import cliffordWalkStill from '../assets/clifford-walk-still.jpg';
 import colourClusters from '../assets/colour-clusters.png';
@@ -37,14 +39,14 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '4.7',
+	rev: '4.8',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
 	   no project figure is an empty slot. `DEPLOYED` at the owner's
 	   request. */
 	status: 'DEPLOYED',
-	updated: '2026-10-16',
+	updated: '2026-11-01',
 };
 
 export const IDENTITY = {
@@ -298,6 +300,24 @@ export const CREDENTIALS: Credential[] = [
 		confirmed: true,
 	},
 	{
+		/* From the owner directly on 1 Nov 2026, like the TREK and TA rows:
+		   he is on UBC's Division 1 team. Not on any résumé yet.
+
+		   The date is ICPC's, not ours: the Pacific Northwest Regional's own
+		   homepage reads "Contest date: Saturday, November 14, 2026." Its
+		   Contest Details page still carries 2025's date, 15 November, so
+		   check the homepage if this ever needs re-verifying.
+
+		   The note says "competing" because the contest has not happened.
+		   When it has, the note becomes the result, and the date moves into
+		   it rather than staying a future tense on a page that dates itself
+		   in the footer. */
+		text: 'ICPC, UBC Division 1 team',
+		note: 'Competing at the Pacific Northwest Regional, 14 November 2026',
+		href: 'https://pnw.na.icpc.global/',
+		confirmed: true,
+	},
+	{
 		text: 'TREK Excellence Scholarship, University of British Columbia',
 		/* The note says what the award is, not what it says about him, in the
 		   same way the APIO note describes the contest. The href is UBC's own
@@ -411,6 +431,10 @@ export type Plate = {
 	/* One line under this panel. In a collage it is prefixed with the
 	   panel's letter, Fig. 5(a), which is derived from position. */
 	label?: string;
+	/* Optional. Seconds this panel stays up in a cycling window, for a
+	   panel that needs longer than the 8s default to be read. Ignored
+	   outside a `cycle` figure. */
+	hold?: number;
 };
 
 export type Project = {
@@ -468,30 +492,115 @@ export type Project = {
 /* Flat list, ordered by impact, not grouped by discipline, per CLAUDE.md. */
 export const PROJECTS: Project[] = [
 	{
-		title: 'This website',
+		/* Added 1 Nov 2026, and P1 at the owner's direction because it is
+		   his most recent project. The first three are his order: Bellhop,
+		   Clifford, then this website, which had held the lead until then
+		   and gave up the 28px title and the full-width figure with it.
+
+		   A team project at Cal Hacks 13.0, and the
+		   repository is Yash Patolia's, not the owner's, so the title and
+		   most links point at someone else's account. If one breaks,
+		   repoint it here; do not go and fix that repository. `Fork` is
+		   the owner's own copy, added at his request, and was identical to
+		   the original when it was linked on 1 Nov.
+
+		   Every word is condensed from that repository, not written fresh:
+
+		   - The first sentence is the README's opening paragraph, "a robot
+		     that answers the call bell in a care home ... drives there,
+		     greets the resident by name, talks with them, and calls a nurse
+		     the moment something is urgent."
+		   - "Assembled the robot and did the electrical debugging" is the
+		     owner's line in the README's Team and credit section.
+		   - The Role is his own sentence at the top of the hardware build
+		     log, which he wrote: "I built the hardware: assembly, wiring,
+		     power, and bringing each part up on the Pi." Its second half
+		     was added at his request from the README's credits, "helped
+		     shape the voice agent's state machine and the navigation's
+		     trajectory reorientation, and proposed the PS2 remote as ...
+		     the backup driver", and from its controls section, where the
+		     camera-checked turn is his proposal and Aditya's build.
+		     "Helped" is the README's word for the state machine and the
+		     turn controller, and stays; do not promote it to "designed".
+		     The autonomous navigation is from the owner directly on
+		     1 Nov, "i helped with the autonav", and keeps his verb too.
+		   - The Stack is the build log's parts table, hardware only,
+		     because that is the half of the robot that was his.
+
+		   **"Built to", on purpose.** The README is candid that the pieces
+		   ran on the robot separately and never as one product by the
+		   deadline: driving worked, the voice and face worked, the bell to
+		   visit chain was shown only against a simulated robot. Saying the
+		   robot *does* all three would be the claim that fails in an
+		   interview. The repository tells the rest, which is its job. */
+		title: 'Bellhop: Care-Home Robot, Cal Hacks 13.0',
 		summary:
-			'A portfolio website since I also needed to be more well-versed about new agentic technologies.',
+			'A robot built to answer the call bell in a care home: drive to the room, talk with the resident, and call a nurse the moment something is urgent. Assembled the robot and did its electrical debugging, in a team of four at Cal Hacks 13.0.',
 		params: [
-			{ key: 'Role', value: 'Sole developer · direction and review' },
-			{ key: 'Stack', value: 'Astro · TypeScript · Vercel · Claude Code (Skills, Plugins, MCP)' },
+			{
+				key: 'Role',
+				value:
+					"Hardware · assembly, wiring, power and bring-up on the Pi · helped with the autonomous navigation, its camera-checked turn controller, and the voice agent's state machine · proposed the PS2 remote for backup driving",
+			},
+			{
+				key: 'Stack',
+				value:
+					'Raspberry Pi 5 · Freenove 4WD kit · Camera Module 3 · pan and tilt servos · ultrasonic sensor · 7 inch touchscreen · PS2 receiver',
+			},
 			{ key: 'Year', value: '2026' },
 		],
-		titleHref: 'https://github.com/BentoOre0/personal-site',
+		titleHref: 'https://github.com/yashpatolia/bellhop',
 		figure: {
-			caption: 'The two authors of this webpage (GPT was used for only making this photo.).',
-			/* The slot used to specify a 1440px screenshot of this homepage.
-			   A picture of the page you are already reading tells the reader
-			   nothing; this row is about the collaboration, so the figure is
-			   too. */
+			caption: 'Bellhop, the care-home robot.',
+			/* The README's own two hero images, in the opposite order. The
+			   clip is (a) because it is the real machine, and because (a) is
+			   what a reader under reduced motion or without JavaScript gets
+			   as the whole figure; Clifford's row makes the same choice.
+
+			   `ratio` is the sketch's own viewBox, 384 by 359. Its cream
+			   page has only 6 units of margin, so a square slot would have
+			   cropped through the page border at both sides. The clip gave
+			   way instead: 440x440 cropped to 440x411 by dropping 14 rows of
+			   floor above and 15 below, which touches nothing of the robot,
+			   then scaled to 384x359. 65 frames at 100ms, looped exactly as
+			   the source GIF loops; it is 4.0MB as GIF and 501KB as WebP.
+			   The still is frame 43, the sharpest by edge variance and a
+			   square-on view with the eyes lit.
+
+			   The label read "An isometric sketch, made with Claude", since
+			   the README's credits say so. Shortened at the owner's request;
+			   the README still carries the credit. */
 			plates: [
 				{
-					still: anthRopic,
-					alt: 'A kraft-paper gig poster, "An evening with Anth, Ropic", showing a line-drawn face in round glasses beside a pixel-art figure, billed as Jeremy and Clawd.',
+					still: bellhopHeroStill,
+					motion: '/bellhop/hero.webp',
+					alt: 'A small four-wheeled robot on a grey concrete floor, looking side to side. A black taped enclosure holds a touchscreen showing two round, glowing white eyes; below it sit an ultrasonic sensor and camera on a small head, with cables and a blue lanyard hanging from one side.',
+					label: 'On the Cal Hacks floor, blinking and thinking...',
+				},
+				{
+					still: bellhopSketch,
+					alt: 'An isometric sketch of the same robot on a cream sketchbook page: four wheels with yellow hubs, a taped display showing crescent eyes under a small nurse cap with a red cross, a speaker with a PS2 receiver on top behind it, and the ultrasonic sensor and camera head on blue servos at the front.',
+					label: 'An isometric sketch',
+					/* Nearly double the 8s default, at the owner's request:
+					   "a solid amount of time". The clip says what it says in
+					   one 6.5s loop; the sketch is dense with parts and is
+					   read rather than watched. */
+					hold: 15,
 				},
 			],
-			ratio: '1 / 1',
+			ratio: '384 / 359',
+			/* A window, like Clifford's. A collage was tried on 1 Nov and
+			   came straight back out: the two panels stack in the figure
+			   column, which made the figure about 300px taller than the text
+			   beside it and left a block of empty sheet under the links.
+			   The sketch's longer `hold` above is what answers "keep the
+			   sketch up", without paying for it in height. */
+			cycle: true,
 		},
-		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/personal-site' }],
+		links: [
+			{ label: 'Repository', href: 'https://github.com/yashpatolia/bellhop' },
+			{ label: 'Fork', href: 'https://github.com/BentoOre0/bellhop' },
+		],
 	},
 	{
 		title: 'Clifford: A Mutated Spot Micro',
@@ -579,6 +688,32 @@ export const PROJECTS: Project[] = [
 		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/Modded-Nova-SM3' }],
 	},
 	{
+		title: 'This website',
+		summary:
+			'A portfolio website since I also needed to be more well-versed about new agentic technologies.',
+		params: [
+			{ key: 'Role', value: 'Sole developer · direction and review' },
+			{ key: 'Stack', value: 'Astro · TypeScript · Vercel · Claude Code (Skills, Plugins, MCP)' },
+			{ key: 'Year', value: '2026' },
+		],
+		titleHref: 'https://github.com/BentoOre0/personal-site',
+		figure: {
+			caption: 'The two authors of this webpage (GPT was used for only making this photo.).',
+			/* The slot used to specify a 1440px screenshot of this homepage.
+			   A picture of the page you are already reading tells the reader
+			   nothing; this row is about the collaboration, so the figure is
+			   too. */
+			plates: [
+				{
+					still: anthRopic,
+					alt: 'A kraft-paper gig poster, "An evening with Anth, Ropic", showing a line-drawn face in round glasses beside a pixel-art figure, billed as Jeremy and Clawd.',
+				},
+			],
+			ratio: '1 / 1',
+		},
+		links: [{ label: 'Repository', href: 'https://github.com/BentoOre0/personal-site' }],
+	},
+	{
 		title: 'SEAOIL: Dispatch and Fulfilment Control System',
 		summary:
 			"Built and shipped as sole developer on an internship, 60 days ahead of schedule, and running in production against SEAOIL and SEAGAS delivery operations. Automates rider messaging and order confirmation through the Viber API on AWS Lambda. A Google Apps Script MVP put the process in ground staff's hands.",
@@ -620,7 +755,7 @@ export const PROJECTS: Project[] = [
 			   uses `Stack` and should keep it, but this row is CAD, filament,
 			   composites and machine tools, and "stack" is a software word
 			   doing a poor job of covering a lathe. The params table is
-			   per-project by design, `Status` appears on two rows of eight,
+			   per-project by design, `Status` appears on two rows of nine,
 			   so a key that fits the row is the pattern rather than a break
 			   from it. Flip it back to `Stack` if the scannable column
 			   matters more than the precise word.

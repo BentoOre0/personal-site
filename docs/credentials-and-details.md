@@ -56,10 +56,10 @@ text from 20px to 16px and greys it to the muted colour. It is the honest way to
 list something you cannot yet prove, visibly lighter than the verified entries
 around it, without being hidden.
 
-All seven current credentials are `confirmed: true`. Five come from the résumé
+All eight current credentials are `confirmed: true`. Five come from the résumé
 of 25 Aug 2026; the TREK scholarship and the UBC Computer Science TA
-appointment came from the owner directly on 2 Sep, so the résumé is behind the
-site by two entries.
+appointment came from the owner directly on 2 Sep, and the UBC ICPC Division 1
+team on 1 Nov.
 
 **4. `sources` folds somebody else's words behind the note.** Add it and the
 note grows a small red arrow. Click the note and it opens to the quoted

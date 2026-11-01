@@ -572,7 +572,8 @@ request: the typed tagline; the loading screen (`Loader.astro`), which is
 progress indicator; the closing note at the
 foot of `/blog` (`QuoteBar.astro`), one quote at a time on a 7s hold and a
 400ms cross-fade; and project figures (`Figure.astro`), which may hold an
-animation and may cycle between panels on an 8s hold.
+animation and may cycle between panels on an 8s hold, or a plate's own
+`hold` where one is set.
 
 All four are off under `prefers-reduced-motion`. The figures are the only
 one where the browser does it rather than a script: an animated panel is a
