@@ -15,17 +15,12 @@ session logs and no longer read as a handoff.
 commit sha; it was wrong within two commits every time, so it names the
 branch now and the rev block at the foot of the site dates the deploy.
 
-**Everything in this file is live except the 11 Sep work.** The 3 Sep work
-went up with PR #6 and the earlier 4 Sep work followed in that merge. The
-evening of 4 Sep, the blog-list and rotator work described under `## 4 Sep`,
-went up from `feat/fixedwordingubcrocket`.
+**Everything in this file is live up to and including `## 1 Nov`.** The
+11 Sep note and the 1 Nov Bellhop work went up with PR #10, and the sketch's
+SVG-to-PNG swap with PR #11. The résumé link will need repointing again
+whenever the PDF is reuploaded; see `## 8 Sep`.
 
-**Two branches are unmerged, one on top of the other.** `feat/about-note`
-carries the personal note and its hardening (`## 11 Sep`) and the résumé
-link repointed at the 16 Oct PDF. `feat/bellhop` branches from it and adds
-the 1 Nov work (`## 1 Nov`). Both are pushed, neither is on `master`, so
-merging `feat/bellhop` ships both. The résumé link will need repointing
-again whenever the PDF is reuploaded; see `## 8 Sep`.
+**`feat/bellhop-edge-ai` is pushed and not merged** (`## 7 Nov`).
 
 **Five pages, not twelve**, and that is the intended state rather than a
 regression: homepage, `/blog`, the one real post, its `about-me` tag
@@ -296,6 +291,15 @@ them. The rule is in `CLAUDE.md` under Scope.
 
 Links pointing at other repositories can move without warning. If one breaks,
 repoint it here.
+
+## 7 Nov
+
+On `feat/bellhop-edge-ai`, `REVISION.rev` 4.9 to 5.0. The Bellhop summary
+opens "An Edge AI robot" at the owner's request. The term is the README's
+own tagline, and its "Why it runs on the robot" section backs it: vision,
+speech detection, the voice and the safety stops run on the Pi. Conversation
+and the best speech recognition still go to the cloud, so **do not stretch
+it to "offline" or "fully on-device"**. The comment above the entry says so.
 
 ## 1 Nov
 

@@ -39,14 +39,14 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '4.9',
+	rev: '5.0',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
 	   no project figure is an empty slot. `DEPLOYED` at the owner's
 	   request. */
 	status: 'DEPLOYED',
-	updated: '2026-11-01',
+	updated: '2026-11-07',
 };
 
 export const IDENTITY = {
@@ -510,6 +510,13 @@ export const PROJECTS: Project[] = [
 		     that answers the call bell in a care home ... drives there,
 		     greets the resident by name, talks with them, and calls a nurse
 		     the moment something is urgent."
+		   - "Edge AI" is the README's tagline, "Edge AI on a Raspberry Pi
+		     robot", added to the summary at the owner's request on 7 Nov.
+		     The README's "Why it runs on the robot" section is what makes
+		     it true: perception, speech detection, the voice and every
+		     safety stop run on the Pi. Open conversation and the best
+		     speech recognition still go to the cloud, so do not stretch it
+		     to "offline" or "fully on-device".
 		   - "Assembled the robot and did the electrical debugging" is the
 		     owner's line in the README's Team and credit section.
 		   - The Role is his own sentence at the top of the hardware build
@@ -535,7 +542,7 @@ export const PROJECTS: Project[] = [
 		   interview. The repository tells the rest, which is its job. */
 		title: 'Bellhop: Care-Home Robot, Cal Hacks 13.0',
 		summary:
-			'A robot built to answer the call bell in a care home: drive to the room, talk with the resident, and call a nurse the moment something is urgent. Assembled the robot and did its electrical debugging, in a team of four at Cal Hacks 13.0.',
+			'An Edge AI robot built to answer the call bell in a care home: drive to the room, talk with the resident, and call a nurse the moment something is urgent. Assembled the robot and did its electrical debugging, in a team of four at Cal Hacks 13.0.',
 		params: [
 			{
 				key: 'Role',
