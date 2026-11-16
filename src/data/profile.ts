@@ -39,14 +39,14 @@ import ubcRocketTeam from '../assets/ubc-rocket-team.jpg';
    follow-up commit of their own. A rev that lags the site is worse than
    no rev at all: the block is the one place the document dates itself. */
 export const REVISION = {
-	rev: '5.0',
+	rev: '5.1',
 	/* `PRELIMINARY` until 4 Sep, which on a datasheet means the spec may
 	   still change. It stopped being true: the credentials are confirmed
 	   and sourced, the résumé link is real, no row prints a shot spec and
 	   no project figure is an empty slot. `DEPLOYED` at the owner's
 	   request. */
 	status: 'DEPLOYED',
-	updated: '2026-11-07',
+	updated: '2026-11-15',
 };
 
 export const IDENTITY = {
@@ -301,20 +301,19 @@ export const CREDENTIALS: Credential[] = [
 	},
 	{
 		/* From the owner directly on 1 Nov 2026, like the TREK and TA rows:
-		   he is on UBC's Division 1 team. Not on any résumé yet.
+		   he is on UBC's Division 1 team. The result is from the owner on
+		   15 Nov 2026, checked against ICPC's own final Division 1
+		   scoreboard, which the href points at: his team, GPT-6.7 Sol (UBC),
+		   is 11th with seven problems solved. "3rd in British Columbia" is
+		   read off the same table, the only BC teams above it being UBC's
+		   GPT-6.7 Astra (2nd) and SFU_Lavender (8th). The contest was
+		   14 November 2026.
 
-		   The date is ICPC's, not ours: the Pacific Northwest Regional's own
-		   homepage reads "Contest date: Saturday, November 14, 2026." Its
-		   Contest Details page still carries 2025's date, 15 November, so
-		   check the homepage if this ever needs re-verifying.
-
-		   The note says "competing" because the contest has not happened.
-		   When it has, the note becomes the result, and the date moves into
-		   it rather than staying a future tense on a page that dates itself
-		   in the footer. */
-		text: 'ICPC, UBC Division 1 team',
-		note: 'Competing at the Pacific Northwest Regional, 14 November 2026',
-		href: 'https://pnw.na.icpc.global/',
+		   Placing in the title and context in the note, the same shape as the
+		   NOI row. */
+		text: 'ICPC Pacific Northwest Regional: 11th in Division 1 (2026)',
+		note: '3rd in British Columbia · UBC team',
+		href: 'https://pnw.na.icpc.global/scoreboard/2026/real/index_D1.html',
 		confirmed: true,
 	},
 	{
