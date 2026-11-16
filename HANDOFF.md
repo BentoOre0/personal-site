@@ -292,6 +292,14 @@ them. The rule is in `CLAUDE.md` under Scope.
 Links pointing at other repositories can move without warning. If one breaks,
 repoint it here.
 
+## 15 Nov
+
+On `feat/icpc-result`, branched from `feat/bellhop-edge-ai` so the rev stays
+linear. `REVISION.rev` 5.0 to 5.1. **The ICPC row is now the result**, as the
+1 Nov note asked: 11th in Division 1 at the Pacific Northwest Regional, 3rd in
+British Columbia, from the owner and checked against ICPC's final D1
+scoreboard, which the row now links. His team is GPT-6.7 Sol (UBC).
+
 ## 7 Nov
 
 On `feat/bellhop-edge-ai`, `REVISION.rev` 4.9 to 5.0. The Bellhop summary
